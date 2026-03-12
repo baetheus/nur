@@ -1,28 +1,19 @@
-# Brandon's Nix Flake
+# Brandon's Nix User Repository
 
-I use nix flakes to manage laptop and server configurations,
-my home environment, and my dotfiles (what precious few I use).
-
-This repository is a monorepo containing any configurations or
-extraneous packages I want to include in nix. I prefer a
-[flakes](https://nixos.wiki/wiki/Flakes) only approach.
-
-Since I'm used to flakes I am also leaning towards nix-direnv for
-managing developer environments. You can expect a few templates to
-land here in the long term as well as repackaged tools and devShells.
+A flakes-only monorepo for managing system configurations, home environments, and development templates across macOS and NixOS machines.
 
 ## Installation (darwin)
 
-1. Clone this into `~/.nix` or some similar place and `cd` into it.
+1. Clone this repository and `cd` into it.
 2. Install [nix](https://nixos.org/download.html).
-3. You'll probably have to enable nix flakes.
+3. Enable nix flakes:
 
 ```sh
 mkdir -p ~/.config/nix
 echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 ```
 
-4. Build the initial activation for your `HOST` and then switch to it.
+4. Build and switch to your host configuration:
 
 ```sh
 nix build .#darwinConfigurations.HOST.system
@@ -32,87 +23,80 @@ nix build .#darwinConfigurations.HOST.system
 ## Installation (nixos)
 
 1. Fork this repository.
-2. Create a system configuration in [systems/default.nix](./systems/default.nix).
-3. Push your changes to your repo.
-4. Install or rebuild with the following commands.
-
-If you are already on nixos:
+2. Create a system configuration in [system/default.nix](./system/default.nix).
+3. Push your changes.
+4. Install or rebuild:
 
 ```sh
+# If already on NixOS
 nixos-rebuild switch --flake github:YOUR_REPO_PATH#YOUR_HOST_NAME
-````
 
-If you are installing via kexec or somesuch
-
-```sh
+# Fresh install
 nixos-install --flake github:YOUR_REPO_PATH#YOUR_HOST_NAME --root /YOUR_ROOT_MOUNT
-````
+```
 
-## System Configurations
-
-These are my personal nix configuraions for:
-
-- [nixos](https://github.com/NixOS)
-- [nix-darwin](https://github.com/LnL7/nix-darwin)
-- [home-manager](https://github.com/nix-community/home-manager)
-
-I use home-manager as a module of nixos and nix-darwin. Broadly, I use the built in
-abstractions of home-manager, nix-darwin, and nixos as much as possible for
-configuration. Following is the current structure and purposes of various
-directories and files.
+## Structure
 
 ```
 .
-├── flake.nix # Default entrypoint for .nix
-├── homes # Contains all configuration related to home-manager
-│   ├── default.nix # Takes flake inputs and returns home-manager module configs by user
-│   ├── profiles.nix # Various user specific profiles: name, email, username, etc
-│   ├── bundles # Home Manager configurations that reference ../modules
-│   └── modules # Program or service specific home-manager configurations
-├── packages # Not used yet, but will be nixified packges
-│   ├── flake.lock
-│   └── flake.nix
-├── scripts # Scripts related to nix
-│   └── run.sh # Creates zfs pools for use with nixos installation
-├── secrets # Age encrypted secrets
-└── systems # Contains all configuration related to nixos and nix-darwin
-    ├── default.nix # Takes flake inputs and returns nixos and darwin configs by system
-    ├── bundles # @deprecated Configuration bundles
-    ├── common # Configuration modules common to nixos and darwin
-    ├── darwin # Configuration modules specific to darwin
-    ├── hardware # Harware specific configuration settings
-    ├── nixos # Configuration modules specific to nixos
-    └── users # @deprecated User specific configurations
+├── flake.nix          # Main flake with inputs and outputs
+├── system/            # System configurations
+│   ├── default.nix    # Exports nixosConfigurations and darwinConfigurations
+│   ├── host/          # Per-host configurations (toph, abigail, diane, etc.)
+│   ├── mixin/         # Reusable configuration modules
+│   │   ├── minimal.nix        # Base setup (timezone, essential tools)
+│   │   ├── common.nix         # NixOS-specific common settings
+│   │   ├── darwin-minimal.nix # macOS-specific settings
+│   │   ├── openssh.nix        # SSH hardening
+│   │   ├── tailscale.nix      # VPN/mesh networking
+│   │   ├── zfs.nix            # ZFS with auto-scrub and snapshots
+│   │   └── ...
+│   ├── module/        # Custom NixOS modules (fossil, photoprism, yubikey-agent)
+│   ├── program/       # Home-manager program configs (git, zsh, vim, helix, etc.)
+│   ├── profile/       # Profiles combining multiple programs (desktop.nix)
+│   └── user/          # User configurations with metadata and SSH keys
+├── template/          # Development templates
+│   ├── simple/        # Basic flake template
+│   └── rust/          # Rust development environment
+├── package/           # Custom packages (placeholder)
+├── secret/            # Age-encrypted secrets (agenix)
+└── files/             # Static files (scripts, printer drivers, themes)
 ```
 
-As I learn more about nix I simplify my configurations here. Once I've gone a few months
-to a year without changing the structure I intend to add instructions on how and why
-this particular organization works.
+## Templates
+
+Create a new project from a template:
+
+```sh
+nix flake new -t github:baetheus/nur#simple .
+nix flake new -t github:baetheus/nur#rust .
+```
+
+## Key Features
+
+- **Secrets Management**: Age-encrypted secrets via agenix with YubiKey identities
+- **Home Manager**: Integrated as a module for consistent dotfiles across systems
+- **Modular Mixins**: Reusable configs for services (openssh, tailscale, zfs, syncthing)
+- **Program Configs**: Pre-configured git, zsh, vim, helix, jujutsu, direnv, zellij, alacritty
 
 ## SSH Keys
 
-Because I keep forgetting here is some information about how I use SSH Keys and
-how to get them setup on new systems. I create fido2 credentials on each of
-these keys and install the associated public keys on any service that I tend to
-use. The fido credentials have a pin and require touch. This seems secure enough
-for the attack vectors I care about.
+I create FIDO2 credentials on YubiKeys and install the associated public keys on services I use. The credentials have a PIN and require touch.
 
-There are two ways to setup ssh to use the fido2 signing on a yubikey. I tend to
-generate a public/private keypair using the command `ssh-keygen -K`. This will
-generate the keypair from a `resident` fido2 credential for each credential on
-each attached yubikey. I haven't played with `non-resident` keys but I assume
-those require keeping the public/private keypair around and backed up.
+To generate SSH keypairs from resident FIDO2 credentials:
 
-The second way to setup ssh with fido2 signing is using ssh-agent. I have yet to
-really get this working and I also don't really like ssh-agent, but the command
-to add a yubikey fido2 credential to the ssh-agent is with the command
-`ssh-add -K`. This generally requires installation of `ssh-askpass`, which is a
-program that handles the pin for fido credentials and fingerprints. It's not a
-broadly cross-platform application so I avoid it where possible.
+```sh
+ssh-keygen -K
+```
 
+This generates a keypair for each credential on each attached YubiKey.
 
+Alternatively, add YubiKey FIDO2 credentials to ssh-agent (requires `ssh-askpass`):
+
+```sh
+ssh-add -K
+```
 
 ## Questions
 
-If you got here and you have questions open the discussions and lets talk about
-it! I'm very very new to nix but I'd love an opportunity to dig in some more.
+If you have questions, open a discussion. I'm always happy to dig into nix topics.
