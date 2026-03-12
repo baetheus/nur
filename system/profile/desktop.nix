@@ -1,0 +1,21 @@
+{ me, pkgs, ... }: {
+  home = {
+    username = me.username;
+    stateVersion = "23.05";
+    sessionVariables.EDITOR = "vim";
+    packages = with pkgs; [ ripgrep tailscale bottom jujutsu git ];
+  };
+
+  programs = {
+    home-manager.enable = true;
+    zsh.enable = true;
+  };
+
+  imports = [
+    (import ../mixin/git { inherit me pkgs; })
+    (import ../mixin/jujutsu { inherit me pkgs; })
+    ../mixin/zsh
+    ../mixin/vim
+    ../mixin/direnv
+  ];
+}

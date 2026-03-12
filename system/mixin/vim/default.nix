@@ -1,0 +1,22 @@
+{ pkgs, ... }: {
+  programs.vim = {
+    enable = true;
+    plugins = with pkgs; [
+      # Generic Plugins
+      vimPlugins.vim-unimpaired
+      vimPlugins.vim-commentary
+      vimPlugins.vim-noctu
+
+      # Life Plugins
+      vimPlugins.vim-ledger
+
+      # Programming Plugins
+      vimPlugins.ale
+      vimPlugins.vim-dadbod
+      vimPlugins.vim-dadbod-ui
+      vimPlugins.vim-dadbod-completion
+      nixfmt
+    ];
+    extraConfig = builtins.readFile ./vimrc;
+  };
+}
