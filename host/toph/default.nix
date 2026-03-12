@@ -8,9 +8,8 @@ in {
 
   imports = [
     ./hardware-configuration.nix
-    ../../mixin/minimal.nix
+    ../../mixin/common-nixos.nix
     ../../mixin/zfs.nix
-    ../../mixin/common.nix
     ../../mixin/openssh.nix
     ../../mixin/age.nix
     ../../mixin/tailscale.nix
@@ -22,7 +21,7 @@ in {
   ];
 
   # Secrets
-  age.secrets."tuna-wifi".file = ../../../secrets/wifi-tuna.age;
+  age.secrets."tuna-wifi".file = ../../secrets/wifi-tuna.age;
 
   # General
   system.stateVersion = "22.05";

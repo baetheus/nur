@@ -7,9 +7,8 @@ in {
 
   imports = [
     ./hardware-configuration.nix
-    ../../mixin/minimal.nix
+    ../../mixin/common-nixos.nix
     ../../mixin/zfs.nix
-    ../../mixin/common.nix
     ../../mixin/age.nix
     ../../mixin/openssh.nix
     ../../mixin/tailscale.nix
@@ -30,13 +29,13 @@ in {
 
   # Secrets
   age.secrets.basicauth = {
-    file = ../../../secrets/basicauth.age;
+    file = ../../secrets/basicauth.age;
     owner = "nginx";
     group = "nginx";
   };
 
   age.secrets.miniflux = {
-    file = ../../../secrets/miniflux-config.age;
+    file = ../../secrets/miniflux-config.age;
   };
 
   # Users and Groups

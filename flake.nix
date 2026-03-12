@@ -21,7 +21,24 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... } @ inputs:
+  outputs = { self, nixpkgs, flake-utils, home-manager, nix-darwin, disko, agenix, ... } @ inputs:
+    let
+      darwinSystem = module: nix-darwin.lib.darwinSystem {
+        modules = [
+          home-manager.darwinModules.home-manager
+          module
+        ];
+      };
+
+      nixosSystem = module: nixpkgs.lib.nixosSystem {
+        modules = [
+          home-manager.nixosModules.home-manager
+          agenix.nixosModules.age
+          disko.nixosModules.disko
+          module
+        ];
+      };
+    in
     (flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
@@ -35,6 +52,32 @@
       {
         devShells.default = shell;
       }))
-    // (import ./system/default.nix inputs)
-    // (import ./template/default.nix inputs);
+    // {
+      # macOS hosts
+      darwinConfigurations = {
+        diane = darwinSystem ./host/diane;
+        rosalind = darwinSystem ./host/rosalind;
+      };
+
+      # nixos hosts
+      nixosConfigurations = {
+        toph = nixosSystem ./host/toph;
+        abigail = nixosSystem ./host/abigail;
+        bartleby = nixosSystem ./host/bartleby;
+        clementine = nixosSystem ./host/clementine;
+      };
+
+      # Quick templates that I use
+      templates = rec {
+        simple = {
+          path = ./template/simple;
+          description = "nix flake new -t github:baetheus/.nix#simple .";
+        };
+        rust = {
+          path = ./template/rust;
+          description = "nix flake new -t github:baetheus/.nix#rust .";
+        };
+      };
+
+    };
 }

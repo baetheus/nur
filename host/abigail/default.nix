@@ -7,9 +7,8 @@ in {
 
   imports = [
     ./hardware-configuration.nix
-    ../../mixin/minimal.nix
+    ../../mixin/common-nixos.nix
     ../../mixin/zfs.nix
-    ../../mixin/common.nix
     ../../mixin/age.nix
     ../../mixin/openssh.nix
     ../../mixin/tailscale.nix
@@ -29,7 +28,7 @@ in {
   networking.firewall.allowedUDPPorts = [ 41641 ]; # Tailscale
 
   # Secrets
-  age.secrets.vaultwarden.file = ../../../secrets/vaultwarden.age;
+  age.secrets.vaultwarden.file = ../../secrets/vaultwarden.age;
 
   # Nginx
   security.acme.acceptTerms = true;

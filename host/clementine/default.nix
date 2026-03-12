@@ -7,7 +7,11 @@ in {
 
   imports = [
     ./hardware-configuration.nix
-    ../../mixin/minimal.nix
+    ../../mixin/nix.nix
+    ../../mixin/timezone.nix
+    ../../mixin/locale.nix
+    ../../mixin/sudo.nix
+    ../../mixin/motd.nix
     (userMixin.mkZshUser {
       me = user.brandon;
       profile = profile.desktop;
@@ -121,6 +125,16 @@ in {
       };
     };
   };
+
+  # System packages
+  environment.systemPackages = with pkgs; [
+    vim
+    wget
+    git
+    ripgrep
+    darkhttpd
+    syncthing
+  ];
 
   # Services
   services.openssh.enable = true;

@@ -25,8 +25,8 @@
       ll = "ls -alhG --color=always"; # Pretty ll
       vi = "vim"; # Prefer vim
       sw = if pkgs.stdenv.isDarwin
-        then "sudo darwin-rebuild switch --flake ~/share/src/nix"
-        else "nixos-rebuild switch --flake ~/share/src/nix --use-remote-sudo";
+        then "sudo darwin-rebuild switch --flake github:baetheus/nur"
+        else "nixos-rebuild switch --use-remote-sudo --flake github:baetheus/nur";
     };
 
     history = {

@@ -23,7 +23,7 @@ nix build .#darwinConfigurations.HOST.system
 ## Installation (nixos)
 
 1. Fork this repository.
-2. Create a system configuration in [system/default.nix](./system/default.nix).
+2. Create a host configuration in [host/](./host/).
 3. Push your changes.
 4. Install or rebuild:
 
@@ -40,25 +40,12 @@ nixos-install --flake github:YOUR_REPO_PATH#YOUR_HOST_NAME --root /YOUR_ROOT_MOU
 ```
 .
 ├── flake.nix          # Main flake with inputs and outputs
-├── system/            # System configurations
-│   ├── default.nix    # Exports nixosConfigurations and darwinConfigurations
-│   ├── host/          # Per-host configurations (toph, abigail, diane, etc.)
-│   ├── mixin/         # Reusable configuration modules
-│   │   ├── minimal.nix        # Base setup (timezone, essential tools)
-│   │   ├── common.nix         # NixOS-specific common settings
-│   │   ├── darwin-minimal.nix # macOS-specific settings
-│   │   ├── openssh.nix        # SSH hardening
-│   │   ├── tailscale.nix      # VPN/mesh networking
-│   │   ├── zfs.nix            # ZFS with auto-scrub and snapshots
-│   │   └── ...
-│   ├── module/        # Custom NixOS modules (fossil, photoprism, yubikey-agent)
-│   ├── program/       # Home-manager program configs (git, zsh, vim, helix, etc.)
-│   ├── profile/       # Profiles combining multiple programs (desktop.nix)
-│   └── user/          # User configurations with metadata and SSH keys
-├── template/          # Development templates
-│   ├── simple/        # Basic flake template
-│   └── rust/          # Rust development environment
-├── package/           # Custom packages (placeholder)
+├── host/              # Per-host configurations (toph, abigail, diane, etc.)
+├── mixin/             # Reusable configuration modules (services, programs)
+├── module/            # Custom NixOS modules (fossil, photoprism, yubikey-agent)
+├── profile/           # Profiles combining multiple mixins (desktop.nix)
+├── user/              # User configurations with metadata and SSH keys
+├── template/          # Development templates (simple, rust)
 ├── secret/            # Age-encrypted secrets (agenix)
 └── files/             # Static files (scripts, printer drivers, themes)
 ```
@@ -76,8 +63,7 @@ nix flake new -t github:baetheus/nur#rust .
 
 - **Secrets Management**: Age-encrypted secrets via agenix with YubiKey identities
 - **Home Manager**: Integrated as a module for consistent dotfiles across systems
-- **Modular Mixins**: Reusable configs for services (openssh, tailscale, zfs, syncthing)
-- **Program Configs**: Pre-configured git, zsh, vim, helix, jujutsu, direnv, zellij, alacritty
+- **Modular Mixins**: Reusable configs for services and programs (openssh, tailscale, zfs, git, zsh, vim, helix, etc.)
 
 ## SSH Keys
 

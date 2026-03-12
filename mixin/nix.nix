@@ -1,18 +1,4 @@
 { pkgs, ... }: {
-  # Standardize on California time
-  time.timeZone = "America/Los_Angeles";
-
-  # Make sure we have the tools to troubleshoot available to root
-  environment.systemPackages = with pkgs; [
-    vim
-    wget
-    git
-    ripgrep
-    darkhttpd
-    syncthing
-  ];
-
-  # Configure nix for all the fun stuff
   nix = {
     package = pkgs.nixVersions.stable;
     optimise.automatic = true;
