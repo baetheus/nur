@@ -1,4 +1,7 @@
 { ... }: {
+  # Default Shell
+  programs.zsh.enable = true;
+
   # Firewall
   networking.applicationFirewall = {
     enable = true;

@@ -1,9 +1,8 @@
 { config, pkgs, ... }: let
-  user = import ../../user;
-  profile = import ../../profile;
   userMixin = import ../../mixin/user.nix;
+  users = userMixin.users.default { inherit pkgs; };
 in {
-  system = "x86_64-linux";
+  nixpkgs.hostPlatform = "x86_64-linux";
 
   imports = [
     ./hardware-configuration.nix
@@ -12,11 +11,7 @@ in {
     ../../mixin/age.nix
     ../../mixin/openssh.nix
     ../../mixin/tailscale.nix
-    (userMixin.mkZshUser {
-      me = user.brandon;
-      profile = profile.desktop;
-      inherit pkgs;
-    })
+    users
   ];
 
   # General
@@ -29,13 +24,13 @@ in {
 
   # Secrets
   age.secrets.basicauth = {
-    file = ../../secrets/basicauth.age;
+    file = ../../secret/basicauth.age;
     owner = "nginx";
     group = "nginx";
   };
 
   age.secrets.miniflux = {
-    file = ../../secrets/miniflux-config.age;
+    file = ../../secret/miniflux-config.age;
   };
 
   # Users and Groups

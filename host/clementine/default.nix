@@ -1,9 +1,8 @@
 { config, pkgs, lib, ... }: let
-  user = import ../../user;
-  profile = import ../../profile;
   userMixin = import ../../mixin/user.nix;
+  users = userMixin.users.default { inherit pkgs; };
 in {
-  system = "x86_64-linux";
+  nixpkgs.hostPlatform = "x86_64-linux";
 
   imports = [
     ./hardware-configuration.nix
@@ -12,11 +11,7 @@ in {
     ../../mixin/locale.nix
     ../../mixin/sudo.nix
     ../../mixin/motd.nix
-    (userMixin.mkZshUser {
-      me = user.brandon;
-      profile = profile.desktop;
-      inherit pkgs;
-    })
+    users
   ];
 
   # General
@@ -125,16 +120,6 @@ in {
       };
     };
   };
-
-  # System packages
-  environment.systemPackages = with pkgs; [
-    vim
-    wget
-    git
-    ripgrep
-    darkhttpd
-    syncthing
-  ];
 
   # Services
   services.openssh.enable = true;

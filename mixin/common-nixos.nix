@@ -6,15 +6,6 @@
     ./boot.nix
     ./sudo.nix
     ./motd.nix
-  ];
-
-  # System packages available on all NixOS hosts
-  environment.systemPackages = with pkgs; [
-    vim
-    wget
-    git
-    ripgrep
-    darkhttpd
-    syncthing
+    ./system-packages.nix
   ];
 }

@@ -1,9 +1,8 @@
 { config, pkgs, ... }: let
-  user = import ../../user;
-  profile = import ../../profile;
   userMixin = import ../../mixin/user.nix;
+  users = userMixin.users.default { inherit pkgs; };
 in {
-  system = "x86_64-linux";
+  nixpkgs.hostPlatform = "x86_64-linux";
 
   imports = [
     ./hardware-configuration.nix
@@ -12,11 +11,7 @@ in {
     ../../mixin/age.nix
     ../../mixin/openssh.nix
     ../../mixin/tailscale.nix
-    (userMixin.mkZshUser {
-      me = user.brandon;
-      profile = profile.desktop;
-      inherit pkgs;
-    })
+    users
   ];
 
   # General
@@ -28,7 +23,7 @@ in {
   networking.firewall.allowedUDPPorts = [ 41641 ]; # Tailscale
 
   # Secrets
-  age.secrets.vaultwarden.file = ../../secrets/vaultwarden.age;
+  age.secrets.vaultwarden.file = ../../secret/vaultwarden.age;
 
   # Nginx
   security.acme.acceptTerms = true;

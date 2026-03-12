@@ -51,7 +51,13 @@ let
     else builtins.throw "Invalid user data:\n  - ${errorMsg}";
 
   # Internal implementation
-  mkUserWithShell = { me, profile, pkgs, overrides ? {} }:
+
+  user = import ../user;
+  profile = import ../profile;
+in
+rec {
+  # Make default user and home-manager
+  mkUser = { me, profile, pkgs, overrides ? {} }:
     let
       validatedMe = validateUser me;
       isDarwin = pkgs.stdenv.isDarwin;
@@ -68,12 +74,25 @@ let
 
       home-manager.users.${validatedMe.username} = profile { me = validatedMe; inherit pkgs; };
     };
-in
-{
-  mkUser = mkUserWithShell;
-  mkZshUser = { me, profile, pkgs, overrides ? {} }: mkUserWithShell {
-    inherit me profile pkgs;
-    overrides = { shell = pkgs.zsh; } // overrides;
+
+  # Make user with zsh shell
+  mkZshUser = { me, profile, pkgs, overrides ? {} }:
+    (mkUser {
+      inherit me profile pkgs;
+      overrides = {
+        shell = pkgs.zsh;
+      } // overrides;
+    }) // {
+      programs.zsh.enable = true;
+    };
+
+  # Groupings of users and home directories
+  users = {
+    default = { pkgs, overrides ? {} }: mkZshUser {
+      inherit pkgs overrides;
+      me = user.brandon;
+      profile = profile.desktop;
+    };
   };
 
   # Export validator for external use

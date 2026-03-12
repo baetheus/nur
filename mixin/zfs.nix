@@ -8,7 +8,7 @@
   services.zfs.autoSnapshot.enable = true;
 
   # I wish there were a way to ref secrets without this..
-  age.secrets.msmtp-passwordeval.file = ../../secrets/msmtp-passwordeval.age;
+  age.secrets.msmtp-passwordeval.file = ../../secret/msmtp-passwordeval.age;
 
   # Setup SMTP Relay
   programs.msmtp = {

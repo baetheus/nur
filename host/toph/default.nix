@@ -1,10 +1,9 @@
 { config, pkgs, ... }: let
-  user = import ../../user;
-  profile = import ../../profile;
   userMixin = import ../../mixin/user.nix;
+  users = userMixin.users.default { inherit pkgs; };
 in {
   nixpkgs.hostPlatform = "x86_64-linux";
-  nixpkgs.localSystem = "x86_64-linux";
+  nixpkgs.config.allowUnfree = true; # For samsung driver
 
   imports = [
     ./hardware-configuration.nix
@@ -13,15 +12,11 @@ in {
     ../../mixin/openssh.nix
     ../../mixin/age.nix
     ../../mixin/tailscale.nix
-    (userMixin.mkZshUser {
-      me = user.brandon;
-      profile = profile.desktop;
-      inherit pkgs;
-    })
+    users
   ];
 
   # Secrets
-  age.secrets."tuna-wifi".file = ../../secrets/wifi-tuna.age;
+  age.secrets."tuna-wifi".file = ../../secret/wifi-tuna.age;
 
   # General
   system.stateVersion = "22.05";

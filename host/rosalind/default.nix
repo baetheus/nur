@@ -1,17 +1,12 @@
 { pkgs, ... }: let
-  user = import ../../user;
-  profile = import ../../profile;
   userMixin = import ../../mixin/user.nix;
+  users = userMixin.users.default { inherit pkgs; };
 in {
   nixpkgs.hostPlatform = "aarch64-darwin";
 
   imports = [
     ../../mixin/common-darwin.nix
-    (userMixin.mkZshUser {
-      me = user.brandon;
-      profile = profile.desktop;
-      inherit pkgs;
-    })
+    users
   ];
 
   environment.systemPackages = with pkgs; [
