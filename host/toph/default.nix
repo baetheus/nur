@@ -16,7 +16,7 @@ in {
   ];
 
   # Secrets
-  age.secrets."tuna-wifi".file = ../../secret/wifi-tuna.age;
+  # age.secrets."tuna-wifi".file = ../../secret/wifi-tuna.age;
 
   # General
   system.stateVersion = "22.05";
@@ -25,13 +25,13 @@ in {
   networking.hostName = "toph";
   networking.hostId = "007f0200";
   networking.interfaces.eno1.useDHCP = true;
-  networking.wireless.enable = true;
-  networking.interfaces.wlp0s20f3.useDHCP = true;
-  networking.supplicant = {
-    "WLAN" = {
-      configFile.path = config.age.secrets."tuna-wifi".path;
-    };
-  };
+  # networking.wireless.enable = true;
+  # networking.interfaces.wlp0s20f3.useDHCP = true;
+  # networking.supplicant = {
+  #   "WLAN" = {
+  #     configFile.path = config.age.secrets."tuna-wifi".path;
+  #   };
+  # };
 
   # Firewall
   networking.firewall.enable = true;
