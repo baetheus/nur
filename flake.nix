@@ -45,6 +45,8 @@
         shell = with pkgs; mkShell {
           buildInputs = [
             nixos-anywhere
+            ragenix
+            age-plugin-yubikey 
             claude-code
           ];
         };
