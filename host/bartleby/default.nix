@@ -1,6 +1,5 @@
 { config, pkgs, ... }: let
-  userMixin = import ../../mixin/user.nix;
-  users = userMixin.users.default { inherit pkgs; };
+  users = import ../../mixin/user.nix;
 in {
   nixpkgs.hostPlatform = "x86_64-linux";
   nixpkgs.config.allowUnfree = true; # plexmediaserver
@@ -12,8 +11,7 @@ in {
     ../../mixin/sops.nix
     ../../mixin/openssh.nix
     ../../mixin/tailscale.nix
-    users
-  ];
+  ] ++ users.default;
 
   # General
   system.stateVersion = "22.05";

@@ -1,13 +1,11 @@
 { pkgs, ... }: let
-  userMixin = import ../../mixin/user.nix;
-  users = userMixin.users.default { inherit pkgs; };
+  users = ../../user.nix;
 in {
   nixpkgs.hostPlatform = "aarch64-darwin";
 
   imports = [
     ../../mixin/common-darwin.nix
-    users
-  ];
+  ] ++ users.default;
 
   environment.systemPackages = with pkgs; [
     bitwarden-desktop

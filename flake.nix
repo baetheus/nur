@@ -48,6 +48,7 @@
             age-plugin-yubikey
             age
             sops
+            claude-code
           ];
         };
       in
@@ -66,6 +67,7 @@
         toph = nixosSystem ./host/toph;
         abigail = nixosSystem ./host/abigail;
         bartleby = nixosSystem ./host/bartleby;
+        clementine = nixosSystem ./host/clementine;
       };
 
       # Quick templates that I use

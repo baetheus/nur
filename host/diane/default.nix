@@ -1,11 +1,7 @@
 { pkgs, ... }: let
-  userMixin = import ../../mixin/user.nix;
-  users = userMixin.users.default { inherit pkgs; };
+  users = import ../../mixin/user.nix;
 in {
   nixpkgs.hostPlatform = "x86_64-darwin";
 
-  imports = [
-    ../../mixin/common-darwin.nix
-    users
-  ];
+  imports = [ ../../mixin/common-darwin.nix ] ++ users.default;
 }

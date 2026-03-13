@@ -52,49 +52,36 @@ let
 
   # Internal implementation
 
-  user = import ../user;
-  profile = import ../profile;
+
 in
 rec {
-  # Make default user and home-manager
-  mkUser = { me, profile, pkgs, overrides ? {} }:
+  # Re-export users and profiles
+  user = import ../user;
+  profile = import ../profile;
+
+  # Helper for my user and home-manager configs
+  mkZshAdmin = { me, profile, ... }: { pkgs, ... }:
     let
       validatedMe = validateUser me;
       isDarwin = pkgs.stdenv.isDarwin;
       homeDir = if isDarwin then "/Users/${validatedMe.username}" else "/home/${validatedMe.username}";
-    in
-    {
+    in {
       users.users.${validatedMe.username} = (if isDarwin then {
         home = homeDir;
       } else {
         isNormalUser = true;
         extraGroups = [ "wheel" ];
         openssh.authorizedKeys.keys = validatedMe.keys;
-      }) // overrides;
+      });
 
       home-manager.users.${validatedMe.username} = profile { me = validatedMe; inherit pkgs; };
     };
 
-  # Make user with zsh shell
-  mkZshUser = { me, profile, pkgs, overrides ? {} }:
-    (mkUser {
-      inherit me profile pkgs;
-      overrides = {
-        shell = pkgs.zsh;
-      } // overrides;
-    }) // {
-      programs.zsh.enable = true;
-    };
-
   # Groupings of users and home directories
-  users = {
-    default = { pkgs, overrides ? {} }: mkZshUser {
-      inherit pkgs overrides;
+  default = [
+    (mkZshAdmin {
       me = user.brandon;
       profile = profile.desktop;
-    };
-  };
-
-  # Export validator for external use
-  inherit validateUser;
+    })
+  ];
 }

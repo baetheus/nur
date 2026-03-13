@@ -10,7 +10,7 @@ in {
     ../../mixin/sops.nix
     ../../mixin/openssh.nix
     ../../mixin/tailscale.nix
-  ] ++ users.default;
+  ] // users.default;
 
   # General
   system.stateVersion = "22.05";

@@ -65,6 +65,59 @@ nix flake new -t github:baetheus/nur#rust .
 - **Home Manager**: Integrated as a module for consistent dotfiles across systems
 - **Modular Mixins**: Reusable configs for services and programs (openssh, tailscale, zfs, git, zsh, vim, helix, etc.)
 
+## Deployment (nixos-anywhere)
+
+For deploying to dedicated servers (e.g., OVH) using nixos-anywhere with disko:
+
+### Prerequisites
+
+- nixos-anywhere installed (available in the dev shell: `nix develop`)
+- SSH access to the target server in rescue mode
+- YubiKey with FIDO2 credentials for SSH authentication
+
+### Deployment Steps
+
+1. Boot the server into rescue mode (Linux-based rescue system)
+
+2. SSH into rescue mode and verify disk devices:
+   ```sh
+   ssh root@<server-ip>
+   lsblk
+   ```
+   Confirm `/dev/sda` and `/dev/sdb` are the target disks. Adjust `host/<name>/disko.nix` if different.
+
+3. Run nixos-anywhere from your local machine:
+   ```sh
+   nixos-anywhere --flake .#<hostname> root@<server-ip>
+   ```
+
+4. After installation completes, copy the age key to the server:
+   ```sh
+   scp /path/to/age-<hostname>.key root@<server-ip>:/keys/age-<hostname>.key
+   ```
+
+5. Reboot into the installed NixOS:
+   ```sh
+   ssh root@<server-ip> reboot
+   ```
+
+### Post-Deployment
+
+1. Join Tailscale network:
+   ```sh
+   tailscale up
+   ```
+
+2. Verify ZFS pool status:
+   ```sh
+   zpool status rpool
+   ```
+
+3. Verify boot redundancy:
+   ```sh
+   ls /boot /boot2
+   ```
+
 ## SSH Keys
 
 I create FIDO2 credentials on YubiKeys and install the associated public keys on services I use. The credentials have a PIN and require touch.
