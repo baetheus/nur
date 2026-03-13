@@ -10,13 +10,17 @@ in {
     ../../mixin/common-nixos.nix
     ../../mixin/zfs.nix
     ../../mixin/openssh.nix
-    ../../mixin/age.nix
+    ../../mixin/sops.nix
     ../../mixin/tailscale.nix
     users
   ];
 
   # Secrets
-  # age.secrets."tuna-wifi".file = ../../secret/wifi-tuna.age;
+  # sops.secrets."tuna-wifi" = {
+  #   sopsFile = ../../secret/wifi-tuna.json;
+  #   format = "json";
+  #   key = "data";
+  # };
 
   # General
   system.stateVersion = "22.05";
@@ -29,7 +33,7 @@ in {
   # networking.interfaces.wlp0s20f3.useDHCP = true;
   # networking.supplicant = {
   #   "WLAN" = {
-  #     configFile.path = config.age.secrets."tuna-wifi".path;
+  #     configFile.path = config.sops.secrets."tuna-wifi".path;
   #   };
   # };
 

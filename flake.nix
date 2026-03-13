@@ -17,11 +17,11 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
-    agenix.url = "github:yaxitech/ragenix";
-    agenix.inputs.nixpkgs.follows = "nixpkgs";
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, flake-utils, home-manager, nix-darwin, disko, agenix, ... } @ inputs:
+  outputs = { self, nixpkgs, flake-utils, home-manager, nix-darwin, disko, sops-nix, ... } @ inputs:
     let
       darwinSystem = module: nix-darwin.lib.darwinSystem {
         modules = [
@@ -33,7 +33,7 @@
       nixosSystem = module: nixpkgs.lib.nixosSystem {
         modules = [
           home-manager.nixosModules.home-manager
-          agenix.nixosModules.age
+          sops-nix.nixosModules.sops
           disko.nixosModules.disko
           module
         ];
@@ -45,9 +45,9 @@
         shell = with pkgs; mkShell {
           buildInputs = [
             nixos-anywhere
-            ragenix
-            age-plugin-yubikey 
-            claude-code
+            age-plugin-yubikey
+            age
+            sops
           ];
         };
       in
@@ -66,7 +66,6 @@
         toph = nixosSystem ./host/toph;
         abigail = nixosSystem ./host/abigail;
         bartleby = nixosSystem ./host/bartleby;
-        clementine = nixosSystem ./host/clementine;
       };
 
       # Quick templates that I use

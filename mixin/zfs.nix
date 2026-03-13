@@ -8,7 +8,11 @@
   services.zfs.autoSnapshot.enable = true;
 
   # I wish there were a way to ref secrets without this..
-  age.secrets.msmtp-passwordeval.file = ../../secret/msmtp-passwordeval.age;
+  sops.secrets.msmtp-passwordeval = {
+    sopsFile = ../secret/msmtp-passwordeval.json;
+    format = "json";
+    key = "data";
+  };
 
   # Setup SMTP Relay
   programs.msmtp = {
@@ -25,7 +29,7 @@
     accounts = {
       default = {
         host = "smtp.fastmail.com";
-        passwordeval = "cat ${config.age.secrets.msmtp-passwordeval.path}";
+        passwordeval = "cat ${config.sops.secrets.msmtp-passwordeval.path}";
         user = "brandon@nll.sh";
         from = "noreply@null.pub";
       };

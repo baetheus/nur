@@ -3,12 +3,13 @@
   users = userMixin.users.default { inherit pkgs; };
 in {
   nixpkgs.hostPlatform = "x86_64-linux";
+  nixpkgs.config.allowUnfree = true; # plexmediaserver
 
   imports = [
     ./hardware-configuration.nix
     ../../mixin/common-nixos.nix
     ../../mixin/zfs.nix
-    ../../mixin/age.nix
+    ../../mixin/sops.nix
     ../../mixin/openssh.nix
     ../../mixin/tailscale.nix
     users
@@ -23,14 +24,18 @@ in {
   networking.firewall.allowedUDPPorts = [ 41641 ]; # Tailscale
 
   # Secrets
-  age.secrets.basicauth = {
-    file = ../../secret/basicauth.age;
+  sops.secrets.basicauth = {
+    sopsFile = ../../secret/basicauth.json;
+    format = "json";
+    key = "data";
     owner = "nginx";
     group = "nginx";
   };
 
-  age.secrets.miniflux = {
-    file = ../../secret/miniflux-config.age;
+  sops.secrets.miniflux = {
+    sopsFile = ../../secret/miniflux-config.json;
+    format = "json";
+    key = "data";
   };
 
   # Users and Groups
@@ -64,7 +69,7 @@ in {
       "media.null.pub" = {
         forceSSL = true;
         enableACME = true;
-        basicAuthFile = config.age.secrets.basicauth.path;
+        basicAuthFile = config.sops.secrets.basicauth.path;
         locations."/" = {
           root = "/media";
           extraConfig = "autoindex on;";
@@ -83,7 +88,7 @@ in {
       "nzbget.null.pub" = {
         forceSSL = true;
         enableACME = true;
-        basicAuthFile = config.age.secrets.basicauth.path;
+        basicAuthFile = config.sops.secrets.basicauth.path;
         locations."/" = {
           proxyPass = "http://0.0.0.0:6789";
           proxyWebsockets = true; };

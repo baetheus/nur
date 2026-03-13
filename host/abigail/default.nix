@@ -8,7 +8,7 @@ in {
     ./hardware-configuration.nix
     ../../mixin/common-nixos.nix
     ../../mixin/zfs.nix
-    ../../mixin/age.nix
+    ../../mixin/sops.nix
     ../../mixin/openssh.nix
     ../../mixin/tailscale.nix
     users
@@ -23,7 +23,11 @@ in {
   networking.firewall.allowedUDPPorts = [ 41641 ]; # Tailscale
 
   # Secrets
-  age.secrets.vaultwarden.file = ../../secret/vaultwarden.age;
+  sops.secrets.vaultwarden = {
+    sopsFile = ../../secret/vaultwarden.json;
+    format = "json";
+    key = "data";
+  };
 
   # Nginx
   security.acme.acceptTerms = true;
@@ -150,13 +154,12 @@ in {
       WEBSOCKET_ENABLED = "true";
       SIGNUPS_ALLOWED = "false";
     };
-    environmentFile = config.age.secrets.vaultwarden.path;
+    environmentFile = config.sops.secrets.vaultwarden.path;
   };
 
   # Personal OIDC provider
   services.pocket-id = {
     enable = true;
-    package = pkgs.unstable.pocket-id;
     settings = {
       TRUST_PROXY = true;
       APP_URL = "https://id.null.pub";
