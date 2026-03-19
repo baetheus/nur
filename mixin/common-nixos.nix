@@ -5,7 +5,6 @@
     ./locale.nix
     ./boot.nix
     ./sudo.nix
-    ./motd.nix
     ./system-packages.nix
   ];
 }

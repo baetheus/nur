@@ -66,22 +66,10 @@
 
       # nixos hosts
       nixosConfigurations = {
-        live-iso = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ({ pkgs, modulesPath, ... }: {
-              imports = [
-                (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
-                home-manager.nixosModules.home-manager
-                { services.openssh.enable = true; }
-                ./mixin/locale.nix
-                ./mixin/sudo.nix
-                ./mixin/system-packages.nix
-              ] ++ (import ./mixin/user.nix).default;
-            })
-          ];
-        };
+        # live iso
+        live = nixosSystem ./host/live; 
 
+        # systems
         toph = nixosSystem ./host/toph;
         abigail = nixosSystem ./host/abigail;
         bartleby = nixosSystem ./host/bartleby;

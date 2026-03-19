@@ -10,7 +10,6 @@ in {
     ../../mixin/timezone.nix
     ../../mixin/locale.nix
     ../../mixin/sudo.nix
-    ../../mixin/motd.nix
     ../../mixin/system-packages.nix
     # ZFS and services
     ../../mixin/zfs.nix
