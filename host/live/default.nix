@@ -19,6 +19,10 @@ in
 
   networking.hostName = "live";
 
+  environment.systemPackages = with pkgs; [
+    disko
+  ];
+
   services.openssh = {
     enable = true;
     settings = {
