@@ -17,6 +17,8 @@ in
     ../../mixin/system-packages.nix
   ];
 
+  networking.hostName = "live";
+
   services.openssh = {
     enable = true;
     settings = {
