@@ -7,9 +7,13 @@
         content = {
           type = "gpt";
           partitions = {
+            boot = {
+              size = "1M";
+              type = "EF02"; # for grub MBR
+            };
             ESP = {
               type = "EF00";
-              size = "500M";
+              size = "512M";
               content = {
                 type = "filesystem";
                 format = "vfat";
@@ -29,7 +33,7 @@
       };
       storage1 = {
         type = "disk";
-        device = "/dev/disk/by-id/ata-ST4000NM0035-1V4107_ZC182W1Y";
+        device = "/dev/disk/by-id/ata-WDC_WD40EFAX-68JH4N1_WD-WX22D616SAD8";
         content = {
           type = "gpt";
           partitions = {
@@ -45,7 +49,7 @@
       };
       storage2 = {
         type = "disk";
-        device = "/dev/disk/by-id/ata-WDC_WD40EFAX-68JH4N1_WD-WX22D616SAD8";
+        device = "/dev/disk/by-id/ata-ST4000DM000-1F2168_S3011SML";
         content = {
           type = "gpt";
           partitions = {
@@ -61,7 +65,7 @@
       };
       storage3 = {
         type = "disk";
-        device = "/dev/disk/by-id/ata-ST4000DM000-1F2168_S3011SML";
+        device = "/dev/disk/by-id/ata-ST4000NM0035-1V4107_ZC13BWV4";
         content = {
           type = "gpt";
           partitions = {
@@ -77,7 +81,7 @@
       };
       storage4 = {
         type = "disk";
-        device = "/dev/disk/by-id/ata-ST4000NM0035-1V4107_ZC13BWV4";
+        device = "/dev/disk/by-id/ata-ST4000NM0035-1V4107_ZC182W1Y";
         content = {
           type = "gpt";
           partitions = {
@@ -97,6 +101,7 @@
         type = "zpool";
         # Workaround: cannot import 'zroot': I/O error in disko tests
         options.cachefile = "none";
+        options.mountpoint = "legacy";
         rootFsOptions = {
           compression = "zstd";
           "com.sun:auto-snapshot" = "false";
