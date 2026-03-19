@@ -1,6 +1,8 @@
-{ config, pkgs, ... }: let
+{ config, pkgs, ... }:
+let
   users = import ../../mixin/user.nix;
-in {
+in
+{
   nixpkgs.hostPlatform = "x86_64-linux";
 
   imports = [
@@ -10,14 +12,19 @@ in {
     ../../mixin/sops.nix
     ../../mixin/openssh.nix
     ../../mixin/tailscale.nix
-  ] ++ users.default;
+  ]
+  ++ users.default;
 
   # General
   system.stateVersion = "22.05";
 
   networking.hostName = "abigail";
   networking.hostId = "a9a768fa";
-  networking.firewall.allowedTCPPorts = [ 22 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    22
+    80
+    443
+  ];
   networking.firewall.allowedUDPPorts = [ 41641 ]; # Tailscale
 
   # Secrets
@@ -127,7 +134,6 @@ in {
     };
   };
 
-
   # Headscale
   environment.systemPackages = with pkgs; [ headscale ];
   services.headscale = {
@@ -139,7 +145,10 @@ in {
         magic_dns = true;
         base_domain = "rou.st";
         search_domains = [ "rou.st" ];
-        nameservers.global = [ "1.1.1.1" "4.4.4.4" ];
+        nameservers.global = [
+          "1.1.1.1"
+          "4.4.4.4"
+        ];
       };
     };
   };
@@ -199,7 +208,12 @@ in {
       "share" = {
         id = "xa7yg-wn5qo";
         path = "/home/brandon/share";
-        devices = [ "rosalind" "toph" "bartleby" "diane" ];
+        devices = [
+          "rosalind"
+          "toph"
+          "bartleby"
+          "diane"
+        ];
       };
 
       # "photos" = {
@@ -213,7 +227,12 @@ in {
         id = "xa7yg-mu5ic";
         type = "receiveonly";
         path = "/home/brandon/music";
-        devices = [ "rosalind" "toph" "bartleby" "diane" ];
+        devices = [
+          "rosalind"
+          "toph"
+          "bartleby"
+          "diane"
+        ];
       };
     };
   };

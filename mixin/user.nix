@@ -1,3 +1,10 @@
+/**
+This is a good pattern for now, but in the future I'd like to move all the user
+and home manager construction back to a home directory, with home manager
+configurations, and user configurations, there. The interface I'd like is to
+have modules exported under keys from the default.nix under home. Or, perhaps,
+have userConfig.<username> and usersConfig.<group> exports.
+*/
 let
   # Type validation helpers
   isString = x: builtins.typeOf x == "string";

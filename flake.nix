@@ -48,6 +48,8 @@
             age-plugin-yubikey
             age
             sops
+            nixfmt
+            statix
             claude-code
           ];
         };
