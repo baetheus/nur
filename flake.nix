@@ -73,7 +73,7 @@
               imports = [
                 (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
                 home-manager.nixosModules.home-manager
-                ./mixin/openssh.nix
+                { services.openssh.enable = true; }
                 ./mixin/locale.nix
                 ./mixin/sudo.nix
                 ./mixin/system-packages.nix
