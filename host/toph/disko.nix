@@ -97,7 +97,6 @@
         type = "zpool";
         # Workaround: cannot import 'zroot': I/O error in disko tests
         options.cachefile = "none";
-        options.mountpoint = "legacy";
         rootFsOptions = {
           compression = "zstd";
           "com.sun:auto-snapshot" = "false";
@@ -116,16 +115,9 @@
         };
         # postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^zroot@blank$' || zfs snapshot zroot@blank";
         datasets = {
-          home = {
-            type = "zfs_fs";
-            mountpoint = "/home";
-            options.mountpoint = "legacy";
-            options."com.sun:auto-snapshot" = "true";
-          };
           media = {
             type = "zfs_fs";
             mountpoint = "/media";
-            options.mountpoint = "legacy";
             options."com.sun:auto-snapshot" = "false";
           };
         };
