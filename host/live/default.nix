@@ -15,13 +15,15 @@ in
     ../../mixin/locale.nix
     ../../mixin/timezone.nix
     ../../mixin/system-packages.nix
-  ]
+  ];
 
   services.openssh = {
     enable = true;
-    PasswordAuthentication = false;
-    KbdInteractiveAuthentication = true;
-    PermitRootLogin = "yes";
+    settings = {
+      PermitRootLogin = "yes";
+      PasswordAuthentication = false;
+    };
+    extraConfig = "PubkeyAuthOptions verify-required";
   };
 
   users.users.root.openssh.authorizedKeys.keys = users.user.brandon.keys;
