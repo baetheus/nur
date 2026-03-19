@@ -1,9 +1,11 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   imports = [
     ./nix.nix
-    ./timezone.nix
-    ./locale.nix
     ./sudo.nix
+    ./boot.nix
+    ./locale.nix
+    ./timezone.nix
     ./system-packages.nix
   ];
 }
