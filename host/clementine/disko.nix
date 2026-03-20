@@ -75,19 +75,24 @@
           root = {
             type = "zfs_fs";
             mountpoint = "/";
+            options.mountpoint = "legacy";
           };
           nix = {
             type = "zfs_fs";
             mountpoint = "/nix";
+            options.mountpoint = "legacy";
           };
           home = {
             type = "zfs_fs";
-            options.mountpoint = "/home";
+            mountpoint = "/home";
+            options.mountpoint = "legacy";
             options."com.sun:auto-snapshot" = "true";
           };
           persist = {
             type = "zfs_fs";
-            options.mountpoint = "/persist";
+            mountpoint = "/persist";
+            options.mountpoint = "legacy";
+            options."com.sun:auto-snapshot" = "true";
           };
         };
       };

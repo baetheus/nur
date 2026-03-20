@@ -111,19 +111,23 @@
           };
           root = {
             type = "zfs_fs";
+            options.mountpoint = "legacy";
             mountpoint = "/";
           };
           nix = {
             type = "zfs_fs";
+            options.mountpoint = "legacy";
             mountpoint = "/nix";
           };
           home = {
             type = "zfs_fs";
-            options.mountpoint = "/home";
+            options.mountpoint = "legacy";
+            mountpoint = "/home";
           };
           persist = {
             type = "zfs_fs";
-            options.mountpoint = "/persist";
+            options.mountpoint = "legacy";
+            mountpoint = "/persist";
           };
         };
       };
@@ -144,6 +148,7 @@
           media = {
             type = "zfs_fs";
             mountpoint = "/media";
+            options.mountpoint = "legacy";
             options."com.sun:auto-snapshot" = "false";
           };
         };
