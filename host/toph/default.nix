@@ -25,11 +25,6 @@ in
   # General
   system.stateVersion = "25.11";
 
-  # Immutable Rollback
-  boot.initrd.postDeviceCommands = lib.mkAfter ''
-    zfs rollback -r rpool/root@blank
-  '';
-
   # Networking
   networking.hostName = "toph";
   networking.hostId = "007f0200";

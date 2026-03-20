@@ -1,7 +1,15 @@
 {
   disko.devices = {
+    nodev = {
+      "/" = {
+        fsType = "tmpfs";
+        mountOptions = [
+          "size=2G"
+        ];
+      };
+    };
     disk = {
-      nvme = {
+      main = {
         device = "/dev/disk/by-id/nvme-ADATA_SX8200PNP_2K3629A97HPY";
         type = "disk";
         content = {
@@ -102,17 +110,11 @@
           compression = "zstd";
           "com.sun:auto-snapshot" = "false";
         };
-        postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^rpool/root@blank$' || zfs snapshot rpool/root@blank";
         datasets = {
           reserved = {
             type = "zfs_fs";
             options.mountpoint = "none";
             options.reservation = "12G";
-          };
-          root = {
-            type = "zfs_fs";
-            options.mountpoint = "legacy";
-            mountpoint = "/";
           };
           nix = {
             type = "zfs_fs";
@@ -145,9 +147,9 @@
             options.mountpoint = "none";
             options.reservation = "12G";
           };
-          media = {
+          store = {
             type = "zfs_fs";
-            mountpoint = "/media";
+            mountpoint = "/store";
             options.mountpoint = "legacy";
             options."com.sun:auto-snapshot" = "false";
           };
