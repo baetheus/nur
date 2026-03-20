@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   users = import ../../mixin/user.nix;
 in
@@ -18,7 +23,7 @@ in
   ++ users.default;
 
   # General
-  system.stateVersion = "26.11";
+  system.stateVersion = "25.11";
 
   # Immutable Rollback
   boot.initrd.postDeviceCommands = lib.mkAfter ''

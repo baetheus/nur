@@ -1,9 +1,10 @@
-{ ... }: {
+{ ... }:
+{
   disko.devices = {
     disk = {
       sda = {
         type = "disk";
-        device = "/dev/sda";
+        device = "/dev/disk/by-id/ata-HGST_HUS724020ALA640_PN1186P2G19J5H";
         content = {
           type = "gpt";
           partitions = {
@@ -29,7 +30,7 @@
       };
       sdb = {
         type = "disk";
-        device = "/dev/sdb";
+        device = "/dev/disk/by-id/ata-HGST_HUS724020ALA640_PN1138P2GGZ5DH";
         content = {
           type = "gpt";
           partitions = {
@@ -62,16 +63,18 @@
           ashift = "12";
         };
         rootFsOptions = {
-          compression = "lz4";
+          compression = "zstd";
           "com.sun:auto-snapshot" = "false";
         };
         datasets = {
+          reserved = {
+            type = "zfs_fs";
+            options.mountpoint = "none";
+            options.reservation = "12G";
+          };
           root = {
             type = "zfs_fs";
             mountpoint = "/";
-            options = {
-              "com.sun:auto-snapshot" = "true";
-            };
           };
           nix = {
             type = "zfs_fs";
@@ -79,10 +82,12 @@
           };
           home = {
             type = "zfs_fs";
-            mountpoint = "/home";
-            options = {
-              "com.sun:auto-snapshot" = "true";
-            };
+            options.mountpoint = "/home";
+            options."com.sun:auto-snapshot" = "true";
+          };
+          persist = {
+            type = "zfs_fs";
+            options.mountpoint = "/persist";
           };
         };
       };
