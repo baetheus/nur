@@ -1,3 +1,3 @@
 { config, ... }: {
-  sops.age.keyFile = "/keys/age-${config.networking.hostName}.key";
+  sops.age.keyFile = "/persist/keys/age-${config.networking.hostName}.key";
 }
