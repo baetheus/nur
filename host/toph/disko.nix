@@ -110,7 +110,6 @@
         rootFsOptions = {
           mountpoint = "none";
           compression = "zstd";
-          "com.sun:auto-snapshot" = "false";
         };
         datasets = {
           reserved = {
@@ -123,16 +122,6 @@
             options.mountpoint = "legacy";
             mountpoint = "/nix";
           };
-          home = {
-            type = "zfs_fs";
-            options.mountpoint = "legacy";
-            mountpoint = "/home";
-          };
-          persist = {
-            type = "zfs_fs";
-            options.mountpoint = "legacy";
-            mountpoint = "/persist";
-          };
         };
       };
       store = {
@@ -141,7 +130,6 @@
         rootFsOptions = {
           mountpoint = "none";
           compression = "zstd";
-          "com.sun:auto-snapshot" = "false";
         };
         datasets = {
           reserved = {
@@ -149,11 +137,23 @@
             options.mountpoint = "none";
             options.reservation = "12G";
           };
-          store = {
+          home = {
+            type = "zfs_fs";
+            mountpoint = "/home";
+            options.mountpoint = "legacy";
+            options."com.sun:auto-snapshot" = "true";
+          };
+          media = {
             type = "zfs_fs";
             mountpoint = "/store";
             options.mountpoint = "legacy";
             options."com.sun:auto-snapshot" = "false";
+          };
+          persist = {
+            type = "zfs_fs";
+            mountpoint = "/persist";
+            options.mountpoint = "legacy";
+            options."com.sun:auto-snapshot" = "true";
           };
         };
       };

@@ -10,11 +10,10 @@ in
   system.stateVersion = "25.11";
 
   imports = [
-    ../../mixin/nix.nix
-    ../../mixin/locale.nix
-    ../../mixin/timezone.nix
-    ../../mixin/system-packages.nix
-  ];
+    ./disko.nix
+    ../../mixin/common-nixos.nix
+  ]
+  ++ users.default;
 
   networking.hostName = "live";
 

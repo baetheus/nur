@@ -19,6 +19,10 @@
 
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    impermanence.url = "github:nix-community/impermanence";
+    impermanence.inputs.nixpkgs.follows = "nixpkgs";
+    impermanence.inputs.home-manager.follows = "home-manager";
   };
 
   outputs =
@@ -30,6 +34,7 @@
       nix-darwin,
       disko,
       sops-nix,
+      impermanence,
       ...
     }@inputs:
     let
@@ -49,6 +54,7 @@
             home-manager.nixosModules.home-manager
             sops-nix.nixosModules.sops
             disko.nixosModules.disko
+            impermanence.nixosModules.impermanence
             module
           ];
         };
