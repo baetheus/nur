@@ -8,8 +8,10 @@ let
 in
 {
   nixpkgs.hostPlatform = "x86_64-linux";
+  system.stateVersion = "25.11";
 
   imports = [
+    (modulesPath + "/installer/netboot/netboot-minimal.nix")
     ../../mixin/nix.nix
     ../../mixin/locale.nix
     ../../mixin/timezone.nix
