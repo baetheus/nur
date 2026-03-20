@@ -114,24 +114,22 @@
 
       # Images: TODO hoist to own file
       packages."x86_64-linux" = {
-        live-iso =
-        (nixpkgs.lib.nixosSystem {
+        live-iso = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             nixos-images.nixosModules.kexec-installer
             nixos-images.nixosModules.noninteractive
             ./host/live
           ];
-        }).config.system.build.kexecTarball;
-        live-kexec =
-        (nixpkgs.lib.nixosSystem {
+        };
+        live-kexec = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             nixos-images.nixosModules.image-installer
             nixos-images.nixosModules.noninteractive
             ./host/live
           ];
-        }).config.system.build;
+        };
       };
     };
 }
