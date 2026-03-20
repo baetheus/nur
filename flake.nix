@@ -19,44 +19,71 @@
 
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    nixos-images.url = "github:nix-community/nixos-images";
+    nixos-images.inputs.nixos-stable.follows = "nixpkgs-stable";
+    nixos-images.inputs.nixos-unstable.follows = "nixpkgs-unstable";
   };
 
-  outputs = { self, nixpkgs, flake-utils, home-manager, nix-darwin, disko, sops-nix, ... } @ inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      home-manager,
+      nix-darwin,
+      disko,
+      sops-nix,
+      nixos-images,
+      ...
+    }@inputs:
     let
-      darwinSystem = module: nix-darwin.lib.darwinSystem {
-        modules = [
-          home-manager.darwinModules.home-manager
-          module
-        ];
-      };
-
-      nixosSystem = module: nixpkgs.lib.nixosSystem {
-        modules = [
-          home-manager.nixosModules.home-manager
-          sops-nix.nixosModules.sops
-          disko.nixosModules.disko
-          module
-        ];
-      };
-    in
-    (flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
-        shell = with pkgs; mkShell {
-          buildInputs = [
-            nixos-anywhere
-            age-plugin-yubikey
-            age
-            sops
-            nixfmt
-            statix
-            claude-code
+      darwinSystem =
+        module:
+        nix-darwin.lib.darwinSystem {
+          modules = [
+            home-manager.darwinModules.home-manager
+            module
           ];
         };
+
+      nixosSystem =
+        module:
+        nixpkgs.lib.nixosSystem {
+          modules = [
+            home-manager.nixosModules.home-manager
+            sops-nix.nixosModules.sops
+            disko.nixosModules.disko
+            module
+          ];
+        };
+    in
+    (flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+        shell =
+          with pkgs;
+          mkShell {
+            buildInputs = [
+              nixos-anywhere
+              age-plugin-yubikey
+              age
+              sops
+              nixfmt
+              statix
+              claude-code
+            ];
+          };
       in
       {
         devShells.default = shell;
-      }))
+
+      }
+    ))
     // {
       # macOS hosts
       darwinConfigurations = {
@@ -66,9 +93,6 @@
 
       # nixos hosts
       nixosConfigurations = {
-        # live iso
-        live = nixosSystem ./host/live; 
-
         # systems
         toph = nixosSystem ./host/toph;
         abigail = nixosSystem ./host/abigail;
@@ -88,5 +112,26 @@
         };
       };
 
+      # Images: TODO hoist to own file
+      packages."x86_64-linux" = {
+        live-iso =
+        (nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            nixos-images.nixosModules.kexec-installer
+            nixos-images.nixosModules.noninteractive
+            ./host/live
+          ];
+        }).config.system.build.kexecTarball;
+        live-kexec =
+        (nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            nixos-images.nixosModules.image-installer
+            nixos-images.nixosModules.noninteractive
+            ./host/live
+          ];
+        }).config.system.build;
+      };
     };
 }
