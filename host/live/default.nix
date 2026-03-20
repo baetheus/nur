@@ -1,6 +1,5 @@
 {
   pkgs,
-  modulesPath,
   ...
 }:
 let
@@ -11,7 +10,6 @@ in
   system.stateVersion = "25.11";
 
   imports = [
-    (modulesPath + "/installer/cd-dvd/installation-cd-base.nix")
     ../../mixin/nix.nix
     ../../mixin/locale.nix
     ../../mixin/timezone.nix
