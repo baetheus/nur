@@ -1,5 +1,5 @@
 { pkgs, ... }: let
-  users = ../../user.nix;
+  users = import ../../user.nix;
 in {
   nixpkgs.hostPlatform = "aarch64-darwin";
 
