@@ -2,8 +2,9 @@
 {
   environment.systemPackages = with pkgs; [
     vim
-    wget
     git
+    wget
+    watch
     jujutsu
     ripgrep
   ];
