@@ -21,13 +21,13 @@
               size = "100%";
               content = {
                 type = "zfs";
-                pool = "root";
+                pool = "rpool";
               };
             };
           };
         };
       };
-      storage1 = {
+      store1 = {
         type = "disk";
         device = "/dev/disk/by-id/ata-WDC_WD40EFAX-68JH4N1_WD-WX22D616SAD8";
         content = {
@@ -37,13 +37,13 @@
               size = "100%";
               content = {
                 type = "zfs";
-                pool = "storage";
+                pool = "store";
               };
             };
           };
         };
       };
-      storage2 = {
+      store2 = {
         type = "disk";
         device = "/dev/disk/by-id/ata-ST4000DM000-1F2168_S3011SML";
         content = {
@@ -53,13 +53,13 @@
               size = "100%";
               content = {
                 type = "zfs";
-                pool = "storage";
+                pool = "store";
               };
             };
           };
         };
       };
-      storage3 = {
+      store3 = {
         type = "disk";
         device = "/dev/disk/by-id/ata-ST4000NM0035-1V4107_ZC13BWV4";
         content = {
@@ -69,13 +69,13 @@
               size = "100%";
               content = {
                 type = "zfs";
-                pool = "storage";
+                pool = "store";
               };
             };
           };
         };
       };
-      storage4 = {
+      store4 = {
         type = "disk";
         device = "/dev/disk/by-id/ata-ST4000NM0035-1V4107_ZC182W1Y";
         content = {
@@ -85,7 +85,7 @@
               size = "100%";
               content = {
                 type = "zfs";
-                pool = "storage";
+                pool = "store";
               };
             };
           };
@@ -93,28 +93,54 @@
       };
     };
     zpool = {
-      root = {
+      rpool = {
         type = "zpool";
         # Workaround: cannot import 'zroot': I/O error in disko tests
         options.cachefile = "none";
         rootFsOptions = {
+          mountpoint = "none";
           compression = "zstd";
           "com.sun:auto-snapshot" = "false";
         };
-        mountpoint = "/";
-        postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^root@blank$' || zfs snapshot root@blank";
+        postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^rpool/root@blank$' || zfs snapshot rpool/root@blank";
+        datasets = {
+          reserved = {
+            type = "zfs_fs";
+            options.mountpoint = "none";
+            options.reservation = "12G";
+          };
+          root = {
+            type = "zfs_fs";
+            mountpoint = "/";
+          };
+          nix = {
+            type = "zfs_fs";
+            mountpoint = "/nix";
+          };
+          home = {
+            type = "zfs_fs";
+            options.mountpoint = "/home";
+          };
+          persist = {
+            type = "zfs_fs";
+            options.mountpoint = "/persist";
+          };
+        };
       };
-      storage = {
+      store = {
         type = "zpool";
         mode = "raidz1";
-        # Workaround: cannot import 'zroot': I/O error in disko tests
-        options.cachefile = "none";
         rootFsOptions = {
+          mountpoint = "none";
           compression = "zstd";
           "com.sun:auto-snapshot" = "false";
         };
-        # postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^zroot@blank$' || zfs snapshot zroot@blank";
         datasets = {
+          reserved = {
+            type = "zfs_fs";
+            options.mountpoint = "none";
+            options.reservation = "12G";
+          };
           media = {
             type = "zfs_fs";
             mountpoint = "/media";

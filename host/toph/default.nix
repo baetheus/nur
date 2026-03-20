@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   users = import ../../mixin/user.nix;
 in
@@ -18,7 +18,12 @@ in
   ++ users.default;
 
   # General
-  system.stateVersion = "22.05";
+  system.stateVersion = "26.11";
+
+  # Immutable Rollback
+  boot.initrd.postDeviceCommands = lib.mkAfter ''
+    zfs rollback -r rpool/root@blank
+  '';
 
   # Networking
   networking.hostName = "toph";
