@@ -19,10 +19,6 @@
 
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-
-    nixos-images.url = "github:nix-community/nixos-images";
-    nixos-images.inputs.nixos-stable.follows = "nixpkgs-stable";
-    nixos-images.inputs.nixos-unstable.follows = "nixpkgs-unstable";
   };
 
   outputs =
@@ -34,7 +30,6 @@
       nix-darwin,
       disko,
       sops-nix,
-      nixos-images,
       ...
     }@inputs:
     let
@@ -94,6 +89,7 @@
       # nixos hosts
       nixosConfigurations = {
         # systems
+        live = nixosSystem ./host/live;
         toph = nixosSystem ./host/toph;
         abigail = nixosSystem ./host/abigail;
         bartleby = nixosSystem ./host/bartleby;
@@ -109,26 +105,6 @@
         rust = {
           path = ./template/rust;
           description = "nix flake new -t github:baetheus/.nix#rust .";
-        };
-      };
-
-      # Images: TODO hoist to own file
-      packages."x86_64-linux" = {
-        live-iso = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            nixos-images.nixosModules.kexec-installer
-            nixos-images.nixosModules.noninteractive
-            ./host/live
-          ];
-        };
-        live-kexec = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            nixos-images.nixosModules.image-installer
-            nixos-images.nixosModules.noninteractive
-            ./host/live
-          ];
         };
       };
     };

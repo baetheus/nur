@@ -7,6 +7,8 @@ let
   users = import ../../mixin/user.nix;
 in
 {
+  nixpkgs.hostPlatform = "x86_64-linux";
+
   imports = [
     ../../mixin/nix.nix
     ../../mixin/locale.nix
