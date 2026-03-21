@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   home.packages = with pkgs; [
     openssh # For a good ssh-agent
     zsh # Because
@@ -9,11 +10,11 @@
     enable = true;
     defaultKeymap = "viins"; # Use vi for insert mode
     initContent = ''
+      export PATH="/Users/brandon/.deno/bin:$PATH"
       PROMPT="%n@%B%m%b %# "
       RPROMPT="%~"
       COLORTERM=1
-      export PATH="/Users/brandon/.deno/bin:$PATH"
-      eval `ssh-agent`;
+
       new() {
         nix flake new -t ~/share/src/nix#$1 $2
       }
@@ -24,9 +25,11 @@
     shellAliases = {
       ll = "ls -alhG --color=always"; # Pretty ll
       vi = "vim"; # Prefer vim
-      sw = if pkgs.stdenv.isDarwin
-        then "sudo darwin-rebuild switch --flake github:baetheus/nur"
-        else "nixos-rebuild switch --use-remote-sudo --flake github:baetheus/nur";
+      sw =
+        if pkgs.stdenv.isDarwin then
+          "sudo darwin-rebuild switch --flake github:baetheus/nur"
+        else
+          "nixos-rebuild switch --use-remote-sudo --flake github:baetheus/nur";
     };
 
     history = {
