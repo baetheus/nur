@@ -20,15 +20,4 @@ in
   environment.systemPackages = with pkgs; [
     disko
   ];
-
-  services.openssh = {
-    enable = true;
-    settings = {
-      PermitRootLogin = "yes";
-      PasswordAuthentication = false;
-    };
-    extraConfig = "PubkeyAuthOptions verify-required";
-  };
-
-  users.users.root.openssh.authorizedKeys.keys = users.user.brandon.keys;
 }
