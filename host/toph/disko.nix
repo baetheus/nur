@@ -145,7 +145,7 @@
           };
           media = {
             type = "zfs_fs";
-            mountpoint = "/store";
+            mountpoint = "/media";
             options.mountpoint = "legacy";
             options."com.sun:auto-snapshot" = "false";
           };

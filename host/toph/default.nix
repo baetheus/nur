@@ -16,7 +16,6 @@ in
     ./disko.nix
     ../../mixin/common-nixos.nix
     ../../mixin/zfs.nix
-    ../../mixin/openssh.nix
     ../../mixin/sops.nix
     ../../mixin/tailscale.nix
   ]
@@ -32,17 +31,13 @@ in
 
   # Firewall
   networking.firewall.enable = true;
-  networking.firewall.allowedUDPPorts = [
-    22
-    53
-    631
-    5353
-  ];
+  networking.firewall.allowedUDPPorts = [ 41641 ];
   networking.firewall.allowedTCPPorts = [
     22
     53
+    443
     631
-    5353
+    32400
   ];
 
   # Printing
@@ -60,6 +55,79 @@ in
   services.avahi.publish.enable = true;
   services.avahi.publish.domain = true;
   services.avahi.publish.userServices = true;
+
+  # Media
+  users = {
+    users.media = {
+      group = "media";
+      isSystemUser = true;
+    };
+    groups.media = {
+      members = [ "media" ];
+    };
+  };
+
+  # Nginx
+  services.nginx = {
+    enable = true;
+
+    virtualHosts = {
+      "toph.lan" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          root = "/var/www/toph.lan";
+          extraConfig = "autoindex on;";
+        };
+      };
+
+      "plex.null.pub" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://0.0.0.0:32400";
+          proxyWebsockets = true;
+        };
+      };
+
+      "nzbget.null.pub" = {
+        forceSSL = true;
+        enableACME = true;
+        basicAuthFile = config.sops.secrets.basicauth.path;
+        locations."/" = {
+          proxyPass = "http://0.0.0.0:6789";
+          proxyWebsockets = true;
+        };
+      };
+
+      "series.null.pub" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://0.0.0.0:8989";
+          proxyWebsockets = true;
+        };
+      };
+
+      "movies.null.pub" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://0.0.0.0:7878";
+          proxyWebsockets = true;
+        };
+      };
+
+      "music.null.pub" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://0.0.0.0:8686";
+          proxyWebsockets = true;
+        };
+      };
+    };
+  };
 
   # Syncthing
   services.syncthing = {
@@ -137,6 +205,10 @@ in
     enable = true;
     files = [
       "/etc/machine-id"
+      "/etc/ssh/ssh_host_ed25519_key"
+      "/etc/ssh/ssh_host_ed25519_key.pub"
+      "/etc/ssh/ssh_host_rsa_key"
+      "/etc/ssh/ssh_host_rsa_key.pub"
     ];
     directories = [
       "/var/log"

@@ -1,6 +1,8 @@
-{ config, pkgs, ... }: let
+{ config, pkgs, ... }:
+let
   users = import ../../mixin/user.nix;
-in {
+in
+{
   nixpkgs.hostPlatform = "x86_64-linux";
   nixpkgs.config.allowUnfree = true; # plexmediaserver
 
@@ -9,16 +11,21 @@ in {
     ../../mixin/common-nixos.nix
     ../../mixin/zfs.nix
     ../../mixin/sops.nix
-    ../../mixin/openssh.nix
     ../../mixin/tailscale.nix
-  ] ++ users.default;
+  ]
+  ++ users.default;
 
   # General
   system.stateVersion = "22.05";
 
   networking.hostName = "bartleby";
   networking.hostId = "1de212b7";
-  networking.firewall.allowedTCPPorts = [ 22 80 443 32400 ];
+  networking.firewall.allowedTCPPorts = [
+    22
+    80
+    443
+    32400
+  ];
   networking.firewall.allowedUDPPorts = [ 41641 ]; # Tailscale
 
   # Secrets
@@ -28,12 +35,6 @@ in {
     key = "data";
     owner = "nginx";
     group = "nginx";
-  };
-
-  sops.secrets.miniflux = {
-    sopsFile = ../../secret/miniflux-config.json;
-    format = "json";
-    key = "data";
   };
 
   # Users and Groups
@@ -89,7 +90,8 @@ in {
         basicAuthFile = config.sops.secrets.basicauth.path;
         locations."/" = {
           proxyPass = "http://0.0.0.0:6789";
-          proxyWebsockets = true; };
+          proxyWebsockets = true;
+        };
       };
 
       "series.null.pub" = {
@@ -202,21 +204,36 @@ in {
       "share" = {
         id = "xa7yg-wn5qo";
         path = "/home/brandon/share";
-        devices = [ "rosalind" "toph" "abigail" "diane" ];
+        devices = [
+          "rosalind"
+          "toph"
+          "abigail"
+          "diane"
+        ];
       };
 
       "photos" = {
         id = "xa7yg-ph0to";
         type = "receiveonly";
         path = "/home/brandon/photos";
-        devices = [ "rosalind" "toph" "abigail" "diane" ];
+        devices = [
+          "rosalind"
+          "toph"
+          "abigail"
+          "diane"
+        ];
       };
 
       "music" = {
         id = "xa7yg-mu5ic";
         type = "sendonly";
         path = "/media/music";
-        devices = [ "rosalind" "toph" "abigail" "diane" ];
+        devices = [
+          "rosalind"
+          "toph"
+          "abigail"
+          "diane"
+        ];
       };
     };
   };
