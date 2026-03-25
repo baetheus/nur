@@ -1,9 +1,16 @@
-{ me, pkgs, ... }: {
+{ me, pkgs, ... }:
+{
   home = {
-    username = me.username;
+    inherit (me) username;
     stateVersion = "23.05";
     sessionVariables.EDITOR = "vim";
-    packages = with pkgs; [ ripgrep tailscale bottom jujutsu git ];
+    packages = with pkgs; [
+      ripgrep
+      tailscale
+      bottom
+      jujutsu
+      git
+    ];
   };
 
   programs = {
@@ -16,5 +23,6 @@
     ../mixin/zsh
     ../mixin/vim
     ../mixin/direnv
+    ../mixin/zellij
   ];
 }
