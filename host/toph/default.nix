@@ -40,6 +40,24 @@ in
     32400
   ];
 
+  # Immutability
+  fileSystems."/persist".neededForBoot = true;
+  environment.persistence."/persist" = {
+    enable = true;
+    files = [
+      "/etc/machine-id"
+      "/etc/ssh/ssh_host_ed25519_key"
+      "/etc/ssh/ssh_host_ed25519_key.pub"
+      "/etc/ssh/ssh_host_rsa_key"
+      "/etc/ssh/ssh_host_rsa_key.pub"
+    ];
+    directories = [
+      "/var/lib/nixos"
+      # "/var/log" Naaaaah
+      config.services.plex.dataDir
+    ];
+  };
+
   # Printing
   services.printing.enable = true;
   services.printing.browsing = true;
@@ -67,152 +85,91 @@ in
     };
   };
 
-  # Nginx
-  # services.nginx = {
-  #   enable = true;
-
-  #   virtualHosts = {
-  #     "toph.lan" = {
-  #       forceSSL = true;
-  #       enableACME = true;
-  #       locations."/" = {
-  #         root = "/var/www/toph.lan";
-  #         extraConfig = "autoindex on;";
-  #       };
-  #     };
-
-  #     "plex.null.pub" = {
-  #       forceSSL = true;
-  #       enableACME = true;
-  #       locations."/" = {
-  #         proxyPass = "http://0.0.0.0:32400";
-  #         proxyWebsockets = true;
-  #       };
-  #     };
-
-  #     "nzbget.null.pub" = {
-  #       forceSSL = true;
-  #       enableACME = true;
-  #       basicAuthFile = config.sops.secrets.basicauth.path;
-  #       locations."/" = {
-  #         proxyPass = "http://0.0.0.0:6789";
-  #         proxyWebsockets = true;
-  #       };
-  #     };
-
-  #     "series.null.pub" = {
-  #       forceSSL = true;
-  #       enableACME = true;
-  #       locations."/" = {
-  #         proxyPass = "http://0.0.0.0:8989";
-  #         proxyWebsockets = true;
-  #       };
-  #     };
-
-  #     "movies.null.pub" = {
-  #       forceSSL = true;
-  #       enableACME = true;
-  #       locations."/" = {
-  #         proxyPass = "http://0.0.0.0:7878";
-  #         proxyWebsockets = true;
-  #       };
-  #     };
-
-  #     "music.null.pub" = {
-  #       forceSSL = true;
-  #       enableACME = true;
-  #       locations."/" = {
-  #         proxyPass = "http://0.0.0.0:8686";
-  #         proxyWebsockets = true;
-  #       };
-  #     };
-  #   };
-  # };
-
-  # # Syncthing
-  # services.syncthing = {
-  #   enable = true;
-  #   openDefaultPorts = true;
-  #   dataDir = "/home/brandon/sync";
-  #   configDir = "/home/brandon/.config/syncthing";
-  #   user = "brandon";
-  #   group = "users";
-  #   guiAddress = "0.0.0.0:8384";
-  #   overrideFolders = true;
-  #   overrideDevices = true;
-
-  #   settings.devices = {
-  #     "rosalind" = {
-  #       id = "FIFUNFL-3QFVW3N-5P7XESL-Q7JZF4S-55B7TTY-2KG57S5-5JYAZVE-KHDOGAW";
-  #       addresses = [ "tcp://rosalind:22000" ];
-  #     };
-  #     "abigail" = {
-  #       id = "5HMRD3B-UWFLIFC-XDY2NPO-TVWGA2U-GB5H2CT-FUFWNDB-OTKAGEQ-JGLF5QF";
-  #       addresses = [ "tcp://abigail:22000" ];
-  #     };
-  #     "bartleby" = {
-  #       id = "OKG5G4Y-BJDA6GS-3G6XCCN-QZC6RIS-N7QDDS5-WL6MO2C-N74QD3S-YC5AIQ5";
-  #       addresses = [ "tcp://bartleby:22000" ];
-  #     };
-  #     "diane" = {
-  #       id = "D5TXPEW-4MFW7PA-4HANFUA-XU7ZTDJ-I7PUNHU-5EC4YSQ-AA46NZM-OX7VDAO";
-  #       addresses = [ "tcp://diane:22000" ];
-  #     };
-  #   };
-
-  #   settings.folders = {
-  #     "share" = {
-  #       id = "xa7yg-wn5qo";
-  #       type = "receiveonly";
-  #       path = "/home/brandon/share";
-  #       devices = [
-  #         "rosalind"
-  #         "abigail"
-  #         "bartleby"
-  #         "diane"
-  #       ];
-  #     };
-
-  #     "photos" = {
-  #       id = "xa7yg-ph0to";
-  #       type = "receiveonly";
-  #       path = "/media/photos";
-  #       devices = [
-  #         "rosalind"
-  #         "abigail"
-  #         "bartleby"
-  #         "diane"
-  #       ];
-  #     };
-
-  #     "music" = {
-  #       id = "xa7yg-mu5ic";
-  #       type = "receiveonly";
-  #       path = "/media/music";
-  #       devices = [
-  #         "rosalind"
-  #         "abigail"
-  #         "bartleby"
-  #         "diane"
-  #       ];
-  #     };
-  #   };
-  # };
-
-  # Setup filesystem and paths we need to keep between boots
-  fileSystems."/persist".neededForBoot = true;
-  environment.persistence."/persist" = {
+  services.plex = {
     enable = true;
-    files = [
-      "/etc/machine-id"
-      "/etc/ssh/ssh_host_ed25519_key"
-      "/etc/ssh/ssh_host_ed25519_key.pub"
-      "/etc/ssh/ssh_host_rsa_key"
-      "/etc/ssh/ssh_host_rsa_key.pub"
-    ];
-    directories = [
-      "/var/log"
-      "/var/lib/nixos"
-    ];
+    user = "media";
+    group = "media";
   };
+
+  services.nzbget = {
+    enable = true;
+    user = "media";
+    group = "media";
+  };
+
+  services.sonarr = {
+    enable = true;
+    user = "media";
+    group = "media";
+  };
+
+  services.radarr = {
+    enable = true;
+    user = "media";
+    group = "media";
+  };
+
+  services.lidarr = {
+    enable = true;
+    user = "media";
+    group = "media";
+  };
+
+  # Web Interfaces
+  services.nginx = {
+    enable = true;
+
+    virtualHosts = {
+      "plex.toph.local" = {
+        # forceSSL = true;
+        # enableACME = true;
+        locations."/" = {
+          proxyPass = "http://0.0.0.0:32400";
+          proxyWebsockets = true;
+        };
+      };
+
+      "nzbget.toph.local" = {
+        # forceSSL = true;
+        # enableACME = true;
+        locations."/" = {
+          proxyPass = "http://0.0.0.0:6789";
+          proxyWebsockets = true;
+        };
+      };
+
+      "series.toph.local" = {
+        # forceSSL = true;
+        # enableACME = true;
+        locations."/" = {
+          proxyPass = "http://0.0.0.0:8989";
+          proxyWebsockets = true;
+        };
+      };
+
+      "movies.toph.local" = {
+        # forceSSL = true;
+        # enableACME = true;
+        locations."/" = {
+          proxyPass = "http://0.0.0.0:7878";
+          proxyWebsockets = true;
+        };
+      };
+
+      "music.toph.local" = {
+        # forceSSL = true;
+        # enableACME = true;
+        locations."/" = {
+          proxyPass = "http://0.0.0.0:8686";
+          proxyWebsockets = true;
+        };
+      };
+    };
+  };
+
+  # Restic Server
+  services.restic.server.enable = true;
+
+  # Restic Backups
+
 }
