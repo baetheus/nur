@@ -5,11 +5,16 @@
     stateVersion = "23.05";
     sessionVariables.EDITOR = "vim";
     packages = with pkgs; [
+      # General CLI Tools
       ripgrep
-      tailscale
       bottom
       jujutsu
       git
+
+      # Networking / Backup
+      tailscale
+      restic
+      restic-browser
     ];
   };
 
