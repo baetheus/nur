@@ -15,6 +15,7 @@ in
   imports = [
     ./disko.nix
     ../../mixin/common-nixos.nix
+    ../../mixin/boot.nix
     ../../mixin/zfs.nix
     ../../mixin/sops.nix
     ../../mixin/tailscale.nix
@@ -33,11 +34,15 @@ in
   networking.firewall.enable = true;
   networking.firewall.allowedUDPPorts = [ 41641 ];
   networking.firewall.allowedTCPPorts = [
-    22
-    53
-    443
+    22 # SSH
+    53 # CUP
+    443 # HTTPS
     631
-    32400
+    6789 # NZBGet
+    7878 # Radarr (Movies)
+    8686 # Lidarr (Music)
+    8989 # Sonarr (Series)
+    32400 # Plex
   ];
 
   # Immutability
@@ -114,62 +119,5 @@ in
     user = "media";
     group = "media";
   };
-
-  # Web Interfaces
-  services.nginx = {
-    enable = true;
-
-    virtualHosts = {
-      "plex.toph.local" = {
-        # forceSSL = true;
-        # enableACME = true;
-        locations."/" = {
-          proxyPass = "http://0.0.0.0:32400";
-          proxyWebsockets = true;
-        };
-      };
-
-      "nzbget.toph.local" = {
-        # forceSSL = true;
-        # enableACME = true;
-        locations."/" = {
-          proxyPass = "http://0.0.0.0:6789";
-          proxyWebsockets = true;
-        };
-      };
-
-      "series.toph.local" = {
-        # forceSSL = true;
-        # enableACME = true;
-        locations."/" = {
-          proxyPass = "http://0.0.0.0:8989";
-          proxyWebsockets = true;
-        };
-      };
-
-      "movies.toph.local" = {
-        # forceSSL = true;
-        # enableACME = true;
-        locations."/" = {
-          proxyPass = "http://0.0.0.0:7878";
-          proxyWebsockets = true;
-        };
-      };
-
-      "music.toph.local" = {
-        # forceSSL = true;
-        # enableACME = true;
-        locations."/" = {
-          proxyPass = "http://0.0.0.0:8686";
-          proxyWebsockets = true;
-        };
-      };
-    };
-  };
-
-  # Restic Server
-  services.restic.server.enable = true;
-
-  # Restic Backups
 
 }

@@ -11,6 +11,7 @@ in
 
   imports = [
     ./disko.nix
+    ../../mixin/boot.nix
     ../../mixin/common-nixos.nix
   ]
   ++ users.default;

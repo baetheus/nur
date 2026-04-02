@@ -1,14 +1,12 @@
 {
   disko.devices = {
-    nodev = {
-      "/" = {
-        fsType = "tmpfs";
-        mountOptions = [
-          "size=2G"
-          "defaults"
-          "mode=755"
-        ];
-      };
+    nodev."/" = {
+      fsType = "tmpfs";
+      mountOptions = [
+        "size=2G"
+        "defaults"
+        "mode=755"
+      ];
     };
     disk = {
       main = {

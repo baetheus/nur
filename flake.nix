@@ -97,9 +97,9 @@
         # systems
         live = nixosSystem ./host/live;
         toph = nixosSystem ./host/toph;
+        hedy = nixosSystem ./host/hedy;
         abigail = nixosSystem ./host/abigail;
         bartleby = nixosSystem ./host/bartleby;
-        clementine = nixosSystem ./host/clementine;
       };
 
       # Quick templates that I use

@@ -8,6 +8,7 @@ in
 
   imports = [
     ./hardware-configuration.nix
+    ../../mixin/boot.nix
     ../../mixin/common-nixos.nix
     ../../mixin/zfs.nix
     ../../mixin/sops.nix
