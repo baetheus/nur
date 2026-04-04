@@ -98,6 +98,7 @@
         live = nixosSystem ./host/live;
         toph = nixosSystem ./host/toph;
         hedy = nixosSystem ./host/hedy;
+        grace = nixosSystem ./host/grace;
         abigail = nixosSystem ./host/abigail;
         bartleby = nixosSystem ./host/bartleby;
       };
