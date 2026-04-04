@@ -15,7 +15,6 @@ in
     ./disko.nix
     ../../mixin/common-nixos.nix
     ../../mixin/boot.nix
-    ../../mixin/zfs.nix
     ../../mixin/sops.nix
     ../../mixin/tailscale.nix
   ]
@@ -23,6 +22,7 @@ in
 
   # General
   system.stateVersion = "25.11";
+  users.mutableUsers = true;
 
   # Networking
   networking.hostName = "grace";

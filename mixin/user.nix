@@ -104,6 +104,7 @@ rec {
             isNormalUser = true;
             extraGroups = [ "wheel" ];
             openssh.authorizedKeys.keys = validatedMe.keys;
+            initialPassword = "changemefirst";
             # Zsh
             shell = pkgs.zsh;
           };

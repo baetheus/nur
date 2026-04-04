@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  modulesPath,
   ...
 }:
 let
@@ -12,6 +13,7 @@ in
   hardware.facter.reportPath = ./facter.json;
 
   imports = [
+    (modulesPath + "/profiles/qemu-guest.nix") # Needed for qemu host
     ./disko.nix
     ../../mixin/common-nixos.nix
     ../../mixin/boot-grub.nix
