@@ -1,7 +1,7 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   imports = [
     ./base.nix
-    .
   ];
 
   # Default Shell
