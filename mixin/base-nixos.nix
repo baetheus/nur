@@ -4,6 +4,9 @@
     ./base.nix
   ];
 
+  # Locale
+  i18n.defaultLocale = "en_US.UTF-8";
+
   # OpenSSH
   services.openssh = {
     enable = true;
