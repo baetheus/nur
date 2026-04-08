@@ -16,7 +16,7 @@
       COLORTERM=1
 
       new() {
-        nix flake new -t ~/share/src/nix#$1 $2
+        nix flake new -t github:baetheus/nur#$1 $2
       }
     '';
 

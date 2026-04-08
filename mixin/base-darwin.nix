@@ -1,4 +1,9 @@
-{ ... }: {
+{ pkgs, ... }: {
+  imports = [
+    ./base.nix
+    .
+  ];
+
   # Default Shell
   programs.zsh.enable = true;
 

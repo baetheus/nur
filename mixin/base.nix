@@ -1,4 +1,10 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
+  # Locale
+  i18n.defaultLocale = "en_US.UTF-8";
+  time.timeZone = "America/Los_Angeles";
+
+  # Nix
   nix = {
     package = pkgs.nixVersions.stable;
     optimise.automatic = true;
@@ -23,4 +29,13 @@
       keep-derivations = true
     '';
   };
+
+  # System Packages
+  environment.systemPackages = with pkgs; [
+    vim
+    git
+    wget
+    watch
+    ripgrep
+  ];
 }

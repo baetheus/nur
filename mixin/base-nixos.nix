@@ -1,4 +1,27 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }:
+{
+  imports = [
+    ./base.nix
+  ];
+
+  # OpenSSH
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
+    };
+    extraConfig = "PubkeyAuthOptions verify-required";
+  };
+
+  # SOPS
+  sops.age.keyFile = "/persist/keys/age-${config.networking.hostName}.key";
+
+  # Sudo
+  systemd.enableEmergencyMode = false;
+  security.sudo.wheelNeedsPassword = false;
+
+  # ZFS
   # Default to latest LTS kernel but update this if needed
   # boot.kernelPackages = pkgs.linuxPackages_6_12;
   boot.supportedFilesystems = [ "zfs" ];

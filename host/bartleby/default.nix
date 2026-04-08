@@ -1,20 +1,14 @@
 { config, pkgs, ... }:
-let
-  users = import ../../mixin/user.nix;
-in
 {
   nixpkgs.hostPlatform = "x86_64-linux";
   nixpkgs.config.allowUnfree = true; # plexmediaserver
 
   imports = [
     ./hardware-configuration.nix
-    ../../mixin/boot.nix
-    ../../mixin/common-nixos.nix
-    ../../mixin/zfs.nix
-    ../../mixin/sops.nix
-    ../../mixin/tailscale.nix
-  ]
-  ++ users.default;
+    ../../mixin/base-nixos.nix
+    ../../mixin/boot-systemd.nix
+    ../../mixin/user/brandon-server.nix
+  ];
 
   # General
   system.stateVersion = "22.05";

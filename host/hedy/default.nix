@@ -1,13 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  modulesPath,
-  ...
-}:
-let
-  users = import ../../mixin/user.nix;
-in
+{ pkgs, modulesPath, ... }:
 {
   nixpkgs.hostPlatform = "x86_64-linux";
   hardware.facter.reportPath = ./facter.json;
@@ -15,10 +6,10 @@ in
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix") # Needed for qemu host
     ./disko.nix
-    ../../mixin/common-nixos.nix
+    ../../mixin/base-nixos.nix
     ../../mixin/boot-grub.nix
-  ]
-  ++ users.default;
+    ../../mixin/user/brandon-server.nix
+  ];
 
   # General
   system.stateVersion = "25.11";

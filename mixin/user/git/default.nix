@@ -1,7 +1,16 @@
-{ me, ... }: {
-  programs.git = with me; {
+let
+  brandon = import ../brandon.nix;
+in
+{
+  programs.git = with brandon; {
     enable = true;
-    ignores = [ "*.DS_Store" "*~" "*.swp" ".direnv" ];
+    ignores = [
+      "*.DS_Store"
+      "*~"
+      "*.swp"
+      ".direnv"
+      ".jj"
+    ];
 
     settings = {
       user.email = email;
@@ -10,7 +19,6 @@
         ll = "log --oneline";
       };
       init.defaultBranch = "main";
-      gpg.ssh.allowedSignersFile = "~/.ssh/allowedGitSigners";
     };
 
     signing = {
