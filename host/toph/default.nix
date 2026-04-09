@@ -17,11 +17,15 @@
 
   # General
   system.stateVersion = "25.11";
+  age.secrets."tuna-wifi".file = ../../secret/wifi-tuna.age;
 
   # Networking
   networking.hostName = "toph";
   networking.hostId = "007f0200";
   networking.interfaces.eno1.useDHCP = true;
+  networking.wireless.enable = true;
+  networking.interfaces.wlp0s20f3.useDHCP = true;
+  networking.supplicant.WLAN.configFile.path = config.age.secrets."tuna-wifi".path;
 
   # Firewall
   networking.firewall.enable = true;

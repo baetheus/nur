@@ -17,8 +17,8 @@
     extraConfig = "PubkeyAuthOptions verify-required";
   };
 
-  # SOPS
-  sops.age.keyFile = "/persist/keys/age-${config.networking.hostName}.key";
+  # Age secrets
+  age.identityPaths = [ "/persist/keys/age-${config.networking.hostName}.key" ];
 
   # Sudo
   systemd.enableEmergencyMode = false;
@@ -33,11 +33,8 @@
   services.zfs.autoScrub.enable = true;
   services.zfs.autoSnapshot.enable = true;
 
-  # I wish there were a way to ref secrets without this..
-  sops.secrets.msmtp-passwordeval = {
-    sopsFile = ../secret/msmtp-passwordeval.json;
-    format = "json";
-    key = "data";
+  age.secrets.msmtp-passwordeval = {
+    file = ../secret/msmtp-passwordeval.age;
   };
 
   # Setup SMTP Relay
@@ -55,7 +52,7 @@
     accounts = {
       default = {
         host = "smtp.fastmail.com";
-        passwordeval = "cat ${config.sops.secrets.msmtp-passwordeval.path}";
+        passwordeval = "cat ${config.age.secrets.msmtp-passwordeval.path}";
         user = "brandon@nll.sh";
         from = "noreply@null.pub";
       };

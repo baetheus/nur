@@ -17,8 +17,8 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
-    sops-nix.url = "github:Mic92/sops-nix";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+    ragenix.url = "github:yaxitech/ragenix";
+    ragenix.inputs.nixpkgs.follows = "nixpkgs";
 
     impermanence.url = "github:nix-community/impermanence";
     impermanence.inputs.nixpkgs.follows = "nixpkgs";
@@ -33,7 +33,7 @@
       home-manager,
       nix-darwin,
       disko,
-      sops-nix,
+      ragenix,
       impermanence,
       ...
     }@inputs:
@@ -52,7 +52,7 @@
         nixpkgs.lib.nixosSystem {
           modules = [
             home-manager.nixosModules.home-manager
-            sops-nix.nixosModules.sops
+            ragenix.nixosModules.default
             disko.nixosModules.disko
             impermanence.nixosModules.impermanence
             module
@@ -72,8 +72,7 @@
             buildInputs = [
               nixos-anywhere
               age-plugin-yubikey
-              age
-              sops
+              ragenix.packages.${system}.default
               nixfmt
               statix
               claude-code

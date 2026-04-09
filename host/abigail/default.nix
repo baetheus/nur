@@ -22,10 +22,8 @@
   networking.firewall.allowedUDPPorts = [ 41641 ]; # Tailscale
 
   # Secrets
-  sops.secrets.vaultwarden = {
-    sopsFile = ../../secret/vaultwarden.json;
-    format = "json";
-    key = "data";
+  age.secrets.vaultwarden = {
+    file = ../../secret/vaultwarden.age;
   };
 
   # Nginx
@@ -155,7 +153,7 @@
       WEBSOCKET_ENABLED = "true";
       SIGNUPS_ALLOWED = "false";
     };
-    environmentFile = config.sops.secrets.vaultwarden.path;
+    environmentFile = config.age.secrets.vaultwarden.path;
   };
 
   # Personal OIDC provider

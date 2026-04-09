@@ -24,10 +24,8 @@
   networking.firewall.allowedUDPPorts = [ 41641 ]; # Tailscale
 
   # Secrets
-  sops.secrets.basicauth = {
-    sopsFile = ../../secret/basicauth.json;
-    format = "json";
-    key = "data";
+  age.secrets.basicauth = {
+    file = ../../secret/basicauth.age;
     owner = "nginx";
     group = "nginx";
   };
@@ -63,7 +61,7 @@
       "media.null.pub" = {
         forceSSL = true;
         enableACME = true;
-        basicAuthFile = config.sops.secrets.basicauth.path;
+        basicAuthFile = config.age.secrets.basicauth.path;
         locations."/" = {
           root = "/media";
           extraConfig = "autoindex on;";
@@ -82,7 +80,7 @@
       "nzbget.null.pub" = {
         forceSSL = true;
         enableACME = true;
-        basicAuthFile = config.sops.secrets.basicauth.path;
+        basicAuthFile = config.age.secrets.basicauth.path;
         locations."/" = {
           proxyPass = "http://0.0.0.0:6789";
           proxyWebsockets = true;
