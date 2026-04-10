@@ -3,6 +3,7 @@
   flake.darwinConfigurations.rosalind = inputs.nix-darwin.lib.darwinSystem {
     modules = [
       self.modules.darwin.base
+      self.modules.darwin.brandon
       self.modules.darwin.rosalindConfiguration
     ];
   };

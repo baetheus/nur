@@ -2,6 +2,7 @@
 {
   imports = [
     inputs.disko.flakeModules.default
+    inputs.flake-parts.flakeModules.modules
     inputs.home-manager.flakeModules.home-manager
   ];
 
