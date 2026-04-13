@@ -7,29 +7,18 @@ let
   admins = [ keychain-a folder-b laptop-c ];
 
   # Host SSH public keys (from generated keypairs)
-  live = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPq0/S6O8IaEeyWYMTos1qRFWKvoHUO5XqIAOrpVz+Bg live@nur";
-  toph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOQrDkQWu1OpswzEdJKcgMEevk+RAEYqNn46Qij/oNxB root@hedy";
-  hedy = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICPhWmPVA6fwOTGbY1VGuYIQYnzCGqHGu2dadreUyT/w root@hedy";
-  grace = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOyXQFxoPFXj+gSZveXoMim8k70nyf5qm8ABGg04dRAH grace@nur";
-  abigail = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBQDE2Y/b4o7+892p3DHOPHOL8qLl+8Ct2LZoZpsjLe5 abigail@nur";
-  bartleby = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBZTvXIbRQeXFqqukTZDA/t1m3+tTWB+XjW4UYJylJjx bartleby@nur";
-  diane = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwgPo6F2maHURrdx8WFJpQZrb15uGKtw9JRM1OQubHd diane@nur";
-  rosalind = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBasbChiBgazhfEfM9UH8gOSIbWA3cQrlaBpXkvrw4RA rosalind@nur";
+  hedy = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOQrDkQWu1OpswzEdJKcgMEevk+RAEYqNn46Qij/oNxB root@hedy";
+  hosts = [ hedy ];
 
-  nixosHosts = [ live toph hedy grace abigail bartleby ];
+  all = admins ++ hosts;
 in
 {
   # Shared secrets (all NixOS hosts)
-  "modules/secrets/msmtp-passwordeval.age".publicKeys = admins ++ nixosHosts;
-  "modules/secrets/wifi-tuna.age".publicKeys = admins ++ nixosHosts;
-  "modules/secrets/k3s-token.age".publicKeys = admins ++ nixosHosts;
-  "modules/secrets/innernet-config.age".publicKeys = admins ++ nixosHosts;
-  "modules/secrets/miniflux-config.age".publicKeys = admins ++ nixosHosts;
-  "modules/secrets/photoprism.age".publicKeys = admins ++ nixosHosts;
-  "modules/secrets/pangolin.age".publicKeys = admins ++ [ hedy ];
-  "modules/secrets/netbird-coturn.age".publicKeys = admins ++ [ hedy ];
+  "modules/secrets/msmtp-passwordeval.age".publicKeys = all;
+  "modules/secrets/wifi-tuna.age".publicKeys = all;
 
   # Host-specific secrets
-  "modules/secrets/vaultwarden.age".publicKeys = admins ++ [ abigail ];
-  "modules/secrets/basicauth.age".publicKeys = admins ++ [ bartleby ];
+  "modules/secrets/vaultwarden.age".publicKeys = all;
+  "modules/secrets/basicauth.age".publicKeys = all;
+  "modules/secrets/netbird-coturn.age".publicKeys = admins ++ [ hedy ];
 }
