@@ -20,16 +20,12 @@
         enable = true;
         settings = {
           PasswordAuthentication = false;
-          PermitTunnel = false;
-          UseDns = false;
-          KbdInteractiveAuthentication = false;
-          X11Forwarding = config.services.xserver.enable;
           PermitRootLogin = "no";
           GSSAPIAuthentication = "no";
         };
         extraConfig = "PubkeyAuthOptions verify-required";
       };
-      services.fail2ban.enable = true;
+      services.fail2ban.enable = false;
 
       # Sudo
       systemd.enableEmergencyMode = false;

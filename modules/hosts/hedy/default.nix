@@ -26,11 +26,9 @@
       # Networking
       networking.hostName = "hedy";
       networking.hostId = "007f0201";
-      networking.interfaces.eno1.useDHCP = true;
 
       # Firewall
       networking.firewall.enable = true;
-      networking.firewall.allowedUDPPorts = [ ];
       networking.firewall.allowedTCPPorts = [ 22 ];
 
       # Immutability
