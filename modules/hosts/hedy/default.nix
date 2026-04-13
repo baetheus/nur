@@ -123,7 +123,12 @@
         ];
         directories = [
           "/var/lib/nixos"
-          # config.services.pangolin.dataDir
+          {
+            directory = config.services.pocket-id.dataDir;
+            user = config.services.pocket-id.user;
+            group = config.services.pocket-id.group;
+            mode = "u=rwx,g=rwx,o=";
+          }
           # "/var/log"
         ];
       };
