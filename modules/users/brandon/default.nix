@@ -22,14 +22,10 @@ let
 
 in
 {
-  flake.nixosModules.brandon =
+  flake.modules.nixos.brandon =
     { pkgs, ... }:
     {
-      home-manager.users."${brandon.username}" =
-        (inputs.home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [ self.homeModules.brandon ];
-        }).activationPackage;
+      home-manager.users."${brandon.username}" = self.homeModules.brandon;
       programs.zsh.enable = true;
       users.users."${brandon.username}" = {
         shell = pkgs.zsh;
@@ -56,7 +52,6 @@ in
       home = {
         inherit (brandon) username;
         stateVersion = "25.11";
-        homeDirectory = "/Users/${brandon.username}";
         sessionVariables = {
           EDITOR = "vim";
         };
@@ -122,7 +117,7 @@ in
           vimPlugins.vim-dadbod
           vimPlugins.vim-dadbod-ui
           vimPlugins.vim-dadbod-completion
-          nixfmt
+          vimPlugins.vim-nix
         ];
         extraConfig = builtins.readFile ./vimrc;
       };
@@ -151,11 +146,11 @@ in
         settings = {
           user.name = brandon.name;
           user.email = brandon.email;
-          # signing = {
-          #   behavior = "drop";
-          #   backend = "ssh";
-          # };
-          # git.sign-on-push = true;
+          signing = {
+            behavior = "drop";
+            backend = "ssh";
+          };
+          git.sign-on-push = true;
 
           aliases = {
             dlog = [

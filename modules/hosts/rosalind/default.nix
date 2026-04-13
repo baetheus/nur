@@ -7,13 +7,9 @@
       self.modules.darwin.brandon
       self.modules.darwin.rosalindConfiguration
     ];
-  };
 
-  flake.modules.darwin.rosalindConfiguration =
-    { pkgs, lib, ... }:
-    {
-      nixpkgs.hostPlatform = "aarch64-darwin";
-      system.stateVersion = 6;
-      system.primaryUser = "brandon";
-    };
+    nixpkgs.hostPlatform = "aarch64-darwin";
+    system.stateVersion = 6;
+    system.primaryUser = "brandon";
+  };
 }
