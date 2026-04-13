@@ -20,31 +20,16 @@
         enable = true;
         settings = {
           PasswordAuthentication = false;
-          PermitEmptyPasswords = false;
           PermitTunnel = false;
           UseDns = false;
           KbdInteractiveAuthentication = false;
           X11Forwarding = config.services.xserver.enable;
-          MaxAuthTries = 3;
-          MaxSessions = 2;
-          TCPKeepAlive = false;
-          AllowAgentForwarding = false;
-          LogLevel = "VERBOSE";
           PermitRootLogin = "no";
           GSSAPIAuthentication = "no";
         };
         extraConfig = "PubkeyAuthOptions verify-required";
       };
-      services.fail2ban = {
-        maxretry = 5;
-        bantime = "1h";
-        bantime-increment = {
-          enable = true; # Enable increment of bantime after each violation
-          multipliers = "1 2 4 8 16 32 64 128 256";
-          maxtime = "168h"; # Do not ban for more than 1 week
-          overalljails = true; # Calculate the bantime based on all the violations
-        };
-      };
+      services.fail2ban.enable = true;
 
       # Sudo
       systemd.enableEmergencyMode = false;
