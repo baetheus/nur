@@ -31,6 +31,14 @@
       networking.firewall.enable = true;
       networking.firewall.allowedTCPPorts = [ 22 ];
 
+      # Pangolin
+      services.pangolin = {
+        enable = true;
+        openFirewall = true;
+        baseDomain = "null.pub";
+        letEncryptEmail = "admin@null.pub";
+      };
+
       # Immutability
       fileSystems."/".neededForBoot = true;
       fileSystems."/persist".neededForBoot = true;
@@ -45,6 +53,7 @@
         ];
         directories = [
           "/var/lib/nixos"
+          config.pangolin.dataDir
           # "/var/log"
         ];
       };
