@@ -50,7 +50,12 @@
       };
 
       # Netbird
-      age.secrets.netbird-coturn.file = ../../secrets/netbird-coturn.age;
+      age.secrets.netbird-coturn = {
+        file = ../../secrets/netbird-coturn.age;
+        mode = "770";
+        owner = config.services.netbird.server.coturn.user;
+        group = "root";
+      };
       services.netbird.server = {
         enable = true;
         domain = "netbird.null.pub";
