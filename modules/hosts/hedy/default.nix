@@ -62,11 +62,12 @@
           enable = true;
           domain = "netbird-dash.null.pub";
           enableNginx = true;
-          settings.AUTH_AUTHORITY = config.services.pocket-id.settings.APP_URL;
+          # settings.AUTH_AUTHORITY = config.services.pocket-id.settings.APP_URL;
+          settings.AUTH_AUTHORITY = "";
         };
 
         management = {
-          oidcConfigEndpoint = "https://id.example.com/.well-known/openid-configuration";
+          oidcConfigEndpoint = "";
         };
 
         coturn = {
