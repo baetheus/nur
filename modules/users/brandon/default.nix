@@ -146,11 +146,11 @@ in
         settings = {
           user.name = brandon.name;
           user.email = brandon.email;
-          signing = {
-            behavior = "drop";
-            backend = "ssh";
-          };
-          git.sign-on-push = true;
+          # signing = {
+          #   behavior = "drop";
+          #   backend = "ssh";
+          # };
+          # git.sign-on-push = true;
 
           aliases = {
             dlog = [
