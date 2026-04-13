@@ -4,7 +4,7 @@
     { config, pkgs, ... }:
     {
       # Imports
-      import = [
+      imports = [
         self.modules.generic.base
       ];
 

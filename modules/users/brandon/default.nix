@@ -1,9 +1,11 @@
-{ self, inputs, ... }:
-let
-  inherit (self.modules.users) brandon;
-in
 {
-  flake.modules.users.brandon = {
+  self,
+  inputs,
+  withSystem,
+  ...
+}:
+let
+  brandon = {
     username = "brandon";
     name = "Brandon Blaylock";
     email = "brandon@null.pub";
@@ -18,10 +20,16 @@ in
     ];
   };
 
+in
+{
   flake.nixosModules.brandon =
     { pkgs, ... }:
     {
-      home-manager.users."${brandon.username}" = self.homeModules.brandon;
+      home-manager.users."${brandon.username}" =
+        (inputs.home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [ self.homeModules.brandon ];
+        }).activationPackage;
       programs.zsh.enable = true;
       users.users."${brandon.username}" = {
         shell = pkgs.zsh;
@@ -48,12 +56,13 @@ in
       home = {
         inherit (brandon) username;
         stateVersion = "25.11";
+        homeDirectory = "/Users/${brandon.username}";
         sessionVariables = {
           EDITOR = "vim";
         };
         packages = with pkgs; [
           git
-          ripgrap
+          ripgrep
           jujutsu
           zsh-completions # For completions
         ];
@@ -124,20 +133,18 @@ in
       # git
       programs.git = {
         enable = true;
-        userEmail = brandon.email;
-        userName = brandon.name;
+        settings = {
+          user.email = brandon.email;
+          user.name = brandon.name;
+          alias.ll = "log --oneline";
+          init.defaultBranch = "main";
+        };
         ignores = [
           "*.DS_Store"
           "*~"
           "*.swp"
           ".direnv"
         ];
-        aliases = {
-          ll = "log --oneline";
-        };
-        extraConfig = {
-          init.defaultBranch = "main";
-        };
       };
 
       # jujutsu
@@ -197,4 +204,5 @@ in
       };
 
     };
+
 }
