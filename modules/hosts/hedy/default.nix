@@ -22,7 +22,7 @@
 
       # General
       system.stateVersion = "25.11";
-      age.rekey.hostPubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICPhWmPVA6fwOTGbY1VGuYIQYnzCGqHGu2dadreUyT/w root@hedy";
+      age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICPhWmPVA6fwOTGbY1VGuYIQYnzCGqHGu2dadreUyT/w root@hedy";
 
       # Networking
       networking.hostName = "hedy";
