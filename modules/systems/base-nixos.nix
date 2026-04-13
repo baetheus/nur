@@ -25,7 +25,7 @@
         };
         extraConfig = "PubkeyAuthOptions verify-required";
       };
-      services.fail2ban.enable = false;
+      services.fail2ban.enable = true;
 
       # Sudo
       systemd.enableEmergencyMode = false;
