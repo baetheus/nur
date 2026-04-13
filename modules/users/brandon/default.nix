@@ -87,7 +87,7 @@ in
             if pkgs.stdenv.isDarwin then
               "sudo darwin-rebuild switch --flake github:baetheus/nur"
             else
-              "nixos-rebuild switch --use-remote-sudo --flake github:baetheus/nur";
+              "nixos-rebuild switch --sudo --flake github:baetheus/nur";
         };
 
         history = {
