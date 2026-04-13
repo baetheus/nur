@@ -61,9 +61,6 @@ in
           EDITOR = "vim";
         };
         packages = with pkgs; [
-          git
-          ripgrep
-          jujutsu
           zsh-completions # For completions
         ];
       };
@@ -154,12 +151,11 @@ in
         settings = {
           user.name = brandon.name;
           user.email = brandon.email;
-          signing = {
-            behavior = "drop";
-            backend = "ssh";
-            key = brandon.signingkey;
-          };
-          git.sign-on-push = true;
+          # signing = {
+          #   behavior = "drop";
+          #   backend = "ssh";
+          # };
+          # git.sign-on-push = true;
 
           aliases = {
             dlog = [

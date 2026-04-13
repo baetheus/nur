@@ -38,7 +38,10 @@
         git
         wget
         watch
+        bottom
         ripgrep
+        jujutsu
+        openssh
       ];
     };
 }
