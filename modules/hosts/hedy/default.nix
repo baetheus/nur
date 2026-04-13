@@ -112,7 +112,7 @@
         enable = true;
         settings = {
           server_url = "https://net.null.pub";
-          dns.base_domain = "net.null.pub";
+          dns.base_domain = "at.null.pub";
           dns.nameservers.global = [
             "1.1.1.1"
             "1.0.0.1"
