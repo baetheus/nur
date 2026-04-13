@@ -52,7 +52,8 @@
       # Netbird
       age.secrets.netbird-coturn = {
         file = ../../secrets/netbird-coturn.age;
-        owner = config.services.netbird.server.coturn.user;
+        owner = "netbird";
+        group = "netbird"
       };
       services.netbird.server = {
         enable = true;
