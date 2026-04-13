@@ -27,6 +27,5 @@
     impermanence.inputs.home-manager.follows = "home-manager";
   };
 
-  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; }
-    (inputs.import-tree.matchNot "secrets.nix" ./modules);
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 }
