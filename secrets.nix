@@ -26,6 +26,8 @@ in
   "modules/secrets/innernet-config.age".publicKeys = admins ++ nixosHosts;
   "modules/secrets/miniflux-config.age".publicKeys = admins ++ nixosHosts;
   "modules/secrets/photoprism.age".publicKeys = admins ++ nixosHosts;
+  "modules/secrets/pangolin.age".publicKeys = admins ++ [ hedy ];
+  "modules/secrets/netbird-coturn.age".publicKeys = admins ++ [ hedy ];
 
   # Host-specific secrets
   "modules/secrets/vaultwarden.age".publicKeys = admins ++ [ abigail ];

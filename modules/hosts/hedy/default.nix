@@ -11,7 +11,7 @@
   };
 
   flake.modules.nixos.hedy =
-    { pkgs, modulesPath, ... }:
+    { config, pkgs, modulesPath, ... }:
     {
       nixpkgs.hostPlatform = "x86_64-linux";
       hardware.facter.reportPath = ./facter.json;
@@ -32,11 +32,77 @@
       networking.firewall.allowedTCPPorts = [ 22 ];
 
       # Pangolin
-      services.pangolin = {
+      # age.secrets.pangolin.file = ../secrets/pangolin.age;
+      # services.pangolin = {
+      #   enable = true;
+      #   openFirewall = true;
+      #   baseDomain = "null.pub";
+      #   letsEncryptEmail = "admin@null.pub";
+      #   environmentFile = config.age.secrets.pangolin.path;
+      # };
+
+      services.pocket-id = {
         enable = true;
-        openFirewall = true;
-        baseDomain = "null.pub";
-        letEncryptEmail = "admin@null.pub";
+        settings = {
+          TRUST_PROXY = true;
+          APP_URL = "https://auth.null.pub";
+        };
+      };
+
+      # Netbird
+      age.secrets.netbird-coturn.file = ../../secrets/netbird-coturn.age;
+      services.netbird.server = {
+        enable = true;
+        domain = "netbird.null.pub";
+
+        dashboard = {
+          enable = true;
+          domain = "netbird-dash.null.pub";
+          enableNginx = true;
+          settings.AUTH_AUTHORITY = config.services.pocket-id.settings.APP_URL;
+        };
+
+        management = {
+          oidcConfigEndpoint = "https://id.example.com/.well-known/openid-configuration";
+        };
+
+        coturn = {
+          enable = true;
+          domain = "netbird-coturn.null.pub";
+          passwordFile = config.age.secrets.netbird-coturn.path;
+        };
+      };
+
+      # Nginx
+      security.acme.acceptTerms = true;
+      security.acme.defaults.email = "admin@null.pub";
+
+      services.nginx = {
+        enable = true;
+
+        recommendedTlsSettings = true;
+        recommendedOptimisation = true;
+        recommendedGzipSettings = true;
+        recommendedProxySettings = true;
+        clientMaxBodySize = "500m";
+
+        virtualHosts = {
+          "auth.null.pub" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+              proxyPass = "http://[::1]:1411";
+              proxyWebsockets = true;
+              recommendedProxySettings = true;
+              extraConfig = ''
+                client_max_body_size 50000M;
+                proxy_read_timeout   600s;
+                proxy_send_timeout   600s;
+                send_timeout         600s;
+              '';
+            };
+          };
+        };
       };
 
       # Immutability
@@ -53,7 +119,8 @@
         ];
         directories = [
           "/var/lib/nixos"
-          config.pangolin.dataDir
+          config.services.pocket-id.dataDir
+          # config.services.pangolin.dataDir
           # "/var/log"
         ];
       };
