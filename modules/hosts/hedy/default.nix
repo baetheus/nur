@@ -29,54 +29,12 @@
 
       # Firewall
       networking.firewall.enable = true;
-      networking.firewall.allowedTCPPorts = [ 22 80 443 ];
-
-      # Pangolin
-      # age.secrets.pangolin.file = ../secrets/pangolin.age;
-      # services.pangolin = {
-      #   enable = true;
-      #   openFirewall = true;
-      #   baseDomain = "null.pub";
-      #   letsEncryptEmail = "admin@null.pub";
-      #   environmentFile = config.age.secrets.pangolin.path;
-      # };
-
-      services.pocket-id = {
-        enable = true;
-        settings = {
-          TRUST_PROXY = true;
-          APP_URL = "https://auth.null.pub";
-        };
-      };
-
-      # Netbird
-      age.secrets.netbird-coturn = {
-        file = ../../secrets/netbird-coturn.age;
-        owner = "turnserver";
-        group = "turnserver";
-      };
-      services.netbird.server = {
-        enable = true;
-        domain = "netbird.null.pub";
-
-        dashboard = {
-          enable = true;
-          domain = "netbird-dash.null.pub";
-          enableNginx = true;
-          # settings.AUTH_AUTHORITY = config.services.pocket-id.settings.APP_URL;
-          settings.AUTH_AUTHORITY = "";
-        };
-
-        management = {
-          oidcConfigEndpoint = "";
-        };
-
-        coturn = {
-          enable = true;
-          domain = "netbird-coturn.null.pub";
-          passwordFile = config.age.secrets.netbird-coturn.path;
-        };
-      };
+      networking.firewall.allowedTCPPorts = [
+        22
+        80
+        443
+        config.services.headscale.port
+      ];
 
       # Nginx
       security.acme.acceptTerms = true;
@@ -92,19 +50,34 @@
         clientMaxBodySize = "500m";
 
         virtualHosts = {
-          "auth.null.pub" = {
-            enableACME = true;
+          "net.null.pub" = {
             forceSSL = true;
-            locations."/" = {
-              proxyPass = "http://[::1]:1411";
-              proxyWebsockets = true;
-              recommendedProxySettings = true;
-              extraConfig = ''
-                client_max_body_size 50000M;
-                proxy_read_timeout   600s;
-                proxy_send_timeout   600s;
-                send_timeout         600s;
-              '';
+            enableACME = true;
+            locations = {
+              "/metrics" = {
+                proxyPass = "http://127.0.0.1:${toString config.services.headscale.port}";
+                extraConfig = ''
+                  allow 100.64.0.0/16;
+                  deny all;
+                '';
+                priority = 2;
+              };
+
+              "/" = {
+                proxyPass = "http://127.0.0.1:${toString config.services.headscale.port}";
+                proxyWebsockets = true;
+                extraConfig = ''
+                  keepalive_requests          100000;
+                  keepalive_timeout           160s;
+                  proxy_buffering             off;
+                  proxy_connect_timeout       75;
+                  proxy_ignore_client_abort   on;
+                  proxy_read_timeout          900s;
+                  proxy_send_timeout          600;
+                  send_timeout                600;
+                '';
+                priority = 99;
+              };
             };
           };
         };
@@ -125,14 +98,29 @@
         directories = [
           "/var/lib/nixos"
           {
-            directory = config.services.pocket-id.dataDir;
-            user = config.services.pocket-id.user;
-            group = config.services.pocket-id.group;
-            mode = "u=rwx,g=rwx,o=";
+            # Hardcoded in nixpkgs
+            directory = "/var/lib/headscale";
+            user = config.services.headscale.user;
+            group = config.services.headscale.group;
           }
           # "/var/log"
         ];
       };
+
+      # Headscale
+      services.headscale = {
+        enable = true;
+        settings = {
+          server_url = "https://net.null.pub";
+          dns.base_domain = "net.null.pub";
+        };
+      };
+
+      # Tailscale
+      services.tailscale = {
+        enable = false;
+      };
+
     };
 
   flake.diskoConfigurations.hedy = {
