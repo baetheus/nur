@@ -8,7 +8,7 @@ let
 
   # Host SSH public keys (from generated keypairs)
   live = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPq0/S6O8IaEeyWYMTos1qRFWKvoHUO5XqIAOrpVz+Bg live@nur";
-  toph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHZDWbiYsUd9YjlqWvdW0FegzzRJ+H/E2GurQYRVOAwe toph@nur";
+  toph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOQrDkQWu1OpswzEdJKcgMEevk+RAEYqNn46Qij/oNxB root@hedy";
   hedy = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICPhWmPVA6fwOTGbY1VGuYIQYnzCGqHGu2dadreUyT/w root@hedy";
   grace = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOyXQFxoPFXj+gSZveXoMim8k70nyf5qm8ABGg04dRAH grace@nur";
   abigail = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBQDE2Y/b4o7+892p3DHOPHOL8qLl+8Ct2LZoZpsjLe5 abigail@nur";
@@ -20,14 +20,14 @@ let
 in
 {
   # Shared secrets (all NixOS hosts)
-  "msmtp-passwordeval.age".publicKeys = admins ++ nixosHosts;
-  "wifi-tuna.age".publicKeys = admins ++ nixosHosts;
-  "k3s-token.age".publicKeys = admins ++ nixosHosts;
-  "innernet-config.age".publicKeys = admins ++ nixosHosts;
-  "miniflux-config.age".publicKeys = admins ++ nixosHosts;
-  "photoprism.age".publicKeys = admins ++ nixosHosts;
+  "modules/secrets/msmtp-passwordeval.age".publicKeys = admins ++ nixosHosts;
+  "modules/secrets/wifi-tuna.age".publicKeys = admins ++ nixosHosts;
+  "modules/secrets/k3s-token.age".publicKeys = admins ++ nixosHosts;
+  "modules/secrets/innernet-config.age".publicKeys = admins ++ nixosHosts;
+  "modules/secrets/miniflux-config.age".publicKeys = admins ++ nixosHosts;
+  "modules/secrets/photoprism.age".publicKeys = admins ++ nixosHosts;
 
   # Host-specific secrets
-  "vaultwarden.age".publicKeys = admins ++ [ abigail ];
-  "basicauth.age".publicKeys = admins ++ [ bartleby ];
+  "modules/secrets/vaultwarden.age".publicKeys = admins ++ [ abigail ];
+  "modules/secrets/basicauth.age".publicKeys = admins ++ [ bartleby ];
 }
