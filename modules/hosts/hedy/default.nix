@@ -29,7 +29,7 @@
 
       # Firewall
       networking.firewall.enable = true;
-      networking.firewall.allowedTCPPorts = [ 22 ];
+      networking.firewall.allowedTCPPorts = [ 22 80 443 ];
 
       # Pangolin
       # age.secrets.pangolin.file = ../secrets/pangolin.age;
