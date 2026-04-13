@@ -4,6 +4,9 @@
     { pkgs, ... }:
     {
       imports = [
+        inputs.home-manager.darwinModules.home-manager
+        inputs.ragenix.darwimModules.default
+        inputs.agenix-rekey.darwinModules.default
         self.modules.generic.base
       ];
 

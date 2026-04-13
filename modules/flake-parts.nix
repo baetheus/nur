@@ -4,7 +4,6 @@
     inputs.disko.flakeModules.default
     inputs.flake-parts.flakeModules.modules
     inputs.home-manager.flakeModules.home-manager
-    inputs.agenix-rekey.flakeModule
   ];
 
   config = {

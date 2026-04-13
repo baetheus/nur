@@ -5,14 +5,10 @@
     {
       devShells.default = pkgs.mkShell {
         nativeBuildInputs = with pkgs;[
-          config.agenix-rekey.package
           age-plugin-yubikey
-
           nixos-anywhere
+          ragenix
         ];
       };
-
-      agenix-rekey.nixosConfigurations = inputs.self.nixosConfigurations;
-      agenix-rekey.darwinConfigurations = inputs.self.darwinConfigurations;
     };
 }

@@ -7,11 +7,9 @@
       imports = [
         inputs.home-manager.nixosModules.home-manager
         inputs.ragenix.nixosModules.default
-        inputs.agenix-rekey.nixosModules.default
         inputs.disko.nixosModules.disko
         inputs.impermanence.nixosModules.impermanence
         self.modules.generic.base
-        self.modules.nixos.rekey
       ];
 
       # Locale
@@ -40,7 +38,8 @@
       services.zfs.autoScrub.enable = true;
       services.zfs.autoSnapshot.enable = true;
 
-      age.secrets.msmtp-passwordeval.rekeyFile = ../secrets/msmtp-passwordeval.age;
+      # Agenix
+      age.secrets.msmtp-passwordeval.file = ../secrets/msmtp-passwordeval.age;
 
       # Setup SMTP Relay
       programs.msmtp = {
