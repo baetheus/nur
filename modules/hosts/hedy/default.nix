@@ -55,7 +55,7 @@
             enableACME = true;
             locations = {
               "/metrics" = {
-                proxyPass = "http://127.0.0.1:${toString config.services.headscale.port}";
+                proxyPass = "http://${config.services.headscale.address}:${toString config.services.headscale.port}";
                 extraConfig = ''
                   allow 100.64.0.0/16;
                   deny all;
@@ -64,7 +64,7 @@
               };
 
               "/" = {
-                proxyPass = "http://127.0.0.1:${toString config.services.headscale.port}";
+                proxyPass = "http://${config.services.headscale.address}:${toString config.services.headscale.port}";
                 proxyWebsockets = true;
                 extraConfig = ''
                   keepalive_requests          100000;
@@ -129,8 +129,16 @@
       };
 
       # Tailscale
+      age.secrets.headscale-preauth-brandon.file = ../../secrets/headscale-preauth-brandon.age;
       services.tailscale = {
-        enable = false;
+        enable = true;
+        openFirewall = true;
+        disableUpstreamLogging = true;
+        useRoutingFeatures = "both";
+        extraSetFlags = [ "--advertise-exit-node" ];
+        authKeyFile = config.age.secrets.headscale-preauth-brandon.path;
+        authKeyParameters.baseURL = config.services.headscale.settings.server_url;
+        authKeyParameters.preauthorized = true;
       };
 
     };

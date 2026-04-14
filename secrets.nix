@@ -21,4 +21,5 @@ in
   "modules/secrets/vaultwarden.age".publicKeys = all;
   "modules/secrets/basicauth.age".publicKeys = all;
   "modules/secrets/netbird-coturn.age".publicKeys = admins ++ [ hedy ];
+  "modules/secrets/headscale-preauth-brandon.age".publicKeys = admins ++ [ hedy ];
 }
