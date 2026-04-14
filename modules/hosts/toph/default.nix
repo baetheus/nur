@@ -74,6 +74,8 @@
           user = "restic"; # Hardcoded in nixpkgs
           group = "restic"; # Hardcoded in nixpkgs
         }
+        # Tailscale - uses root!
+        "/var/lib/tailscale"
       ];
     };
 
