@@ -16,18 +16,19 @@
     ...
   }:
   {
+    # General
+    system.stateVersion = "25.11";
     nixpkgs.hostPlatform = "x86_64-linux";
     nixpkgs.config.allowUnfree = true; # For samsung driver
     hardware.facter.reportPath = ./facter.json;
-
-    # General
-    system.stateVersion = "25.11";
-    age.secrets."tuna-wifi".file = ../../secrets/wifi-tuna.age;
 
     # Networking
     networking.hostName = "toph";
     networking.hostId = "007f0200";
     networking.interfaces.eno1.useDHCP = true;
+
+    # Wifi
+    age.secrets."tuna-wifi".file = ../../secrets/wifi-tuna.age;
     networking.wireless.enable = true;
     networking.interfaces.wlp0s20f3.useDHCP = true;
     networking.supplicant.WLAN.configFile.path = config.age.secrets."tuna-wifi".path;
@@ -39,12 +40,11 @@
       22 # SSH
       53 # CUP
       443 # HTTPS
-      631
+      631 # Print Sharing
       6789 # NZBGet
       7878 # Radarr (Movies)
       8686 # Lidarr (Music)
       8989 # Sonarr (Series)
-      32400 # Plex
     ];
 
     # Immutability
@@ -60,8 +60,18 @@
       ];
       directories = [
         "/var/lib/nixos"
-        # "/var/log" Naaaaah
-        config.services.plex.dataDir
+        # Plex
+        {
+          directory = config.services.plex.dataDir;
+          user = config.services.plex.user;
+          group = config.services.plex.group;
+        }
+        # Restic Server
+        {
+          directory = config.services.restic.server.dataDir;
+          user = "restic"; # Hardcoded in nixpkgs
+          group = "restic"; # Hardcoded in nixpkgs
+        }
       ];
     };
 
@@ -90,6 +100,14 @@
       useRoutingFeatures = "both";
       extraUpFlags = [ "--login-server=https://net.null.pub" ];
       authKeyFile = config.age.secrets.headscale-preauth-brandon.path;
+    };
+
+    # Restic Server
+    age.secrets.restic-htpasswd.file = ../../secrets/restic-htpasswd.age;
+    services.restic.server = {
+      enable = true;
+      privateRepos = true;
+      htpasswd-file = config.age.secrets.restic-htpasswd.path;
     };
 
     # Media

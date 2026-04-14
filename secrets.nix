@@ -22,4 +22,8 @@ in
   # Host-specific secrets
   "modules/secrets/wifi-tuna.age".publicKeys = admins ++ [ toph ];
   "modules/secrets/vaultwarden.age".publicKeys = admins ++ [ toph ];
+  "modules/secrets/restic-htpasswd.age".publicKeys = admins ++ [ toph ];
+  "modules/secrets/restic-env-toph.age".publicKeys = admins ++ [ toph ];
+  "modules/secrets/restic-env-hedy.age".publicKeys = admins ++ [ hedy ];
+  "modules/secrets/restic-env-grace.age".publicKeys = admins ++ [];
 }
