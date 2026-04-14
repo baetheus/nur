@@ -142,6 +142,13 @@
         authKeyFile = config.age.secrets.headscale-preauth-brandon.path;
       };
 
+      # Restic Backups
+      age.secrets.restic-env-hedy-persist.file = ../../secrets/restic-env-hedy-persist.age;
+      services.restic.backups.persist = {
+        initialize = true;
+        environmentFile = config.age.secrets.restic-env-hedy-persist.path;
+        paths = [ "/persist" ];
+      };
     };
 
   flake.diskoConfigurations.hedy = {
