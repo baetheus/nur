@@ -2,11 +2,11 @@
 {
   flake.nixosConfigurations.hedy = inputs.nixpkgs.lib.nixosSystem {
     modules = [
+      self.diskoConfigurations.hedy
       self.modules.nixos.boot-grub
       self.modules.nixos.base
       self.modules.nixos.brandon
       self.modules.nixos.hedy
-      self.diskoConfigurations.hedy
     ];
   };
 
@@ -136,9 +136,8 @@
         disableUpstreamLogging = true;
         useRoutingFeatures = "both";
         extraSetFlags = [ "--advertise-exit-node" ];
+        extraUpFlags = [ "--login-server=${config.services.headscale.settings.server_url}" ];
         authKeyFile = config.age.secrets.headscale-preauth-brandon.path;
-        authKeyParameters.baseURL = config.services.headscale.settings.server_url;
-        authKeyParameters.preauthorized = true;
       };
 
     };
