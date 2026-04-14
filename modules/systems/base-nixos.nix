@@ -23,7 +23,6 @@
           PermitRootLogin = "no";
           GSSAPIAuthentication = "no";
         };
-        extraConfig = "PubkeyAuthOptions verify-required";
       };
       services.fail2ban.enable = true;
 

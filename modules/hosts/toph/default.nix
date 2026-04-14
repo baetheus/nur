@@ -28,10 +28,10 @@
     networking.interfaces.eno1.useDHCP = true;
 
     # Wifi
-    age.secrets."tuna-wifi".file = ../../secrets/wifi-tuna.age;
-    networking.wireless.enable = true;
-    networking.interfaces.wlp0s20f3.useDHCP = true;
-    networking.supplicant.WLAN.configFile.path = config.age.secrets."tuna-wifi".path;
+    # age.secrets."tuna-wifi".file = ../../secrets/wifi-tuna.age;
+    # networking.wireless.enable = true;
+    # networking.interfaces.wlp0s20f3.useDHCP = true;
+    # networking.supplicant.WLAN.configFile.path = config.age.secrets."tuna-wifi".path;
 
     # Firewall
     networking.firewall.enable = true;
@@ -48,6 +48,8 @@
     ];
 
     # Immutability
+    fileSystems."/".neededForBoot = true;
+    fileSystems."/home".neededForBoot = true;
     fileSystems."/persist".neededForBoot = true;
     environment.persistence."/persist" = {
       enable = true;
