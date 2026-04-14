@@ -118,6 +118,14 @@
       htpasswd-file = config.age.secrets.restic-htpasswd.path;
     };
 
+    # Restic Backups
+    age.secrets.restic-env-toph-persist.file = ../../secrets/restic-env-toph-persist.age;
+    services.restic.backups.persist = {
+      initialize = true;
+      environmentFile = config.age.secrets.restic-env-toph-persist.path;
+      paths = [ "/persist" ];
+    };
+
     # Media
     users = {
       users.media = {
