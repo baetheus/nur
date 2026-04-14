@@ -43,7 +43,7 @@
       # Impermanence seems to bindmount after agenix tries to decrypt
       # but /persist is mounted before agenix due to neededForBoot so
       # this is a workaround to make booting work
-      age.identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key.pub" ];
+      age.identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
 
       # Setup SMTP Relay
       age.secrets.msmtp-passwordeval.file = ../secrets/msmtp-passwordeval.age;
