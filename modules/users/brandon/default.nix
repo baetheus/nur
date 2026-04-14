@@ -35,6 +35,14 @@ in
       };
     };
 
+  flake.modules.nixos.brandon-server =
+    { pkgs, ... }:
+    {
+      imports = [ self.modules.nixos.brandon ];
+      home-manager.users."${brandon.username}" = self.homeModules.brandon-server;
+    };
+
+
   flake.modules.darwin.brandon =
     { pkgs, ... }:
     {
@@ -45,6 +53,18 @@ in
         home = "/Users/${brandon.username}";
       };
     };
+
+  flake.homeModules.brandon-server = { pkgs, ... }: {
+    programs.zellij = {
+      enable = true;
+      enableZshIntegration = true;
+      attachExistingSession = true;
+      exitShellOnExit = true;
+      settings = {
+        simplified_ui = true;
+      };
+    };
+  };
 
   flake.homeModules.brandon =
     { pkgs, ... }:
