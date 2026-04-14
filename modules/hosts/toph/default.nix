@@ -167,5 +167,106 @@
       group = "media";
     };
 
+    # Nginx Proxy
+    services.nginx = {
+      enable = true;
+      recommendedOptimisation = true;
+      recommendedGzipSettings = true;
+      recommendedProxySettings = true;
+      clientMaxBodySize = "500m";
+
+      virtualHosts = {
+        "plex.at.null" = {
+          locations = {
+            "/" = {
+              proxyPass = "http://localhost:32400";
+              proxyWebsockets = true;
+              extraConfig = ''
+                keepalive_requests          100000;
+                keepalive_timeout           160s;
+                proxy_buffering             off;
+                proxy_connect_timeout       75;
+                proxy_ignore_client_abort   on;
+                proxy_read_timeout          900s;
+                proxy_send_timeout          600;
+                send_timeout                600;
+              '';
+            };
+          };
+        };
+        "nzbget.at.null" = {
+          locations = {
+            "/" = {
+              proxyPass = "http://localhost:6789";
+              proxyWebsockets = true;
+              extraConfig = ''
+                keepalive_requests          100000;
+                keepalive_timeout           160s;
+                proxy_buffering             off;
+                proxy_connect_timeout       75;
+                proxy_ignore_client_abort   on;
+                proxy_read_timeout          900s;
+                proxy_send_timeout          600;
+                send_timeout                600;
+              '';
+            };
+          };
+        };
+        "music.at.null" = {
+          locations = {
+            "/" = {
+              proxyPass = "http://localhost:8686";
+              proxyWebsockets = true;
+              extraConfig = ''
+                keepalive_requests          100000;
+                keepalive_timeout           160s;
+                proxy_buffering             off;
+                proxy_connect_timeout       75;
+                proxy_ignore_client_abort   on;
+                proxy_read_timeout          900s;
+                proxy_send_timeout          600;
+                send_timeout                600;
+              '';
+            };
+          };
+        };
+        "movies.at.null" = {
+          locations = {
+            "/" = {
+              proxyPass = "http://localhost:7878";
+              proxyWebsockets = true;
+              extraConfig = ''
+                keepalive_requests          100000;
+                keepalive_timeout           160s;
+                proxy_buffering             off;
+                proxy_connect_timeout       75;
+                proxy_ignore_client_abort   on;
+                proxy_read_timeout          900s;
+                proxy_send_timeout          600;
+                send_timeout                600;
+              '';
+            };
+          };
+        };
+        "series.at.null" = {
+          locations = {
+            "/" = {
+              proxyPass = "http://localhost:8989";
+              proxyWebsockets = true;
+              extraConfig = ''
+                keepalive_requests          100000;
+                keepalive_timeout           160s;
+                proxy_buffering             off;
+                proxy_connect_timeout       75;
+                proxy_ignore_client_abort   on;
+                proxy_read_timeout          900s;
+                proxy_send_timeout          600;
+                send_timeout                600;
+              '';
+            };
+          };
+        };
+      };
+    };
   };
 }
