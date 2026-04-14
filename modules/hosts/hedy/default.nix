@@ -97,18 +97,20 @@
         ];
         directories = [
           "/var/lib/nixos"
+          # Headscale
           {
-            # Hardcoded in nixpkgs
             directory = "/var/lib/headscale";
-            user = config.services.headscale.user;
-            group = config.services.headscale.group;
+            user = config.services.headscale.user; # Hardcoded in nixpkgs
+            group = config.services.headscale.group; # Hardcoded in nixpkgs
           }
+          # Acme
           {
             directory = "/var/lib/acme";
             user = "acme";
             group = "acme";
           }
-          # "/var/log"
+          # Tailscale - uses root!
+          "/var/lib/tailscale"
         ];
       };
 

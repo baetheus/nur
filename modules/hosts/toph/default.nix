@@ -5,7 +5,7 @@
       self.diskoConfigurations.toph
       self.modules.nixos.boot-systemd
       self.modules.nixos.base
-      self.modules.nixos.brandon-server
+      self.modules.nixos.brandon
       self.modules.nixos.toph
     ];
   };

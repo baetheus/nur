@@ -38,6 +38,7 @@
         git
         wget
         watch
+        zellij
         bottom
         ripgrep
         jujutsu
