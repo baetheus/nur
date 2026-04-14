@@ -103,7 +103,11 @@
     };
 
     # Restic Server
-    age.secrets.restic-htpasswd.file = ../../secrets/restic-htpasswd.age;
+    age.secrets.restic-htpasswd = {
+      file = ../../secrets/restic-htpasswd.age;
+      owner = "restic";
+      group = "restic";
+    };
     services.restic.server = {
       enable = true;
       privateRepos = true;
