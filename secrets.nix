@@ -8,7 +8,9 @@ let
 
   # Host SSH public keys (from generated keypairs)
   hedy = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOQrDkQWu1OpswzEdJKcgMEevk+RAEYqNn46Qij/oNxB root@hedy";
-  hosts = [ hedy ];
+  toph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICsUOxhHkzo1XGriEX7Avnjez2D4GgTEDixtu2U9cp18 root@toph";
+
+  hosts = [ hedy toph ];
 
   all = admins ++ hosts;
 in
@@ -18,8 +20,8 @@ in
   "modules/secrets/wifi-tuna.age".publicKeys = all;
 
   # Host-specific secrets
-  "modules/secrets/vaultwarden.age".publicKeys = all;
   "modules/secrets/basicauth.age".publicKeys = all;
   "modules/secrets/netbird-coturn.age".publicKeys = admins ++ [ hedy ];
   "modules/secrets/headscale-preauth-brandon.age".publicKeys = admins ++ [ hedy ];
+  "modules/secrets/vaultwarden.age".publicKeys = admins ++ [ toph ];
 }
