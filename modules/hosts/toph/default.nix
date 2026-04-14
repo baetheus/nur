@@ -81,6 +81,17 @@
     services.avahi.publish.domain = true;
     services.avahi.publish.userServices = true;
 
+    # Tailscale
+    age.secrets.headscale-preauth-brandon.file = ../../secrets/headscale-preauth-brandon.age;
+    services.tailscale = {
+      enable = true;
+      openFirewall = true;
+      disableUpstreamLogging = true;
+      useRoutingFeatures = "both";
+      extraUpFlags = [ "--login-server=https://net.null.pub" ];
+      authKeyFile = config.age.secrets.headscale-preauth-brandon.path;
+    };
+
     # Media
     users = {
       users.media = {

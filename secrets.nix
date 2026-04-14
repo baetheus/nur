@@ -17,11 +17,9 @@ in
 {
   # Shared secrets (all NixOS hosts)
   "modules/secrets/msmtp-passwordeval.age".publicKeys = all;
-  "modules/secrets/wifi-tuna.age".publicKeys = all;
+  "modules/secrets/headscale-preauth-brandon.age".publicKeys = all;
 
   # Host-specific secrets
-  "modules/secrets/basicauth.age".publicKeys = all;
-  "modules/secrets/netbird-coturn.age".publicKeys = admins ++ [ hedy ];
-  "modules/secrets/headscale-preauth-brandon.age".publicKeys = admins ++ [ hedy ];
+  "modules/secrets/wifi-tuna.age".publicKeys = admins ++ [ toph ];
   "modules/secrets/vaultwarden.age".publicKeys = admins ++ [ toph ];
 }
