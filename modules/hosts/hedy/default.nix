@@ -103,6 +103,11 @@
             user = config.services.headscale.user;
             group = config.services.headscale.group;
           }
+          {
+            directory = "/var/lib/acme";
+            user = "acme";
+            group = "acme";
+          }
           # "/var/log"
         ];
       };
@@ -110,6 +115,7 @@
       # Headscale
       services.headscale = {
         enable = true;
+        address = "0.0.0.0";
         settings = {
           server_url = "https://net.null.pub";
           dns.base_domain = "at.null";
