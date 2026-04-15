@@ -9,8 +9,10 @@ let
   # Host SSH public keys (from generated keypairs)
   hedy = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOQrDkQWu1OpswzEdJKcgMEevk+RAEYqNn46Qij/oNxB root@hedy";
   toph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICsUOxhHkzo1XGriEX7Avnjez2D4GgTEDixtu2U9cp18 root@toph";
+  grace = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJFx0WwA7pc8rpBnWlLILOxcjqb74VNwUWcC9H3p9mmY root@grace";
 
-  hosts = [ hedy toph ];
+
+  hosts = [ hedy toph grace ];
 
   all = admins ++ hosts;
 in
@@ -20,11 +22,11 @@ in
   "modules/secrets/headscale-preauth-brandon.age".publicKeys = all;
 
   # Host-specific secrets
-  "modules/secrets/wifi-tuna.age".publicKeys = admins ++ [ toph ];
+  "modules/secrets/wifi-tuna.age".publicKeys = admins ++ [ toph grace ];
   "modules/secrets/vaultwarden.age".publicKeys = admins ++ [ toph ];
   "modules/secrets/restic-htpasswd.age".publicKeys = admins ++ [ toph ];
   "modules/secrets/nzbget-conf.age".publicKeys = admins ++ [ toph ];
   "modules/secrets/restic-env-toph-persist.age".publicKeys = admins ++ [ toph ];
   "modules/secrets/restic-env-hedy-persist.age".publicKeys = admins ++ [ hedy ];
-  "modules/secrets/restic-env-grace-persist.age".publicKeys = admins ++ [];
+  "modules/secrets/restic-env-grace-persist.age".publicKeys = admins ++ [ grace ];
 }
