@@ -3,7 +3,7 @@
   flake.nixosConfigurations.toph = inputs.nixpkgs.lib.nixosSystem {
     modules = [
       self.diskoConfigurations.toph
-      self.modules.nixos.null-nzbget
+      self.modules.nixos.nzbgetService # Maybe move this to a "replacedModules"
       self.modules.nixos.boot-systemd
       self.modules.nixos.base
       self.modules.nixos.brandon
@@ -155,7 +155,7 @@
       owner = "media";
       group = "media";
     };
-    services.null-nzbget = {
+    services.nzbget = {
       enable = true;
       user = "media";
       group = "media";

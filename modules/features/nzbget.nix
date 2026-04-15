@@ -1,11 +1,13 @@
 { self, inputs, ... }: {
-  flake.modules.nixos.null-nzbget = { config, pkgs, lib, ...  }:
+  flake.modules.nixos.nzbgetService = { config, pkgs, lib, ...  }:
     let
       cfg = config.services.nzbget;
     in
     {
+      disabledModules = [ "services/misc/nzbget.nix" ];
+
       options = {
-        services.null-nzbget = {
+        services.nzbget = {
           enable = lib.mkEnableOption "NZBGet, for downloading files from news servers";
 
           package = lib.mkPackageOption pkgs "nzbget" { };
