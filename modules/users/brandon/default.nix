@@ -128,6 +128,7 @@ in
           vimPlugins.vim-unimpaired
           vimPlugins.vim-commentary
           vimPlugins.vim-noctu
+          vimPlugins.vim-surround
 
           # Life Plugins
           vimPlugins.vim-ledger

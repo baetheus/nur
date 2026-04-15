@@ -12,22 +12,12 @@
 
   flake.modules.nixos.hedy =
     { config, pkgs, modulesPath, ... }:
-    let
-      pkgs-unstable = import inputs.nixpkgs-unstable {
-        system = "x86_64-linux";
-      };
-    in
     {
       nixpkgs.hostPlatform = "x86_64-linux";
       hardware.facter.reportPath = ./facter.json;
 
-      # Disable standard headscale service
-      disabledModules = ["services/networking/headscale.nix"];
-
       imports = [
         (modulesPath + "/profiles/qemu-guest.nix") # Needed for qemu host
-        # Use unstable headscale service
-        "${pkgs-unstable.path}/nixos/modules/services/networking/headscale.nix"
       ];
 
       # General
@@ -136,33 +126,6 @@
             "1.0.0.1"
             "2606:4700:4700::1111"
             "2606:4700:4700::1001"
-          ];
-          dns.extra_record = [
-            {
-              name = "plex.at.null";
-              type = "A";
-              example = "100.64.0.7";
-            }
-            {
-              name = "nzbget.at.null";
-              type = "A";
-              example = "100.64.0.7";
-            }
-            {
-              name = "music.at.null";
-              type = "A";
-              example = "100.64.0.7";
-            }
-            {
-              name = "movies.at.null";
-              type = "A";
-              example = "100.64.0.7";
-            }
-            {
-              name = "series.at.null";
-              type = "A";
-              example = "100.64.0.7";
-            }
           ];
         };
       };

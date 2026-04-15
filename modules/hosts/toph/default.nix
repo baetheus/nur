@@ -68,6 +68,12 @@
           user = config.services.plex.user;
           group = config.services.plex.group;
         }
+        # NZBGet
+        {
+          directory = "/var/lib/nzbget"; # Hardcoded in nixpkgs
+          user = config.services.nzbget.user;
+          group = config.services.nzbget.group;
+        }
         # Restic Server
         {
           directory = config.services.restic.server.dataDir;
@@ -147,6 +153,57 @@
       enable = true;
       user = "media";
       group = "media";
+      settings = {
+        AppendCategoryDir = "yes";
+
+        "Category1.Aliases" = "movies";
+        "Category1.DestDir" = "/media/downloads/done/movies";
+        "Category1.Name" = "Movies";
+        "Category1.Unpack" = "yes";
+
+        "Category2.Aliases" = "series";
+        "Category2.DestDir" = "/media/downloads/done/series";
+        "Category2.Name" = "Series";
+        "Category2.Unpack" = "yes";
+        
+        "Category3.Aliases" = "music";
+        "Category3.DestDir" = "/media/downloads/done/music";
+        "Category3.Name" = "Music";
+        "Category3.Unpack" = "yes";
+
+        "Category4.Aliases" = "other";
+        "Category4.DestDir" = "/media/downloads/done/other";
+        "Category4.Name" = "Other";
+        "Category4.Unpack" = "yes";
+
+        # Will need to manually enter the user/pass since no secretfile
+        "Server1.Active" = "yes";
+        "Server1.CertVerification" = "Strict";
+        "Server1.Connections" = 60;
+        "Server1.Encryption" = "yes";
+        "Server1.Group" = 0;
+        "Server1.Host" = "news.easynews.com";
+        "Server1.IpVersion" = "auto";
+        "Server1.JoinGroup" = "no";
+        "Server1.Level" = 0;
+        "Server1.Name" = "Easynews";
+        "Server1.Optional" = "no";
+        "Server1.Port" = 563;
+        "Server1.Retention" = 5037;
+
+        ContinuePartial = "yes";
+        MainDir = "/media/downloads";
+        DestDir = "/media/downloads/done";
+        InterDir = "/media/downloads/inter";
+        LockFile = "/media/downloads/nzbget.lock";
+        LogFile = "/media/downloads/nzbget.log";
+        NzbDir = "/media/downloads/nzb";
+        QueueDir = "/media/downloads/queue";
+        ScriptDir = "/media/downloads/scripts";
+        TempDir = "/media/downloads/tmp";
+        FlushQueue = "yes";
+        NzbCleanupDisk = "yes";
+      };
     };
 
     services.sonarr = {
@@ -165,108 +222,6 @@
       enable = true;
       user = "media";
       group = "media";
-    };
-
-    # Nginx Proxy
-    services.nginx = {
-      enable = true;
-      recommendedOptimisation = true;
-      recommendedGzipSettings = true;
-      recommendedProxySettings = true;
-      clientMaxBodySize = "500m";
-
-      virtualHosts = {
-        "plex.at.null" = {
-          locations = {
-            "/" = {
-              proxyPass = "http://localhost:32400";
-              proxyWebsockets = true;
-              extraConfig = ''
-                keepalive_requests          100000;
-                keepalive_timeout           160s;
-                proxy_buffering             off;
-                proxy_connect_timeout       75;
-                proxy_ignore_client_abort   on;
-                proxy_read_timeout          900s;
-                proxy_send_timeout          600;
-                send_timeout                600;
-              '';
-            };
-          };
-        };
-        "nzbget.at.null" = {
-          locations = {
-            "/" = {
-              proxyPass = "http://localhost:6789";
-              proxyWebsockets = true;
-              extraConfig = ''
-                keepalive_requests          100000;
-                keepalive_timeout           160s;
-                proxy_buffering             off;
-                proxy_connect_timeout       75;
-                proxy_ignore_client_abort   on;
-                proxy_read_timeout          900s;
-                proxy_send_timeout          600;
-                send_timeout                600;
-              '';
-            };
-          };
-        };
-        "music.at.null" = {
-          locations = {
-            "/" = {
-              proxyPass = "http://localhost:8686";
-              proxyWebsockets = true;
-              extraConfig = ''
-                keepalive_requests          100000;
-                keepalive_timeout           160s;
-                proxy_buffering             off;
-                proxy_connect_timeout       75;
-                proxy_ignore_client_abort   on;
-                proxy_read_timeout          900s;
-                proxy_send_timeout          600;
-                send_timeout                600;
-              '';
-            };
-          };
-        };
-        "movies.at.null" = {
-          locations = {
-            "/" = {
-              proxyPass = "http://localhost:7878";
-              proxyWebsockets = true;
-              extraConfig = ''
-                keepalive_requests          100000;
-                keepalive_timeout           160s;
-                proxy_buffering             off;
-                proxy_connect_timeout       75;
-                proxy_ignore_client_abort   on;
-                proxy_read_timeout          900s;
-                proxy_send_timeout          600;
-                send_timeout                600;
-              '';
-            };
-          };
-        };
-        "series.at.null" = {
-          locations = {
-            "/" = {
-              proxyPass = "http://localhost:8989";
-              proxyWebsockets = true;
-              extraConfig = ''
-                keepalive_requests          100000;
-                keepalive_timeout           160s;
-                proxy_buffering             off;
-                proxy_connect_timeout       75;
-                proxy_ignore_client_abort   on;
-                proxy_read_timeout          900s;
-                proxy_send_timeout          600;
-                send_timeout                600;
-              '';
-            };
-          };
-        };
-      };
     };
   };
 }
