@@ -4,7 +4,7 @@
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
-    wrappers.url = "github:BirdeeHub/nix-wrapper-modules";
+    wrappers.url = "github:Lassulus/wrappers";
 
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
