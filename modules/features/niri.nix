@@ -1,6 +1,6 @@
 { self, inputs, ... }: {
   perSystem = { pkgs, lib, ... }: {
-    packages.myNiri = inputs.wrappers.wrappers.niri.wrap {
+    packages.niri = inputs.wrappers.wrappers.niri.wrap {
       settings = {
         input.keyboard = {
           xkb.layout = "us,ua";
