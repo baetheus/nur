@@ -3,6 +3,7 @@
   flake.nixosConfigurations.toph = inputs.nixpkgs.lib.nixosSystem {
     modules = [
       self.diskoConfigurations.toph
+      self.modules.nixos.null-nzbget
       self.modules.nixos.boot-systemd
       self.modules.nixos.base
       self.modules.nixos.brandon
@@ -149,61 +150,16 @@
       group = "media";
     };
 
-    services.nzbget = {
+    age.secrets.nzbget-conf = {
+      file = ../../secrets/nzbget-conf.age;
+      owner = "media";
+      group = "media";
+    };
+    services.null-nzbget = {
       enable = true;
       user = "media";
       group = "media";
-      settings = {
-        AppendCategoryDir = "yes";
-
-        "Category1.Aliases" = "movies";
-        "Category1.DestDir" = "/media/downloads/done/movies";
-        "Category1.Name" = "Movies";
-        "Category1.Unpack" = "yes";
-
-        "Category2.Aliases" = "series";
-        "Category2.DestDir" = "/media/downloads/done/series";
-        "Category2.Name" = "Series";
-        "Category2.Unpack" = "yes";
-        
-        "Category3.Aliases" = "music";
-        "Category3.DestDir" = "/media/downloads/done/music";
-        "Category3.Name" = "Music";
-        "Category3.Unpack" = "yes";
-
-        "Category4.Aliases" = "other";
-        "Category4.DestDir" = "/media/downloads/done/other";
-        "Category4.Name" = "Other";
-        "Category4.Unpack" = "yes";
-
-        # Will need to manually enter the user/pass since no secretfile
-        "Server1.Active" = "yes";
-        "Server1.CertVerification" = "Strict";
-        "Server1.Connections" = 60;
-        "Server1.Encryption" = "yes";
-        "Server1.Group" = 0;
-        "Server1.Host" = "news.easynews.com";
-        "Server1.IpVersion" = "auto";
-        "Server1.JoinGroup" = "no";
-        "Server1.Level" = 0;
-        "Server1.Name" = "Easynews";
-        "Server1.Optional" = "no";
-        "Server1.Port" = 563;
-        "Server1.Retention" = 5037;
-
-        ContinuePartial = "yes";
-        MainDir = "/media/downloads";
-        DestDir = "/media/downloads/done";
-        InterDir = "/media/downloads/inter";
-        LockFile = "/media/downloads/nzbget.lock";
-        LogFile = "/media/downloads/nzbget.log";
-        NzbDir = "/media/downloads/nzb";
-        QueueDir = "/media/downloads/queue";
-        ScriptDir = "/media/downloads/scripts";
-        TempDir = "/media/downloads/tmp";
-        FlushQueue = "yes";
-        NzbCleanupDisk = "yes";
-      };
+      configFile = config.age.secrets.nzbget-conf.path;
     };
 
     services.sonarr = {
