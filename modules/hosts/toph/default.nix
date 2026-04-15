@@ -71,7 +71,7 @@
         }
         # NZBGet
         {
-          directory = "/var/lib/nzbget"; # Hardcoded in nixpkgs
+          directory = config.services.nzbget.dataDir;
           user = config.services.nzbget.user;
           group = config.services.nzbget.group;
         }
