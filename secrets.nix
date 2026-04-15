@@ -9,7 +9,7 @@ let
   # Host SSH public keys (from generated keypairs)
   hedy = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOQrDkQWu1OpswzEdJKcgMEevk+RAEYqNn46Qij/oNxB root@hedy";
   toph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICsUOxhHkzo1XGriEX7Avnjez2D4GgTEDixtu2U9cp18 root@toph";
-  grace = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJFx0WwA7pc8rpBnWlLILOxcjqb74VNwUWcC9H3p9mmY root@grace";
+  grace = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK6B862RFK8HYt3qH4S0TANlXuc61gN5kAg9V7IbHZPp root@grace";
 
 
   hosts = [ hedy toph grace ];

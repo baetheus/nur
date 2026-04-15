@@ -16,6 +16,7 @@
     system.stateVersion = "25.11";
     nixpkgs.hostPlatform = "x86_64-linux";
     hardware.facter.reportPath = ./facter.json;
+    services.pcscd.enable = true;
 
     # Networking
     networking.hostName = "grace";
@@ -41,6 +42,7 @@
       ];
       directories = [
         "/var/lib/nixos"
+        "/etc/NetworkManager/system-connections"
       ];
     };
 
@@ -48,8 +50,21 @@
     environment.systemPackages = with pkgs; [
       xwayland-satellite
       foot
+      fuzzel
+      brightnessctl
     ];
 
+    fonts.packages = [ pkgs.font-awesome_4 ];
+
     programs.niri.enable = true;
+    programs.niri.package =
+      self.packages.${pkgs.stdenv.hostPlatform.system}.niri;
+    programs.waybar.enable = true;
+
+    services.playerctld.enable = true;
+    services.pipewire.enable = true;
+    services.pipewire.audio.enable = true;
+    services.pipewire.alsa.enable = true;
+    services.pipewire.wireplumber.enable = true;
   };
 }
