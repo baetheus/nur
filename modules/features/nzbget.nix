@@ -2,6 +2,20 @@
   flake.modules.nixos.nzbgetService = { config, pkgs, lib, ...  }:
     let
       cfg = config.services.nzbget;
+      # Settings we pass to make nzbget runnable as a service
+      settings = {
+        OutputMode = "loggable";
+        WriteLog = "none";
+        ErrorTarget = "screen";
+        WarningTarget = "screen";
+        InfoTarget = "screen";
+        DetailTarget = "screen";
+        ConfigTemplate = "${cfg.package}/share/nzbget/nzbget.conf";
+        WebDir = "${cfg.package}/share/nzbget/webui";
+        UpdateCheck = "none";
+      };
+      configList = lib.mapAttrsToList (name: value: "-o ${name}=${value}") settings;
+      configOpts = lib.concatStringsSep " " configList;
     in
     {
       disabledModules = [ "services/misc/nzbget.nix" ];
@@ -60,7 +74,7 @@
             Group = cfg.group;
             UMask = "0002";
             Restart = "on-failure";
-            ExecStart = "${cfg.package}/bin/nzbget --server --configfile ${cfg.configFile} -o ConfigTemplate=\"${cfg.package}/share/nzbget/nzbget.conf\" -o WebDir=\"${cfg.package}/share/nzbget/webui\"";
+            ExecStart = "${cfg.package}/bin/nzbget --server --configfile ${cfg.configFile} ${configOpts}";
             ExecStop = "${cfg.package}/bin/nzbget --quit";
           };
         };
