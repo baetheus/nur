@@ -11,7 +11,6 @@ let
   toph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICsUOxhHkzo1XGriEX7Avnjez2D4GgTEDixtu2U9cp18 root@toph";
   grace = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK6B862RFK8HYt3qH4S0TANlXuc61gN5kAg9V7IbHZPp root@grace";
 
-
   hosts = [ hedy toph grace ];
 
   all = admins ++ hosts;
@@ -20,6 +19,7 @@ in
   # Shared secrets (all NixOS hosts)
   "modules/secrets/msmtp-passwordeval.age".publicKeys = all;
   "modules/secrets/headscale-preauth-brandon.age".publicKeys = all;
+  "modules/secrets/brandon-password.age".publicKeys = all;
 
   # Host-specific secrets
   "modules/secrets/wifi-tuna.age".publicKeys = admins ++ [ toph grace ];

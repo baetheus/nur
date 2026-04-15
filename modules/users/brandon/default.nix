@@ -23,15 +23,17 @@ let
 in
 {
   flake.modules.nixos.brandon =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       home-manager.users."${brandon.username}" = self.homeModules.brandon;
       programs.zsh.enable = true;
+      age.secrets.brandon-password.file = ../../secrets/brandon-password.age;
       users.users."${brandon.username}" = {
         shell = pkgs.zsh;
         isNormalUser = true;
         extraGroups = [ "wheel" ];
         openssh.authorizedKeys.keys = brandon.keys;
+        hashedPasswordFile = config.age.secrets.brandon-password.path;
       };
     };
 
@@ -39,11 +41,7 @@ in
     { pkgs, ... }:
     {
       imports = [ self.modules.nixos.brandon ];
-
-      # Some settings that we need for a nixos desktop/laptop
-      users.mutableUsers = true;
       users.users."${brandon.username}" = {
-        initialPassword = "changemeplease";
         extraGroups = [ "networkmanager" ];
       };
     };
