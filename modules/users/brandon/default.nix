@@ -35,11 +35,17 @@ in
       };
     };
 
-  flake.modules.nixos.brandon-server =
+  flake.modules.nixos.brandon-desktop =
     { pkgs, ... }:
     {
       imports = [ self.modules.nixos.brandon ];
-      home-manager.users."${brandon.username}" = self.homeModules.brandon-server;
+
+      # Some settings that we need for a nixos desktop/laptop
+      users.mutableUsers = true;
+      users.users."${brandon.username}" = {
+        initialPassword = "changemeplease";
+        extraGroups = [ "networkmanager" ];
+      };
     };
 
 
@@ -53,18 +59,6 @@ in
         home = "/Users/${brandon.username}";
       };
     };
-
-  flake.homeModules.brandon-server = { pkgs, ... }: {
-    programs.zellij = {
-      enable = true;
-      enableZshIntegration = true;
-      attachExistingSession = true;
-      exitShellOnExit = true;
-      settings = {
-        simplified_ui = true;
-      };
-    };
-  };
 
   flake.homeModules.brandon =
     { pkgs, ... }:
