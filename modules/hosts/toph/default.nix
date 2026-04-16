@@ -39,6 +39,7 @@
         53 # CUP
         443 # HTTPS
         631 # Print Sharing
+        8222 # Vaultwarden
         6789 # NZBGet
         7878 # Radarr (Movies)
         8686 # Lidarr (Music)
