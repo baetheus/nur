@@ -88,7 +88,6 @@
       };
 
       programs.niri.enable = true;
-      programs.niri.package = self.packages.${pkgs.stdenv.hostPlatform.system}.niri;
 
       # For the hotkeys
       services.playerctld.enable = true;

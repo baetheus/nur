@@ -2,6 +2,7 @@
   description = "Nix User Repository for Brandon Blaylock";
 
   inputs = {
+    nixos-hardware.url = "github:nixos/nixos-hardware";
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs.follows = "nixpkgs-stable";
@@ -27,10 +28,15 @@
     impermanence.inputs.home-manager.follows = "home-manager";
   };
 
-  outputs = inputs: inputs.flake-parts.lib.mkFlake
-    { inherit inputs; }
-    (inputs.import-tree.filterNot (p: builtins.elem (builtins.baseNameOf p) [
-      "secrets.nix"
-      "flake.nix"
-    ]) ./.);
+  outputs =
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } (
+      inputs.import-tree.filterNot (
+        p:
+        builtins.elem (builtins.baseNameOf p) [
+          "secrets.nix"
+          "flake.nix"
+        ]
+      ) ./.
+    );
 }
