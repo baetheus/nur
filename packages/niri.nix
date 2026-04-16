@@ -4,7 +4,7 @@
       inherit pkgs;
       settings = {
         spawn-at-startup = [
-          "${lib.getExe pkgs.swaybg} -i ${../../files/default_bg.jpg} -m fill"
+          "${lib.getExe pkgs.swaybg} -i ${../files/default_bg.jpg} -m fill"
         ];
 
         input.keyboard = {
