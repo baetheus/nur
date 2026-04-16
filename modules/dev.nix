@@ -1,7 +1,12 @@
-{ self, inputs, ... }:
+{ inputs, ... }:
 {
   perSystem =
-    { config, pkgs, inputs', ... }:
+    {
+      config,
+      pkgs,
+      inputs',
+      ...
+    }:
     let
       pkgs' = import inputs.nixpkgs {
         inherit (pkgs.stdenv.hostPlatform) system;
@@ -10,11 +15,18 @@
     in
     {
       devShells.default = pkgs.mkShell {
-        nativeBuildInputs = with pkgs';[
-          age-plugin-yubikey
-          nixos-anywhere
+        nativeBuildInputs = with pkgs'; [
+          # For secrets
           ragenix
-          pcsclite
+          age-plugin-yubikey
+
+          # For initial installations
+          nixos-anywhere
+
+          # For vim
+          nil
+
+          # For vibing and questions I guess
           claude-code
         ];
       };

@@ -1,4 +1,4 @@
-{ self, inputs, withSystem, ... }:
+{ self, inputs, ... }:
 {
   flake.nixosConfigurations.hedy = inputs.nixpkgs.lib.nixosSystem {
     modules = [
@@ -11,7 +11,12 @@
   };
 
   flake.modules.nixos.hedy =
-    { config, pkgs, modulesPath, ... }:
+    {
+      config,
+      pkgs,
+      modulesPath,
+      ...
+    }:
     {
       nixpkgs.hostPlatform = "x86_64-linux";
       hardware.facter.reportPath = ./facter.json;
@@ -80,7 +85,24 @@
               };
             };
           };
+
+          "vault.null.pub" = {
+            forceSSL = true;
+            enableACME = true;
+            locations = {
+              "/".proxyPass = "http://toph.at.null:8222";
+              "= /notifications/anonymous-hub" = {
+                proxyPass = "http://toph.at.null:8222";
+                proxyWebsockets = true;
+              };
+              "= /notifications/hub" = {
+                proxyPass = "http://toph.at.null:8222";
+                proxyWebsockets = true;
+              };
+            };
+          };
         };
+
       };
 
       # Immutability
@@ -149,6 +171,7 @@
         environmentFile = config.age.secrets.restic-env-hedy-persist.path;
         paths = [ "/persist" ];
       };
+
     };
 
   flake.diskoConfigurations.hedy = {

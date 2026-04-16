@@ -71,62 +71,92 @@ inoremap <S-Tab> <c-r>=ShiftTab()<CR>
 " Ledger settings
 let g:ledger_is_hledger = 1
 
+" vim-lsp settings
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> K <plug>(lsp-hover)
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
+
+    let g:lsp_format_sync_timeout = 1000
+    autocmd! BufWritePre * call execute('LspDocumentFormatSync')
+    
+    " refer to doc to add more commands
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
 " ALE Settings
-let g:ale_fix_on_save = 1 " Run fixers on write
-let g:ale_completion_enabled = 1 " Allow autocompletion
-let g:ale_completion_autoimport = 1 " Allow autocompletion of imports
-let g:ale_set_balloons = 1 " Show hover info in balloon
-let g:ale_deno_unstable = 1
+" let g:ale_fix_on_save = 1 " Run fixers on write
+" let g:ale_completion_enabled = 1 " Allow autocompletion
+" let g:ale_completion_autoimport = 1 " Allow autocompletion of imports
+" let g:ale_set_balloons = 1 " Show hover info in balloon
+" let g:ale_deno_unstable = 1
 
 " ALE Autocompletion
-set omnifunc=ale#completion#OmniFunc
+" set omnifunc=ale#completion#OmniFunc
 
 " ALE mappings
-nmap gr <Plug>(ale_rename)
-nmap gR <Plug>(ale_find_reference)
-nmap gd <Plug>(ale_go_to_definition)
-nmap gD <Plug>(ale_go_to_type_definition)
-nmap <Leader>h <Plug>(ale_hover)
-nmap <Leader>j <Plug>(ale_code_action)
-nmap <Leader>f <Plug>(ale_fix)
-nmap <silent> [d <Plug>(ale_previous_wrap)
-nmap <silent> ]d <Plug>(ale_next_wrap)
+" nmap gr <Plug>(ale_rename)
+" nmap gR <Plug>(ale_find_reference)
+" nmap gd <Plug>(ale_go_to_definition)
+" nmap gD <Plug>(ale_go_to_type_definition)
+" nmap <Leader>h <Plug>(ale_hover)
+" nmap <Leader>j <Plug>(ale_code_action)
+" nmap <Leader>f <Plug>(ale_fix)
+" nmap <silent> [d <Plug>(ale_previous_wrap)
+" nmap <silent> ]d <Plug>(ale_next_wrap)
 
 " Stupid work still uses node, so switch up linters/fixers based on
 " the IS_NODE environment variable. ;_;
-let is_node = $IS_NODE
+" let is_node = $IS_NODE
 
-if is_node == '1'
-  let js_linters = ['eslint', 'tsserver']
-  let js_fixers = ['eslint', 'prettier']
-else
-  let js_linters = ['deno']
-  let js_fixers = ['deno']
-endif
+" if is_node == '1'
+"   let js_linters = ['eslint', 'tsserver']
+"   let js_fixers = ['eslint', 'prettier']
+" else
+"   let js_linters = ['deno']
+"   let js_fixers = ['deno']
+" endif
 
 " ALE linters
-let g:ale_linters = {
-\  'nix': ['rnix_lsp'],
-\  'javascript': js_linters,
-\  'javascriptreact': js_linters,
-\  'typescript': js_linters,
-\  'typescriptreact': js_linters,
-\  'rust': ['analyzer'],
-\  'json': ['jq'],
-\  'go': ['gofmt', 'gopls'],
-\  'markdown': ['vale', 'marksman']
-\}
+" let g:ale_linters = {
+" \  'nix': ['rnix_lsp'],
+" \  'javascript': js_linters,
+" \  'javascriptreact': js_linters,
+" \  'typescript': js_linters,
+" \  'typescriptreact': js_linters,
+" \  'rust': ['analyzer'],
+" \  'json': ['jq'],
+" \  'go': ['gofmt', 'gopls'],
+" \  'markdown': ['vale', 'marksman']
+" \}
 
 " ALE fixers (formatting)
-let g:ale_fixers = {
-\  '*': ['remove_trailing_lines', 'trim_whitespace'],
-\  'nix': ['nixfmt', 'statix'],
-\  'javascript': js_fixers,
-\  'javascriptreact': js_fixers,
-\  'typescript': js_fixers,
-\  'typescriptreact': js_fixers,
-\  'rust': ['rustfmt'],
-\  'json': ['jq'],
-\  'go': ['gofmt', 'goimports', 'gopls'],
-\  'markdown': ['deno']
-\}
+" let g:ale_fixers = {
+" \  '*': ['remove_trailing_lines', 'trim_whitespace'],
+" \  'nix': ['nixfmt', 'statix'],
+" \  'javascript': js_fixers,
+" \  'javascriptreact': js_fixers,
+" \  'typescript': js_fixers,
+" \  'typescriptreact': js_fixers,
+" \  'rust': ['rustfmt'],
+" \  'json': ['jq'],
+" \  'go': ['gofmt', 'goimports', 'gopls'],
+" \  'markdown': ['deno']
+" \}

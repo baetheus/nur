@@ -1,9 +1,4 @@
-{
-  self,
-  inputs,
-  withSystem,
-  ...
-}:
+{ self, ... }:
 let
   brandon = {
     username = "brandon";
@@ -44,8 +39,10 @@ in
       users.users."${brandon.username}" = {
         extraGroups = [ "networkmanager" ];
       };
+      home-manager.users."${brandon.username}" = {
+        # home.packages = with pkgs; [ ];
+      };
     };
-
 
   flake.modules.darwin.brandon =
     { pkgs, ... }:
@@ -126,11 +123,8 @@ in
           vimPlugins.vim-ledger
 
           # Programming Plugins
-          vimPlugins.ale
-          vimPlugins.vim-dadbod
-          vimPlugins.vim-dadbod-ui
-          vimPlugins.vim-dadbod-completion
-          vimPlugins.vim-nix
+          vimPlugins.vim-lsp
+          vimPlugins.vim-lsp-settings
         ];
         extraConfig = builtins.readFile ./vimrc;
       };
