@@ -87,8 +87,8 @@
       };
 
       # Networking
-      networking.hostName = "hedy";
-      networking.hostId = "007f0201";
+      networking.hostName = "amelia";
+      networking.hostId = "007f0206";
 
       # Wifi
       age.secrets."tuna-wifi".file = ../../secrets/wifi-tuna.age;
