@@ -13,12 +13,6 @@
   flake.modules.nixos.amelia =
     { config, pkgs, ... }:
     {
-
-      # Imports
-      imports = [
-        "${builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }}/apple/t2"
-      ];
-
       # General setup
       nixpkgs.hostPlatform = "x86_64-linux";
       system.stateVersion = "25.11";
