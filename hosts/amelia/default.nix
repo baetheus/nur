@@ -21,6 +21,7 @@
       boot.loader.efi.efiSysMountPoint = "/boot";
 
       # Hardware Setup
+      hardware.apple-t2.kernelChannel = "latest";
       hardware.facter.reportPath = ./facter.json;
       hardware.firmware = [
         # Apple Firmware
