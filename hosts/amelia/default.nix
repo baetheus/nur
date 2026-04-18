@@ -84,6 +84,7 @@
           "/var/lib/nixos"
           "/var/lib/NetworkManager"
           "/etc/NetworkManager/system-connections"
+          "/lib/firmware"
         ];
       };
 
