@@ -97,9 +97,9 @@
 
       # Wifi
       age.secrets."tuna-wifi".file = ../../secrets/wifi-tuna.age;
-      networking.wireless.enable = true;
-      networking.interfaces.w1p1s0.useDHCP = true;
-      networking.supplicant.WLAN.configFile.path = config.age.secrets."tuna-wifi".path;
+      # networking.wireless.enable = true;
+      # networking.interfaces.w1p1s0.useDHCP = true;
+      # networking.supplicant.WLAN.configFile.path = config.age.secrets."tuna-wifi".path;
 
       # Firewall
       networking.firewall.enable = true;
