@@ -42,6 +42,11 @@
         neededForBoot = true;
         device = "none";
         fsType = "tmpfs";
+        options = [
+          "defaults"
+          "size=4G"
+          "mode=755"
+        ];
       };
 
       fileSystems."/nix" = {
