@@ -92,10 +92,13 @@
       networking.hostName = "amelia";
       networking.hostId = "007f0206";
 
+      networking.networkmanager.enable = true;
+      networking.networkmanager.wifi.powersave = true;
+
       # Wifi
       age.secrets."tuna-wifi".file = ../../secrets/wifi-tuna.age;
       networking.wireless.enable = true;
-      networking.interfaces.wlp0s20f3.useDHCP = true;
+      networking.interfaces.w1p1s0.useDHCP = true;
       networking.supplicant.WLAN.configFile.path = config.age.secrets."tuna-wifi".path;
 
       # Firewall
