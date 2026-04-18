@@ -12,6 +12,11 @@
         self.modules.generic.base
       ];
 
+      # Packages
+      environment.systemPackages = with pkgs; [
+        networkmanager
+      ];
+
       # Locale
       i18n.defaultLocale = "en_US.UTF-8";
 
