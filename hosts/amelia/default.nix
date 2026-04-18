@@ -16,6 +16,7 @@
       # General setup
       nixpkgs.hostPlatform = "x86_64-linux";
       system.stateVersion = "25.11";
+      services.pcscd.enable = true; # yubikey
 
       # Boot Specials
       boot.loader.efi.efiSysMountPoint = "/boot";

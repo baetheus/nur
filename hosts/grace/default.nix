@@ -25,7 +25,6 @@
       nixpkgs.config.allowUnfree = true;
       hardware.facter.reportPath = ./facter.json;
       services.pcscd.enable = true;
-      # services.gnome.gcr-ssh-agent.enable = false;
 
       # Networking
       networking.hostName = "grace";
