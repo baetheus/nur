@@ -45,7 +45,7 @@
         options = [
           "defaults"
           "size=4G"
-          "mode=755"
+          "mode=0755"
         ];
       };
 
