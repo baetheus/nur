@@ -1,4 +1,8 @@
-{ self, inputs, ... }:
+{
+  self,
+  inputs,
+  ...
+}:
 {
   flake.nixosConfigurations.amelia = inputs.nixpkgs.lib.nixosSystem {
     modules = [
@@ -112,6 +116,48 @@
       networking.firewall.allowedTCPPorts = [
         22
       ];
+
+      # Shutdown if the lid is closed
+      services.logind.settings.Login = {
+        HandleLidSwitch = "poweroff";
+        HandleLidSwitchExternalPower = "poweroff";
+        HandleLidSwitchDocked = "poweroff";
+      };
+
+      # Prevent overheating of cpu
+      services.thermald.enable = true;
+
+      # Automate performance/powersave based on cpu freq
+      services.auto-cpufreq.enable = true;
+      services.auto-cpufreq.settings = {
+        battery = {
+          governor = "powersave";
+          turbo = "never";
+        };
+        charger = {
+          governor = "performance";
+          turbo = "auto";
+        };
+      };
+
+      # Niri
+      programs.niri.enable = true;
+
+      # Foot
+      programs.foot.enable = true;
+      programs.foot.enableZshIntegration = true;
+
+      # Bluetooth
+      hardware.bluetooth.enable = true;
+
+      # Battery
+      services.upower.enable = true;
+
+      # Packages
+      environment.systemPackages = [
+        inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+      ];
+
     };
 
 }
