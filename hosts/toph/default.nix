@@ -44,6 +44,7 @@
         7878 # Radarr (Movies)
         8686 # Lidarr (Music)
         8989 # Sonarr (Series)
+        32400 # Plex
       ];
 
       # Immutability
