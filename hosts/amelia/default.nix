@@ -15,10 +15,16 @@
   };
 
   flake.modules.nixos.amelia =
-    { config, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       # General setup
       nixpkgs.hostPlatform = "x86_64-linux";
+      nixpkgs.config.allowUnfree = true; # plexamp
       system.stateVersion = "25.11";
       services.pcscd.enable = true; # yubikey
 
@@ -95,6 +101,8 @@
           "/var/lib/NetworkManager"
           "/etc/NetworkManager/system-connections"
           "/lib/firmware"
+          # Tailscale - uses root!
+          "/var/lib/tailscale"
         ];
       };
 
@@ -140,24 +148,57 @@
         };
       };
 
+      # Tailscale
+      age.secrets.headscale-preauth-brandon.file = ../../secrets/headscale-preauth-brandon.age;
+      services.tailscale = {
+        enable = true;
+        openFirewall = true;
+        disableUpstreamLogging = true;
+        useRoutingFeatures = "both";
+        extraUpFlags = [ "--login-server=https://net.null.pub" ];
+        authKeyFile = config.age.secrets.headscale-preauth-brandon.path;
+      };
+
       # Niri
       programs.niri.enable = true;
 
-      # Foot
-      programs.foot.enable = true;
-      programs.foot.enableZshIntegration = true;
-
-      # Bluetooth
+      # Desktop Things
       hardware.bluetooth.enable = true;
 
       # Battery
       services.upower.enable = true;
 
       # Packages
-      environment.systemPackages = [
+      environment.systemPackages = with pkgs; [
         inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+        xwayland-satellite
+        firefox
+        plexamp
       ];
 
+      # Fix caps:escape - capslock key maps to escape systemwide
+      services.interception-tools =
+        let
+          inherit (pkgs.interception-tools-plugins) caps2esc;
+          inherit (pkgs) interception-tools;
+        in
+        {
+          enable = true;
+          plugins = [ caps2esc ];
+          udevmonConfig = lib.strings.toJSON [
+            {
+              JOB = builtins.concatStringsSep " | " [
+                "${interception-tools}/bin/intercept -g $DEVNODE"
+                "${lib.getExe caps2esc} -m 1 -t 0"
+                "${interception-tools}/bin/uinput -d $DEVNODE"
+              ];
+              DEVICE.EVENTS.EV_KEY = [
+                "KEY_CAPSLOCK"
+                "KEY_ESC"
+              ];
+            }
+          ];
+        };
     };
 
 }

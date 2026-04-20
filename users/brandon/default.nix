@@ -35,12 +35,22 @@ in
   flake.modules.nixos.brandon-desktop =
     { pkgs, ... }:
     {
-      imports = [ self.modules.nixos.brandon ];
+      imports = [
+        self.modules.nixos.brandon
+      ];
       users.users."${brandon.username}" = {
         extraGroups = [ "networkmanager" ];
       };
       home-manager.users."${brandon.username}" = {
         # home.packages = with pkgs; [ ];
+        home = {
+          # Foot Terminal
+          programs.foot.enable = true;
+          programs.foot.settings = {
+            colors-dark.alpha = 0.9;
+            colors-light.alpha = 0.9;
+          };
+        };
       };
     };
 
