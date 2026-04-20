@@ -143,7 +143,7 @@
         address = "0.0.0.0";
         settings = {
           server_url = "https://net.null.pub";
-          dns.base_domain = "at.null";
+          dns.base_domain = "host.internal";
           dns.nameservers.global = [
             "1.1.1.1"
             "1.0.0.1"
