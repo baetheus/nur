@@ -73,7 +73,7 @@ in
             addresses = [ "tcp://rosalind:22000" ];
           };
           "amelia" = {
-            id = "FIFUNFL-3QFVW3N-5P7XESL-Q7JZF4S-55B7TTY-2KG57S5-5JYAZVE-KHDOGAW";
+            id = "WWJUGAT-KNOZ3G7-OUNUYWL-VJNGMSF-4UFXGKU-J3WAXAQ-EMNNI3A-HALGUQ3";
             addresses = [ "tcp://amelia:22000" ];
           };
           "toph" = {
