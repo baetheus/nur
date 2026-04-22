@@ -69,7 +69,7 @@ in
 
         settings.devices = {
           "rosalind" = {
-            id = "OKG5G4Y-BJDA6GS-3G6XCCN-QZC6RIS-N7QDDS5-WL6MO2C-N74QD3S-YC5AIQ5";
+            id = "FIFUNFL-3QFVW3N-5P7XESL-Q7JZF4S-55B7TTY-2KG57S5-5JYAZVE-KHDOGAW";
             addresses = [ "tcp://rosalind:22000" ];
           };
           "amelia" = {
@@ -77,7 +77,7 @@ in
             addresses = [ "tcp://amelia:22000" ];
           };
           "toph" = {
-            id = "X6JGCDD-4DQQTNL-VPPBNYB-PRTO4XJ-KTWLZ5O-N2DLDHP-PCNIYA5-TXFO6AI";
+            id = "O3P6QSJ-WAZ7LOO-IHPRN2Q-XWW5XL5-YEOGMG4-MEUZIUQ-URQMTMO-YERA3QJ";
             addresses = [ "tcp://toph:22000" ];
           };
         };
