@@ -59,16 +59,49 @@ in
       };
     };
 
-  flake.homeModules.foot =
+  flake.homeModules.syncthing =
     { pkgs, ... }:
     {
-      programs.foot.enable = true;
-      programs.foot.server.enable = true;
+      services.syncthing = {
+        enable = true;
+        overrideFolders = true;
+        overrideDevices = true;
+
+        settings.devices = {
+          "rosalind" = {
+            id = "OKG5G4Y-BJDA6GS-3G6XCCN-QZC6RIS-N7QDDS5-WL6MO2C-N74QD3S-YC5AIQ5";
+            addresses = [ "tcp://rosalind:22000" ];
+          };
+          "amelia" = {
+            id = "FIFUNFL-3QFVW3N-5P7XESL-Q7JZF4S-55B7TTY-2KG57S5-5JYAZVE-KHDOGAW";
+            addresses = [ "tcp://amelia:22000" ];
+          };
+          "toph" = {
+            id = "X6JGCDD-4DQQTNL-VPPBNYB-PRTO4XJ-KTWLZ5O-N2DLDHP-PCNIYA5-TXFO6AI";
+            addresses = [ "tcp://toph:22000" ];
+          };
+        };
+
+        settings.folders = {
+          "share" = {
+            id = "xa7yg-wn5qo";
+            path = if pkgs.stdenv.isDarwin then "/Users/brandon/share" else "/home/brandon/share";
+            devices = [
+              "rosalind"
+              "amelia"
+              "toph"
+            ];
+          };
+        };
+      };
     };
 
   flake.homeModules.brandon =
     { pkgs, ... }:
     {
+      imports = [
+        self.homeModules.syncthing
+      ];
       home = {
         inherit (brandon) username;
         stateVersion = "25.11";
