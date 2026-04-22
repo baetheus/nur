@@ -1,4 +1,4 @@
-{ self, ... }:
+{ inputs, self, ... }:
 let
   brandon = {
     username = "brandon";
@@ -43,14 +43,8 @@ in
       };
       home-manager.users."${brandon.username}" = {
         # home.packages = with pkgs; [ ];
-        home = {
-          # Foot Terminal
-          programs.foot.enable = true;
-          programs.foot.settings = {
-            colors-dark.alpha = 0.9;
-            colors-light.alpha = 0.9;
-          };
-        };
+        # Foot Terminal
+        programs.foot.enable = true;
       };
     };
 
@@ -63,6 +57,13 @@ in
         shell = pkgs.zsh;
         home = "/Users/${brandon.username}";
       };
+    };
+
+  flake.homeModules.foot =
+    { pkgs, ... }:
+    {
+      programs.foot.enable = true;
+      programs.foot.server.enable = true;
     };
 
   flake.homeModules.brandon =

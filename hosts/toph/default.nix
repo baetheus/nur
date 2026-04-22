@@ -62,18 +62,6 @@
         ];
         directories = [
           "/var/lib/nixos"
-          # Plex
-          {
-            directory = config.services.plex.dataDir;
-            user = config.services.plex.user;
-            group = config.services.plex.group;
-          }
-          # NZBGet
-          {
-            directory = config.services.nzbget.dataDir;
-            user = config.services.nzbget.user;
-            group = config.services.nzbget.group;
-          }
           # Restic Server
           {
             directory = config.services.restic.server.dataDir;
@@ -84,15 +72,39 @@
           "/var/lib/tailscale"
           # Vaultwarden
           {
-            directory = "/var/backup/vaultwarden"; # Hardcoded in nixpkgs
-            user = "vaultwarden"; # Hardcoded in nixpkgs
-            group = "vaultwarden"; # Hardcoded in nixpkgs
-          }
-          {
             directory = "/var/lib/vaultwarden"; # Hardcoded in nixpkgs
             user = "vaultwarden"; # Hardcoded in nixpkgs
             group = "vaultwarden"; # Hardcoded in nixpkgs
           }
+          # NZBGet
+          {
+            directory = config.services.nzbget.dataDir;
+            user = config.services.nzbget.user;
+            group = config.services.nzbget.group;
+          }
+          # Plex
+          {
+            directory = config.services.plex.dataDir;
+            user = config.services.plex.user;
+            group = config.services.plex.group;
+          }
+          # Sonarr/Radarr/Lidarr
+          {
+            directory = config.services.sonarr.dataDir;
+            user = config.services.sonarr.user;
+            group = config.services.sonarr.group;
+          }
+          {
+            directory = config.services.radarr.dataDir;
+            user = config.services.radarr.user;
+            group = config.services.radarr.group;
+          }
+          {
+            directory = config.services.lidarr.dataDir;
+            user = config.services.lidarr.user;
+            group = config.services.lidarr.group;
+          }
+
         ];
       };
 

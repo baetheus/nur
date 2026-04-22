@@ -9,7 +9,7 @@
       inputs.nixos-hardware.nixosModules.apple-t2
       self.modules.nixos.boot-systemd
       self.modules.nixos.base
-      self.modules.nixos.brandon
+      self.modules.nixos.brandon-desktop
       self.modules.nixos.amelia
     ];
   };
@@ -172,6 +172,7 @@
       environment.systemPackages = with pkgs; [
         inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
         xwayland-satellite
+        brightnessctl
         firefox
         plexamp
       ];
