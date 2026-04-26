@@ -3,6 +3,10 @@
   flake.modules.generic.base =
     { pkgs, ... }:
     {
+      imports = [
+        self.modules.generic.aspects
+      ];
+
       # Locale
       time.timeZone = "America/Los_Angeles";
 

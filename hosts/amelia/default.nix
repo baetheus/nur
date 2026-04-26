@@ -4,6 +4,7 @@
   ...
 }:
 {
+
   flake.nixosConfigurations.amelia = inputs.nixpkgs.lib.nixosSystem {
     modules = [
       inputs.nixos-hardware.nixosModules.apple-t2

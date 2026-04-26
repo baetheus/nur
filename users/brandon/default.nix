@@ -1,25 +1,31 @@
-{ inputs, self, ... }:
-let
-  brandon = {
-    username = "brandon";
-    name = "Brandon Blaylock";
-    email = "brandon@null.pub";
-    signingkey = "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIL7W3Bg5SHwsLQqOjL3lQWf2F9zqY19g9MusuKXi93VtAAAAC3NzaDpkZWZhdWx0 ssh:default";
-    keys = [
-      # Keychain Yubkey A
-      "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAetuhFZ8SCOLnYdfZOCFTQLzIh3a25WX991X5aWem5eAAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
-      # Folder Yubikey B
-      "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIO1pi4MnWUTF2w9GBbxk7F5uuYmt+uRA7gKMGuKqeQe3AAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
-      # Laptop Yubikey C
-      "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIL7W3Bg5SHwsLQqOjL3lQWf2F9zqY19g9MusuKXi93VtAAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
-    ];
-  };
-
-in
+{ self, ... }:
 {
   flake.modules.nixos.brandon =
     { config, pkgs, ... }:
+    let
+      brandon = config.aspects.users.brandon;
+    in
     {
+      # Set brandon's user data via the aspect (aspects module imported via base)
+      aspects.users.brandon = {
+        username = "brandon";
+        name = "Brandon Blaylock";
+        email = "brandon@null.pub";
+        signingkey = "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIL7W3Bg5SHwsLQqOjL3lQWf2F9zqY19g9MusuKXi93VtAAAAC3NzaDpkZWZhdWx0 ssh:default";
+        keys = [
+          # Keychain Yubkey A
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAetuhFZ8SCOLnYdfZOCFTQLzIh3a25WX991X5aWem5eAAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+          # Folder Yubikey B
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIO1pi4MnWUTF2w9GBbxk7F5uuYmt+uRA7gKMGuKqeQe3AAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+          # Laptop Yubikey C
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIL7W3Bg5SHwsLQqOjL3lQWf2F9zqY19g9MusuKXi93VtAAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+        ];
+      };
+
+      # Add brandon to the default group
+      aspects.groups.default = [ "brandon" ];
+
+      # Use the aspect data
       home-manager.users."${brandon.username}" = self.homeModules.brandon;
       programs.zsh.enable = true;
       age.secrets.brandon-password.file = ../../secrets/brandon-password.age;
@@ -33,7 +39,10 @@ in
     };
 
   flake.modules.nixos.brandon-desktop =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
+    let
+      brandon = config.aspects.users.brandon;
+    in
     {
       imports = [
         self.modules.nixos.brandon
@@ -49,8 +58,30 @@ in
     };
 
   flake.modules.darwin.brandon =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
+    let
+      brandon = config.aspects.users.brandon;
+    in
     {
+      # Set brandon's user data via the aspect (aspects module imported via base)
+      aspects.users.brandon = {
+        username = "brandon";
+        name = "Brandon Blaylock";
+        email = "brandon@null.pub";
+        signingkey = "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIL7W3Bg5SHwsLQqOjL3lQWf2F9zqY19g9MusuKXi93VtAAAAC3NzaDpkZWZhdWx0 ssh:default";
+        keys = [
+          # Keychain Yubkey A
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAetuhFZ8SCOLnYdfZOCFTQLzIh3a25WX991X5aWem5eAAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+          # Folder Yubikey B
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIO1pi4MnWUTF2w9GBbxk7F5uuYmt+uRA7gKMGuKqeQe3AAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+          # Laptop Yubikey C
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIL7W3Bg5SHwsLQqOjL3lQWf2F9zqY19g9MusuKXi93VtAAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+        ];
+      };
+
+      # Add brandon to the default group
+      aspects.groups.default = [ "brandon" ];
+
       home-manager.users."${brandon.username}" = self.homeModules.brandon;
       programs.zsh.enable = true;
       users.users."${brandon.username}" = {
@@ -97,11 +128,35 @@ in
     };
 
   flake.homeModules.brandon =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
+    let
+      brandon = config.aspects.users.brandon;
+    in
     {
       imports = [
         self.homeModules.syncthing
+        self.modules.generic.aspects
       ];
+
+      # Set brandon's user data via the aspect
+      aspects.users.brandon = {
+        username = "brandon";
+        name = "Brandon Blaylock";
+        email = "brandon@null.pub";
+        signingkey = "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIL7W3Bg5SHwsLQqOjL3lQWf2F9zqY19g9MusuKXi93VtAAAAC3NzaDpkZWZhdWx0 ssh:default";
+        keys = [
+          # Keychain Yubkey A
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAetuhFZ8SCOLnYdfZOCFTQLzIh3a25WX991X5aWem5eAAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+          # Folder Yubikey B
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIO1pi4MnWUTF2w9GBbxk7F5uuYmt+uRA7gKMGuKqeQe3AAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+          # Laptop Yubikey C
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIL7W3Bg5SHwsLQqOjL3lQWf2F9zqY19g9MusuKXi93VtAAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+        ];
+      };
+
+      # Add brandon to the default group
+      aspects.groups.default = [ "brandon" ];
+
       home = {
         inherit (brandon) username;
         stateVersion = "25.11";
@@ -169,6 +224,7 @@ in
           # Programming Plugins
           vimPlugins.vim-lsp
           vimPlugins.vim-lsp-settings
+          vimPlugins.asyncomplete-vim
         ];
         extraConfig = builtins.readFile ./vimrc;
       };
