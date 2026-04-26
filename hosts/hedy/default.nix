@@ -97,21 +97,21 @@
             };
           };
 
-          "vault.null.pub" = {
-            forceSSL = true;
-            enableACME = true;
-            locations = {
-              "/".proxyPass = "\${toph}";
-              "= /notifications/anonymous-hub" = {
-                proxyPass = "\${toph}";
-                proxyWebsockets = true;
-              };
-              "= /notifications/hub" = {
-                proxyPass = "\${toph}";
-                proxyWebsockets = true;
-              };
-            };
-          };
+          # "vault.null.pub" = {
+          #   forceSSL = true;
+          #   enableACME = true;
+          #   locations = {
+          #     "/".proxyPass = "\${toph}";
+          #     "= /notifications/anonymous-hub" = {
+          #       proxyPass = "\${toph}";
+          #       proxyWebsockets = true;
+          #     };
+          #     "= /notifications/hub" = {
+          #       proxyPass = "\${toph}";
+          #       proxyWebsockets = true;
+          #     };
+          #   };
+          # };
         };
 
       };
