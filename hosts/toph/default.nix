@@ -141,6 +141,7 @@
         initialize = true;
         environmentFile = config.age.secrets.restic-env-toph-persist.path;
         paths = [ "/persist" ];
+        exclude = [ "/persist/var/log" ];
       };
 
       # Media

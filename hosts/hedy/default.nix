@@ -180,6 +180,7 @@
         initialize = true;
         environmentFile = config.age.secrets.restic-env-hedy-persist.path;
         paths = [ "/persist" ];
+        exclude = [ "/persist/var/log" ];
       };
 
       # Vaultwarden (Bitwarden server)
