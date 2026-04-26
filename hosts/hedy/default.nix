@@ -45,6 +45,7 @@
       security.acme.acceptTerms = true;
       security.acme.defaults.email = "admin@null.pub";
       security.acme.defaults.enableDebugLogs = true;
+      security.acme.defaults.group = "nginx";
 
       services.nginx = {
         enable = true;
