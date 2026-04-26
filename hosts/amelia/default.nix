@@ -98,6 +98,7 @@
         ];
         directories = [
           "/var/lib/nixos"
+          "/var/log"
           "/var/lib/NetworkManager"
           "/etc/NetworkManager/system-connections"
           "/lib/firmware"

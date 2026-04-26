@@ -120,6 +120,7 @@
         ];
         directories = [
           "/var/lib/nixos"
+          "/var/log"
           # Headscale
           {
             directory = "/var/lib/headscale";

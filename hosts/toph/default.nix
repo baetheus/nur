@@ -62,6 +62,7 @@
         ];
         directories = [
           "/var/lib/nixos"
+          "/var/log"
           # Restic Server
           {
             directory = config.services.restic.server.dataDir;
