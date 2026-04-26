@@ -37,7 +37,7 @@ in
     grace
     amelia
   ];
-  "secrets/vaultwarden.age".publicKeys = admins ++ [ toph ];
+  "secrets/vaultwarden.age".publicKeys = admins ++ [ hedy ];
   "secrets/restic-htpasswd.age".publicKeys = admins ++ [ toph ];
   "secrets/nzbget-conf.age".publicKeys = admins ++ [ toph ];
   "secrets/restic-env-toph-persist.age".publicKeys = admins ++ [ toph ];
