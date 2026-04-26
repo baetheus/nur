@@ -54,6 +54,20 @@
         recommendedProxySettings = true;
         clientMaxBodySize = "500m";
 
+        /**
+          We proxy requests to vaultwarden through the tailscale vpn. This causes
+          a race between headscale, the tailscale client, and nginx. Nginx needs
+          the tailscale client up to reach toph(vaultwarden. The tailscale client
+          needs nginx and headscale up to autoconnect. Both services fail to start.
+          We can loosen the requirement of the vaultwarden proxy server being
+          available so that nginx can always start without tailscale being up and
+          configuring dns. That's what this block intends to do.
+        */
+        upstreams.toph.servers."toph.host.internal:8222" = {
+          max_fails = 0;
+          slow_start = "30s";
+        };
+
         virtualHosts = {
           "net.null.pub" = {
             forceSSL = true;
@@ -90,13 +104,13 @@
             forceSSL = true;
             enableACME = true;
             locations = {
-              "/".proxyPass = "http://toph.host.internal:8222";
+              "/".proxyPass = "\${toph}";
               "= /notifications/anonymous-hub" = {
-                proxyPass = "http://toph.host.internal:8222";
+                proxyPass = "\${toph}";
                 proxyWebsockets = true;
               };
               "= /notifications/hub" = {
-                proxyPass = "http://toph.host.internal:8222";
+                proxyPass = "\${toph}";
                 proxyWebsockets = true;
               };
             };
