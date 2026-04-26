@@ -25,12 +25,6 @@
       networking.hostId = "007f0200";
       networking.interfaces.eno1.useDHCP = true;
 
-      # Wifi
-      # age.secrets."tuna-wifi".file = ../../secrets/wifi-tuna.age;
-      # networking.wireless.enable = true;
-      # networking.interfaces.wlp0s20f3.useDHCP = true;
-      # networking.supplicant.WLAN.configFile.path = config.age.secrets."tuna-wifi".path;
-
       # Firewall
       networking.firewall.enable = true;
       networking.firewall.allowedUDPPorts = [ 41641 ];
@@ -39,7 +33,6 @@
         53 # CUP
         443 # HTTPS
         631 # Print Sharing
-        8222 # Vaultwarden
         6789 # NZBGet
         7878 # Radarr (Movies)
         8686 # Lidarr (Music)
