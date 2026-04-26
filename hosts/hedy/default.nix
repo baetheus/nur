@@ -63,10 +63,7 @@
           available so that nginx can always start without tailscale being up and
           configuring dns. That's what this block intends to do.
         */
-        upstreams.toph.servers."toph.host.internal:8222" = {
-          max_fails = 0;
-          slow_start = "30s";
-        };
+        upstreams.toph.servers."100.64.0.7:8222" = { };
 
         virtualHosts = {
           "net.null.pub" = {
