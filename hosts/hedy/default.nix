@@ -90,13 +90,13 @@
             forceSSL = true;
             enableACME = true;
             locations = {
-              "/".proxyPass = "http://toph.at.null:8222";
+              "/".proxyPass = "http://toph.host.internal:8222";
               "= /notifications/anonymous-hub" = {
-                proxyPass = "http://toph.at.null:8222";
+                proxyPass = "http://toph.host.internal:8222";
                 proxyWebsockets = true;
               };
               "= /notifications/hub" = {
-                proxyPass = "http://toph.at.null:8222";
+                proxyPass = "http://toph.host.internal:8222";
                 proxyWebsockets = true;
               };
             };
