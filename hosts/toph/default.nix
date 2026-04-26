@@ -141,7 +141,13 @@
         initialize = true;
         environmentFile = config.age.secrets.restic-env-toph-persist.path;
         paths = [ "/persist" ];
-        exclude = [ "/persist/var/log" ];
+        exclude = [
+          "/persist/var/log" # Don't need to backup logs
+          "/persist/var/lib/plex" # Or media
+          "/persist/var/lib/sonarr" # Or downloaders
+          "/persist/var/lib/lidarr" # Or downloaders
+          "/persist/var/lib/radarr" # Or downloaders
+        ];
       };
 
       # Media
