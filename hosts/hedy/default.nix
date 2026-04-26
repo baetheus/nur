@@ -44,6 +44,7 @@
       # Nginx
       security.acme.acceptTerms = true;
       security.acme.defaults.email = "admin@null.pub";
+      security.acme.defaults.enableDebugLogs = true;
 
       services.nginx = {
         enable = true;
