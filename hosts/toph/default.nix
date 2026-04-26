@@ -71,12 +71,6 @@
           }
           # Tailscale - uses root!
           "/var/lib/tailscale"
-          # Vaultwarden
-          {
-            directory = "/var/lib/vaultwarden"; # Hardcoded in nixpkgs
-            user = "vaultwarden"; # Hardcoded in nixpkgs
-            group = "vaultwarden"; # Hardcoded in nixpkgs
-          }
           # NZBGet
           {
             directory = config.services.nzbget.dataDir;
@@ -154,14 +148,6 @@
         initialize = true;
         environmentFile = config.age.secrets.restic-env-toph-persist.path;
         paths = [ "/persist" ];
-      };
-
-      # Vaultwarden (Bitwarden server)
-      age.secrets.vaultwarden.file = ../../secrets/vaultwarden.age;
-      services.vaultwarden = {
-        enable = true;
-        environmentFile = config.age.secrets.vaultwarden.path;
-        backupDir = "/var/backup/vaultwarden"; # Foolishly hardcoded
       };
 
       # Media

@@ -54,17 +54,6 @@
         recommendedProxySettings = true;
         clientMaxBodySize = "500m";
 
-        /**
-          We proxy requests to vaultwarden through the tailscale vpn. This causes
-          a race between headscale, the tailscale client, and nginx. Nginx needs
-          the tailscale client up to reach toph(vaultwarden. The tailscale client
-          needs nginx and headscale up to autoconnect. Both services fail to start.
-          We can loosen the requirement of the vaultwarden proxy server being
-          available so that nginx can always start without tailscale being up and
-          configuring dns. That's what this block intends to do.
-        */
-        upstreams.toph.servers."100.64.0.7:8222" = { };
-
         virtualHosts = {
           "net.null.pub" = {
             forceSSL = true;
@@ -97,21 +86,21 @@
             };
           };
 
-          # "vault.null.pub" = {
-          #   forceSSL = true;
-          #   enableACME = true;
-          #   locations = {
-          #     "/".proxyPass = "\${toph}";
-          #     "= /notifications/anonymous-hub" = {
-          #       proxyPass = "\${toph}";
-          #       proxyWebsockets = true;
-          #     };
-          #     "= /notifications/hub" = {
-          #       proxyPass = "\${toph}";
-          #       proxyWebsockets = true;
-          #     };
-          #   };
-          # };
+          "vault.null.pub" = {
+            forceSSL = true;
+            enableACME = true;
+            locations = {
+              "/".proxyPass = "http://127.0.0.1:8222";
+              "= /notifications/anonymous-hub" = {
+                proxyPass = "http://127.0.0.1:8222";
+                proxyWebsockets = true;
+              };
+              "= /notifications/hub" = {
+                proxyPass = "http://127.0.0.1:8222";
+                proxyWebsockets = true;
+              };
+            };
+          };
         };
 
       };
@@ -146,6 +135,12 @@
           }
           # Tailscale - uses root!
           "/var/lib/tailscale"
+          # Vaultwarden
+          {
+            directory = "/var/lib/vaultwarden"; # Hardcoded in nixpkgs
+            user = "vaultwarden"; # Hardcoded in nixpkgs
+            group = "vaultwarden"; # Hardcoded in nixpkgs
+          }
         ];
       };
 
@@ -183,6 +178,14 @@
         initialize = true;
         environmentFile = config.age.secrets.restic-env-hedy-persist.path;
         paths = [ "/persist" ];
+      };
+
+      # Vaultwarden (Bitwarden server)
+      age.secrets.vaultwarden.file = ../../secrets/vaultwarden.age;
+      services.vaultwarden = {
+        enable = true;
+        environmentFile = config.age.secrets.vaultwarden.path;
+        backupDir = "/var/backup/vaultwarden"; # Foolishly hardcoded
       };
 
     };
