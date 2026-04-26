@@ -1,6 +1,6 @@
 # Brandon's Nix User Repository
 
-A flakes-only monorepo for managing system configurations, home environments, and development templates across macOS and NixOS machines.
+A flakes-only monorepo for managing system configurations, home environments, and development templates across macOS and NixOS machines. Uses flake-parts for modular organization and impermanence for ephemeral root filesystems.
 
 ## Installation (darwin)
 
@@ -23,7 +23,7 @@ nix build .#darwinConfigurations.HOST.system
 ## Installation (nixos)
 
 1. Fork this repository.
-2. Create a host configuration in [host/](./host/).
+2. Create a host configuration in [hosts/](./hosts/).
 3. Push your changes.
 4. Install or rebuild:
 
@@ -33,6 +33,9 @@ nixos-rebuild switch --flake github:YOUR_REPO_PATH#YOUR_HOST_NAME
 
 # Fresh install
 nixos-install --flake github:YOUR_REPO_PATH#YOUR_HOST_NAME --root /YOUR_ROOT_MOUNT
+
+# Fresh install with disko
+nix run 'github:nix-community/disko/latest#disko-install' -- --flake github:REPO#HOST --disk main /dev/YOUR_DISK
 ```
 
 ## Structure
@@ -40,14 +43,17 @@ nixos-install --flake github:YOUR_REPO_PATH#YOUR_HOST_NAME --root /YOUR_ROOT_MOU
 ```
 .
 ├── flake.nix          # Main flake with inputs and outputs
-├── host/              # Per-host configurations (toph, abigail, diane, etc.)
-├── mixin/             # Reusable configuration modules (services, programs)
-├── module/            # Custom NixOS modules (fossil, photoprism, yubikey-agent)
-├── profile/           # Profiles combining multiple mixins (desktop.nix)
-├── user/              # User configurations with metadata and SSH keys
-├── template/          # Development templates (simple, rust)
-├── secret/            # Age-encrypted secrets (agenix)
-└── files/             # Static files (scripts, printer drivers, themes)
+├── config.nix         # Flake-parts configuration
+├── devshell.nix       # Development shell definition
+├── secrets.nix        # Age encryption key mappings
+├── hosts/             # Per-host configurations (toph, grace, hedy, amelia, rosalind)
+├── features/          # Reusable NixOS/Darwin/Home modules organized by category
+├── users/             # User configurations with metadata and SSH keys
+├── templates/         # Development templates (simple, rust)
+├── secrets/           # Age-encrypted secrets (ragenix)
+├── identities/        # YubiKey age identity public keys
+├── packages/          # Custom packages
+└── files/             # Static files (scripts, firmware, themes, drivers)
 ```
 
 ## Templates
@@ -58,12 +64,6 @@ Create a new project from a template:
 nix flake new -t github:baetheus/nur#simple .
 nix flake new -t github:baetheus/nur#rust .
 ```
-
-## Key Features
-
-- **Secrets Management**: Age-encrypted secrets via agenix with YubiKey identities
-- **Home Manager**: Integrated as a module for consistent dotfiles across systems
-- **Modular Mixins**: Reusable configs for services and programs (openssh, tailscale, zfs, git, zsh, vim, helix, etc.)
 
 ## Deployment (nixos-anywhere)
 
@@ -84,17 +84,27 @@ For deploying to dedicated servers (e.g., OVH) using nixos-anywhere with disko:
    ssh root@<server-ip>
    lsblk
    ```
-   Confirm `/dev/sda` and `/dev/sdb` are the target disks. Adjust `host/<name>/disko.nix` if different.
+   Confirm `/dev/sda` and `/dev/sdb` are the target disks. Adjust `hosts/<name>/disko.nix` if different.
 
 3. Run nixos-anywhere from your local machine:
    ```sh
    nixos-anywhere --flake .#<hostname> root@<server-ip>
    ```
 
-4. After installation completes, copy the age key to the server:
+4. Get new hostkey and rekey secrets.
    ```sh
-   scp /path/to/age-<hostname>.key root@<server-ip>:/keys/age-<hostname>.key
+   # macOS - copy pubkey to clipboard
+   ssh HOST cat /etc/ssh/ssh_host_ed25519_key.pub | pbcopy
+
+
+   # linux (wayland) - copy host pubkey to primary clipboard
+   ssh HOST cat /etc/ssh/ssh_host_ed25519_key.pub | wl-copy
+
    ```
+
+   Rekey secrets `ragenix -i identities/IDENTITY_FILE -r`
+
+   Commit the new keys and run `nixos-rebuild switch --flake github:REPO` to pick up the changes.
 
 5. Reboot into the installed NixOS:
    ```sh
@@ -103,19 +113,14 @@ For deploying to dedicated servers (e.g., OVH) using nixos-anywhere with disko:
 
 ### Post-Deployment
 
-1. Join Tailscale network:
+1. Check system status:
    ```sh
-   tailscale up
+    systemctl status
    ```
 
-2. Verify ZFS pool status:
+2. Check disk configuration (look for high disk usage - indicates a non-persisted service):
    ```sh
-   zpool status rpool
-   ```
-
-3. Verify boot redundancy:
-   ```sh
-   ls /boot /boot2
+    df -h
    ```
 
 ## SSH Keys
@@ -130,7 +135,7 @@ ssh-keygen -K
 
 This generates a keypair for each credential on each attached YubiKey.
 
-Alternatively, add YubiKey FIDO2 credentials to ssh-agent (requires `ssh-askpass`):
+Alternatively, add YubiKey FIDO2 credentials to ssh-agent (requires `ssh-askpass`) (DO NOT USE - ssh-agent blows):
 
 ```sh
 ssh-add -K
