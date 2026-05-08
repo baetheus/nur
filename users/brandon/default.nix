@@ -225,6 +225,7 @@
           vimPlugins.vim-lsp
           vimPlugins.vim-lsp-settings
           vimPlugins.asyncomplete-vim
+          vimPlugins.asyncomplete-lsp-vim
         ];
         extraConfig = builtins.readFile ./vimrc;
       };
