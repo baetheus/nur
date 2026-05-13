@@ -35,7 +35,10 @@
       # Firewall
       networking.firewall.enable = true;
       networking.firewall.allowedUDPPorts = [ ];
-      networking.firewall.allowedTCPPorts = [ 22 ];
+      networking.firewall.allowedTCPPorts = [
+        22
+        22000
+      ];
 
       # Immutability
       fileSystems."/persist".neededForBoot = true;

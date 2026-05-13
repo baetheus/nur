@@ -125,6 +125,7 @@
       networking.firewall.enable = true;
       networking.firewall.allowedTCPPorts = [
         22
+        22000
       ];
 
       # Shutdown if the lid is closed

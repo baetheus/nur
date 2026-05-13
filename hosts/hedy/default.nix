@@ -39,6 +39,7 @@
         80
         443
         config.services.headscale.port
+        22000
       ];
 
       # Nginx

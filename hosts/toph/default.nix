@@ -38,6 +38,7 @@
         8686 # Lidarr (Music)
         8989 # Sonarr (Series)
         32400 # Plex
+        22000 # Syncthing
       ];
 
       # Immutability
