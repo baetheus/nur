@@ -99,6 +99,10 @@
         overrideDevices = true;
 
         settings.devices = {
+          "grace" = {
+            id = "D3MNZMJ-ZG3FTL7-2PS5ECG-A2VLNH4-OCUCL5U-5S4CB3X-IDR5BNT-UZPSNQ4";
+            addresses = [ "tcp://grace:22000" ];
+          };
           "rosalind" = {
             id = "FIFUNFL-3QFVW3N-5P7XESL-Q7JZF4S-55B7TTY-2KG57S5-5JYAZVE-KHDOGAW";
             addresses = [ "tcp://rosalind:22000" ];
@@ -120,6 +124,7 @@
             devices = [
               "rosalind"
               "amelia"
+              "grace"
               "toph"
             ];
           };

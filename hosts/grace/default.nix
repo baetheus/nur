@@ -69,32 +69,28 @@
         authKeyFile = config.age.secrets.headscale-preauth-brandon.path;
       };
 
-      # Setup the desktop
-      environment.systemPackages = with pkgs; [
-        xwayland-satellite
-        brightnessctl
-        librewolf
-        plexamp
-      ];
-
-      services.greetd = {
-        enable = true;
-        settings = {
-          default_session = {
-            command = "${config.programs.niri.package}/bin/niri-session";
-            user = "brandon";
-          };
-        };
+      # Shutdown if the lid is closed
+      services.logind.settings.Login = {
+        HandleLidSwitch = "poweroff";
+        HandleLidSwitchExternalPower = "poweroff";
+        HandleLidSwitchDocked = "poweroff";
       };
 
-      programs.niri.enable = true;
+      # Prevent overheating of cpu
+      services.thermald.enable = true;
 
-      # For the hotkeys
-      services.playerctld.enable = true;
-      services.pipewire.enable = true;
-      services.pipewire.audio.enable = true;
-      services.pipewire.alsa.enable = true;
-      services.pipewire.wireplumber.enable = true;
+      # Automate performance/powersave based on cpu freq
+      services.auto-cpufreq.enable = true;
+      services.auto-cpufreq.settings = {
+        battery = {
+          governor = "powersave";
+          turbo = "never";
+        };
+        charger = {
+          governor = "performance";
+          turbo = "auto";
+        };
+      };
 
       # Fix caps:escape - capslock key maps to escape systemwide
       services.interception-tools =
@@ -119,5 +115,24 @@
             }
           ];
         };
+
+      # Niri
+      programs.niri.enable = true;
+
+      # Desktop Things
+      hardware.bluetooth.enable = true;
+
+      # Battery
+      services.upower.enable = true;
+
+      # Packages
+      environment.systemPackages = with pkgs; [
+        inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+        xwayland-satellite
+        brightnessctl
+        firefox
+        plexamp
+      ];
+
     };
 }
