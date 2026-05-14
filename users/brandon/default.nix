@@ -14,11 +14,13 @@
         signingkey = "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIL7W3Bg5SHwsLQqOjL3lQWf2F9zqY19g9MusuKXi93VtAAAAC3NzaDpkZWZhdWx0 ssh:default";
         keys = [
           # Keychain Yubkey A
-          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAetuhFZ8SCOLnYdfZOCFTQLzIh3a25WX991X5aWem5eAAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAetuhFZ8SCOLnYdfZOCFTQLzIh3a25WX991X5aWem5eAAAAC3NzaDpkZWZhdWx0 brandon@null.pub"
           # Folder Yubikey B
-          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIO1pi4MnWUTF2w9GBbxk7F5uuYmt+uRA7gKMGuKqeQe3AAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIO1pi4MnWUTF2w9GBbxk7F5uuYmt+uRA7gKMGuKqeQe3AAAAC3NzaDpkZWZhdWx0 brandon@null.pub"
           # Laptop Yubikey C
-          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIL7W3Bg5SHwsLQqOjL3lQWf2F9zqY19g9MusuKXi93VtAAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIL7W3Bg5SHwsLQqOjL3lQWf2F9zqY19g9MusuKXi93VtAAAAC3NzaDpkZWZhdWx0 brandon@null.pub"
+          # Laptop Yubikey D (usb-a)
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIDwEYMAuTRDm6/6GMuHR6EtjXuHeJP0d0IOY+teERvrAAAAAC3NzaDpicmFuZG9u brandon@null.pub"
         ];
       };
 
@@ -76,6 +78,8 @@
           "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIO1pi4MnWUTF2w9GBbxk7F5uuYmt+uRA7gKMGuKqeQe3AAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
           # Laptop Yubikey C
           "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIL7W3Bg5SHwsLQqOjL3lQWf2F9zqY19g9MusuKXi93VtAAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+          # Laptop Yubikey D (usb-a)
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIDwEYMAuTRDm6/6GMuHR6EtjXuHeJP0d0IOY+teERvrAAAAAC3NzaDpicmFuZG9u brandon@null.pub"
         ];
       };
 
@@ -156,6 +160,8 @@
           "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIO1pi4MnWUTF2w9GBbxk7F5uuYmt+uRA7gKMGuKqeQe3AAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
           # Laptop Yubikey C
           "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIL7W3Bg5SHwsLQqOjL3lQWf2F9zqY19g9MusuKXi93VtAAAAC3NzaDpkZWZhdWx0 brandon@rosalind"
+          # Laptop Yubikey D (usb-a)
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIDwEYMAuTRDm6/6GMuHR6EtjXuHeJP0d0IOY+teERvrAAAAAC3NzaDpicmFuZG9u brandon@null.pub"
         ];
       };
 
