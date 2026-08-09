@@ -26,7 +26,7 @@
         settings = {
           PasswordAuthentication = false;
           PermitRootLogin = "no";
-          GSSAPIAuthentication = "no";
+          # GSSAPIAuthentication = "no";
         };
       };
       services.fail2ban.enable = true;
