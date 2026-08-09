@@ -3,7 +3,7 @@
 
   inputs = {
     nixos-hardware.url = "github:nixos/nixos-hardware";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/release-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs.follows = "nixpkgs-stable";
 
@@ -11,13 +11,13 @@
     import-tree.url = "github:vic/import-tree";
     wrappers.url = "github:Lassulus/wrappers";
 
-    nix-darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+    nix-darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
-    home-manager.url = "github:nix-community/home-manager/release-25.11";
+    home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     ragenix.url = "github:yaxitech/ragenix";

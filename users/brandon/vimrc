@@ -2,7 +2,7 @@
 syntax on
 set re=0
 filetype plugin indent on
-colorscheme noctu
+" colorscheme noctu
 
 set exrc
 set nocompatible

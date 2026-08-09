@@ -3,206 +3,207 @@
   inputs,
   ...
 }:
-{
+{ }
+# {
 
-  flake.nixosConfigurations.amelia = inputs.nixpkgs.lib.nixosSystem {
-    modules = [
-      inputs.nixos-hardware.nixosModules.apple-t2
-      self.modules.nixos.boot-systemd
-      self.modules.nixos.base
-      self.modules.nixos.brandon-desktop
-      self.modules.nixos.amelia
-    ];
-  };
+#   flake.nixosConfigurations.amelia = inputs.nixpkgs.lib.nixosSystem {
+#     modules = [
+#       inputs.nixos-hardware.nixosModules.apple-t2
+#       self.modules.nixos.boot-systemd
+#       self.modules.nixos.base
+#       self.modules.nixos.brandon-desktop
+#       self.modules.nixos.amelia
+#     ];
+#   };
 
-  flake.modules.nixos.amelia =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
-    {
-      # General setup
-      nixpkgs.hostPlatform = "x86_64-linux";
-      nixpkgs.config.allowUnfree = true; # plexamp
-      system.stateVersion = "25.11";
-      services.pcscd.enable = true; # yubikey
+#   flake.modules.nixos.amelia =
+#     {
+#       config,
+#       lib,
+#       pkgs,
+#       ...
+#     }:
+#     {
+#       # General setup
+#       nixpkgs.hostPlatform = "x86_64-linux";
+#       nixpkgs.config.allowUnfree = true; # plexamp
+#       system.stateVersion = "25.11";
+#       services.pcscd.enable = true; # yubikey
 
-      # Boot Specials
-      boot.loader.efi.efiSysMountPoint = "/boot";
+#       # Boot Specials
+#       boot.loader.efi.efiSysMountPoint = "/boot";
 
-      # Hardware Setup
-      hardware.apple-t2.kernelChannel = "latest";
-      hardware.facter.reportPath = ./facter.json;
-      hardware.firmware = [
-        # Apple Firmware
-        (pkgs.stdenvNoCC.mkDerivation (final: {
-          name = "brcm-firmware";
-          src = ../../files/firmware.tar;
-          dontUnpack = true;
-          installPhase = ''
-            mkdir -p $out/lib/firmware/brcm
-            tar -xf ${final.src} -C $out/lib/firmware/brcm
-          '';
-        }))
-      ];
+#       # Hardware Setup
+#       hardware.apple-t2.kernelChannel = "latest";
+#       hardware.facter.reportPath = ./facter.json;
+#       hardware.firmware = [
+#         # Apple Firmware
+#         (pkgs.stdenvNoCC.mkDerivation (final: {
+#           name = "brcm-firmware";
+#           src = ../../files/firmware.tar;
+#           dontUnpack = true;
+#           installPhase = ''
+#             mkdir -p $out/lib/firmware/brcm
+#             tar -xf ${final.src} -C $out/lib/firmware/brcm
+#           '';
+#         }))
+#       ];
 
-      # Filesystems
-      fileSystems."/" = {
-        neededForBoot = true;
-        device = "none";
-        fsType = "tmpfs";
-        options = [
-          "defaults"
-          "size=4G"
-          "mode=0755"
-        ];
-      };
+#       # Filesystems
+#       fileSystems."/" = {
+#         neededForBoot = true;
+#         device = "none";
+#         fsType = "tmpfs";
+#         options = [
+#           "defaults"
+#           "size=4G"
+#           "mode=0755"
+#         ];
+#       };
 
-      fileSystems."/nix" = {
-        neededForBoot = true;
-        device = "pool/nix";
-        fsType = "zfs";
-      };
+#       fileSystems."/nix" = {
+#         neededForBoot = true;
+#         device = "pool/nix";
+#         fsType = "zfs";
+#       };
 
-      fileSystems."/persist" = {
-        neededForBoot = true;
-        device = "pool/persist";
-        fsType = "zfs";
-      };
+#       fileSystems."/persist" = {
+#         neededForBoot = true;
+#         device = "pool/persist";
+#         fsType = "zfs";
+#       };
 
-      fileSystems."/home" = {
-        neededForBoot = true;
-        device = "pool/home";
-        fsType = "zfs";
-      };
+#       fileSystems."/home" = {
+#         neededForBoot = true;
+#         device = "pool/home";
+#         fsType = "zfs";
+#       };
 
-      fileSystems."/boot" = {
-        device = "/dev/disk/by-uuid/5F66-17ED";
-        fsType = "vfat";
-        options = [
-          "defaults"
-          "umask=0077"
-        ];
-      };
+#       fileSystems."/boot" = {
+#         device = "/dev/disk/by-uuid/5F66-17ED";
+#         fsType = "vfat";
+#         options = [
+#           "defaults"
+#           "umask=0077"
+#         ];
+#       };
 
-      # Impermanence
-      environment.persistence."/persist" = {
-        enable = true;
-        files = [
-          "/etc/machine-id"
-          "/etc/ssh/ssh_host_ed25519_key"
-          "/etc/ssh/ssh_host_ed25519_key.pub"
-          "/etc/ssh/ssh_host_rsa_key"
-          "/etc/ssh/ssh_host_rsa_key.pub"
-        ];
-        directories = [
-          "/var/lib/nixos"
-          "/var/log"
-          "/var/lib/NetworkManager"
-          "/etc/NetworkManager/system-connections"
-          "/lib/firmware"
-          # Tailscale - uses root!
-          "/var/lib/tailscale"
-        ];
-      };
+#       # Impermanence
+#       environment.persistence."/persist" = {
+#         enable = true;
+#         files = [
+#           "/etc/machine-id"
+#           "/etc/ssh/ssh_host_ed25519_key"
+#           "/etc/ssh/ssh_host_ed25519_key.pub"
+#           "/etc/ssh/ssh_host_rsa_key"
+#           "/etc/ssh/ssh_host_rsa_key.pub"
+#         ];
+#         directories = [
+#           "/var/lib/nixos"
+#           "/var/log"
+#           "/var/lib/NetworkManager"
+#           "/etc/NetworkManager/system-connections"
+#           "/lib/firmware"
+#           # Tailscale - uses root!
+#           "/var/lib/tailscale"
+#         ];
+#       };
 
-      # Networking
-      networking.hostName = "amelia";
-      networking.hostId = "007f0206";
+#       # Networking
+#       networking.hostName = "amelia";
+#       networking.hostId = "007f0206";
 
-      networking.networkmanager.enable = true;
-      networking.networkmanager.wifi.powersave = true;
+#       networking.networkmanager.enable = true;
+#       networking.networkmanager.wifi.powersave = true;
 
-      # Wifi
-      age.secrets."tuna-wifi".file = ../../secrets/wifi-tuna.age;
-      # networking.wireless.enable = true;
-      # networking.interfaces.w1p1s0.useDHCP = true;
-      # networking.supplicant.WLAN.configFile.path = config.age.secrets."tuna-wifi".path;
+#       # Wifi
+#       age.secrets."tuna-wifi".file = ../../secrets/wifi-tuna.age;
+#       # networking.wireless.enable = true;
+#       # networking.interfaces.w1p1s0.useDHCP = true;
+#       # networking.supplicant.WLAN.configFile.path = config.age.secrets."tuna-wifi".path;
 
-      # Firewall
-      networking.firewall.enable = true;
-      networking.firewall.allowedTCPPorts = [
-        22
-        22000
-      ];
+#       # Firewall
+#       networking.firewall.enable = true;
+#       networking.firewall.allowedTCPPorts = [
+#         22
+#         22000
+#       ];
 
-      # Shutdown if the lid is closed
-      services.logind.settings.Login = {
-        HandleLidSwitch = "poweroff";
-        HandleLidSwitchExternalPower = "poweroff";
-        HandleLidSwitchDocked = "poweroff";
-      };
+#       # Shutdown if the lid is closed
+#       services.logind.settings.Login = {
+#         HandleLidSwitch = "poweroff";
+#         HandleLidSwitchExternalPower = "poweroff";
+#         HandleLidSwitchDocked = "poweroff";
+#       };
 
-      # Prevent overheating of cpu
-      services.thermald.enable = true;
+#       # Prevent overheating of cpu
+#       services.thermald.enable = true;
 
-      # Automate performance/powersave based on cpu freq
-      services.auto-cpufreq.enable = true;
-      services.auto-cpufreq.settings = {
-        battery = {
-          governor = "powersave";
-          turbo = "never";
-        };
-        charger = {
-          governor = "performance";
-          turbo = "auto";
-        };
-      };
+#       # Automate performance/powersave based on cpu freq
+#       services.auto-cpufreq.enable = true;
+#       services.auto-cpufreq.settings = {
+#         battery = {
+#           governor = "powersave";
+#           turbo = "never";
+#         };
+#         charger = {
+#           governor = "performance";
+#           turbo = "auto";
+#         };
+#       };
 
-      # Tailscale
-      age.secrets.headscale-preauth-brandon.file = ../../secrets/headscale-preauth-brandon.age;
-      services.tailscale = {
-        enable = true;
-        openFirewall = true;
-        disableUpstreamLogging = true;
-        useRoutingFeatures = "both";
-        extraUpFlags = [ "--login-server=https://net.null.pub" ];
-        authKeyFile = config.age.secrets.headscale-preauth-brandon.path;
-      };
+#       # Tailscale
+#       age.secrets.headscale-preauth-brandon.file = ../../secrets/headscale-preauth-brandon.age;
+#       services.tailscale = {
+#         enable = true;
+#         openFirewall = true;
+#         disableUpstreamLogging = true;
+#         useRoutingFeatures = "both";
+#         extraUpFlags = [ "--login-server=https://net.null.pub" ];
+#         authKeyFile = config.age.secrets.headscale-preauth-brandon.path;
+#       };
 
-      # Niri
-      programs.niri.enable = true;
+#       # Niri
+#       programs.niri.enable = true;
 
-      # Desktop Things
-      hardware.bluetooth.enable = true;
+#       # Desktop Things
+#       hardware.bluetooth.enable = true;
 
-      # Battery
-      services.upower.enable = true;
+#       # Battery
+#       services.upower.enable = true;
 
-      # Packages
-      environment.systemPackages = with pkgs; [
-        inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
-        xwayland-satellite
-        brightnessctl
-        firefox
-        plexamp
-      ];
+#       # Packages
+#       environment.systemPackages = with pkgs; [
+#         inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+#         xwayland-satellite
+#         brightnessctl
+#         firefox
+#         plexamp
+#       ];
 
-      # Fix caps:escape - capslock key maps to escape systemwide
-      services.interception-tools =
-        let
-          inherit (pkgs.interception-tools-plugins) caps2esc;
-          inherit (pkgs) interception-tools;
-        in
-        {
-          enable = true;
-          plugins = [ caps2esc ];
-          udevmonConfig = lib.strings.toJSON [
-            {
-              JOB = builtins.concatStringsSep " | " [
-                "${interception-tools}/bin/intercept -g $DEVNODE"
-                "${lib.getExe caps2esc} -m 1 -t 0"
-                "${interception-tools}/bin/uinput -d $DEVNODE"
-              ];
-              DEVICE.EVENTS.EV_KEY = [
-                "KEY_CAPSLOCK"
-                "KEY_ESC"
-              ];
-            }
-          ];
-        };
-    };
+#       # Fix caps:escape - capslock key maps to escape systemwide
+#       services.interception-tools =
+#         let
+#           inherit (pkgs.interception-tools-plugins) caps2esc;
+#           inherit (pkgs) interception-tools;
+#         in
+#         {
+#           enable = true;
+#           plugins = [ caps2esc ];
+#           udevmonConfig = lib.strings.toJSON [
+#             {
+#               JOB = builtins.concatStringsSep " | " [
+#                 "${interception-tools}/bin/intercept -g $DEVNODE"
+#                 "${lib.getExe caps2esc} -m 1 -t 0"
+#                 "${interception-tools}/bin/uinput -d $DEVNODE"
+#               ];
+#               DEVICE.EVENTS.EV_KEY = [
+#                 "KEY_CAPSLOCK"
+#                 "KEY_ESC"
+#               ];
+#             }
+#           ];
+#         };
+#     };
 
-}
+# }

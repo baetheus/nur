@@ -226,7 +226,7 @@
           # Generic Plugins
           vimPlugins.vim-unimpaired
           vimPlugins.vim-commentary
-          vimPlugins.vim-noctu
+          # vimPlugins.vim-noctu
           vimPlugins.vim-surround
 
           # Life Plugins
