@@ -197,5 +197,93 @@
         user = "media";
         group = "media";
       };
+
+      # Proxy TLS
+      age.secrets.porkbun-api = {
+        file = ../../secrets/porkbun-api.age;
+        owner = "acme";
+        group = "acme";
+      };
+      security.acme = {
+        acceptTerms = true;
+        defaults.email = "brandon@null.pub";
+        defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+        certs."toph.ethe.us" = {
+          domain = "toph.ethe.us";
+          extraDomainNames = [ "*.toph.ethe.us" ];
+          dnsProvider = "porkbun";
+          environmentFile = config.age.secrets.porkbun-api.path;
+          dnsPropagationCheck = false; # if issuance times out
+          extraLegoFlags = [
+            "--dns.propagation-wait"
+            "120s"
+          ];
+        };
+      };
+
+      # Proxy Services
+      users.users.nginx.extraGroups = [ "acme" ];
+      services.nginx = {
+        enable = true;
+        recommendedProxySettings = true;
+        recommendedTlsSettings = true;
+
+        virtualHosts = {
+          "media.toph.ethe.us" = {
+            useACMEHost = "toph.ethe.us";
+            forceSSL = true;
+            locations."/" = {
+              root = "/media";
+              extraConfig = "autoindex on;";
+            };
+          };
+
+          "plex.toph.ethe.us" = {
+            useACMEHost = "toph.ethe.us";
+            forceSSL = true;
+            locations."/" = {
+              proxyPass = "http://0.0.0.0:32400";
+              proxyWebsockets = true;
+            };
+          };
+
+          "nzbget.toph.ethe.us" = {
+            useACMEHost = "toph.ethe.us";
+            forceSSL = true;
+            locations."/" = {
+              proxyPass = "http://0.0.0.0:6789";
+              proxyWebsockets = true;
+            };
+          };
+
+          "series.toph.ethe.us" = {
+            useACMEHost = "toph.ethe.us";
+            forceSSL = true;
+            locations."/" = {
+              proxyPass = "http://0.0.0.0:8989";
+              proxyWebsockets = true;
+            };
+          };
+
+          "movies.toph.ethe.us" = {
+            useACMEHost = "toph.ethe.us";
+            forceSSL = true;
+            locations."/" = {
+              proxyPass = "http://0.0.0.0:7878";
+              proxyWebsockets = true;
+            };
+          };
+
+          "music.toph.ethe.us" = {
+            useACMEHost = "toph.ethe.us";
+            forceSSL = true;
+            locations."/" = {
+              proxyPass = "http://0.0.0.0:8686";
+              proxyWebsockets = true;
+            };
+          };
+        };
+      };
+
     };
 }

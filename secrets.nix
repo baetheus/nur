@@ -32,6 +32,7 @@ in
   "secrets/msmtp-passwordeval.age".publicKeys = all;
   "secrets/headscale-preauth-brandon.age".publicKeys = all;
   "secrets/brandon-password.age".publicKeys = all;
+  "secrets/porkbun-api.age".publicKeys = all;
 
   # Host-specific secrets
   "secrets/wifi-tuna.age".publicKeys = admins ++ [

@@ -151,15 +151,30 @@
       services.headscale = {
         enable = true;
         address = "0.0.0.0";
-        settings = {
-          server_url = "https://net.null.pub";
-          dns.base_domain = "host.internal";
-          dns.nameservers.global = [
+        settings.server_url = "https://net.null.pub";
+        settings.dns = {
+          magic_dns = true;
+          base_domain = "ethe.us";
+          nameservers.global = [
             "1.1.1.1"
             "1.0.0.1"
             "2606:4700:4700::1111"
             "2606:4700:4700::1001"
           ];
+          override_local_dns = true;
+          extra_records = [
+            {
+              name = "app.toph.ethe.us";
+              type = "A";
+              value = "100.64.0.2";
+            }
+            {
+              name = "grafana.toph.ethe.us";
+              type = "A";
+              value = "100.64.0.2";
+            }
+          ];
+
         };
       };
 
