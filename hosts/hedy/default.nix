@@ -164,14 +164,34 @@
           override_local_dns = true;
           extra_records = [
             {
-              name = "app.toph.ethe.us";
+              name = "plex.toph.ethe.us";
               type = "A";
-              value = "100.64.0.2";
+              value = "100.64.0.7";
             }
             {
-              name = "grafana.toph.ethe.us";
+              name = "music.toph.ethe.us";
               type = "A";
-              value = "100.64.0.2";
+              value = "100.64.0.7";
+            }
+            {
+              name = "series.toph.ethe.us";
+              type = "A";
+              value = "100.64.0.7";
+            }
+            {
+              name = "movies.toph.ethe.us";
+              type = "A";
+              value = "100.64.0.7";
+            }
+            {
+              name = "nzbget.toph.ethe.us";
+              type = "A";
+              value = "100.64.0.7";
+            }
+            {
+              name = "media.toph.ethe.us";
+              type = "A";
+              value = "100.64.0.7";
             }
           ];
 
