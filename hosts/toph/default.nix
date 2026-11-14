@@ -207,17 +207,12 @@
       security.acme = {
         acceptTerms = true;
         defaults.email = "brandon@null.pub";
-        defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+        # defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
         certs."toph.ethe.us" = {
           domain = "toph.ethe.us";
           extraDomainNames = [ "*.toph.ethe.us" ];
           dnsProvider = "porkbun";
           environmentFile = config.age.secrets.porkbun-api.path;
-          dnsPropagationCheck = false; # if issuance times out
-          extraLegoFlags = [
-            "--dns.propagation-wait"
-            "120s"
-          ];
         };
       };
 
