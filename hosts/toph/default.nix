@@ -32,12 +32,6 @@
         22 # SSH
         53 # CUP
         443 # HTTPS
-        631 # Print Sharing
-        6789 # NZBGet
-        7878 # Radarr (Movies)
-        8686 # Lidarr (Music)
-        8989 # Sonarr (Series)
-        32400 # Plex
         22000 # Syncthing
       ];
 
@@ -275,6 +269,15 @@
             forceSSL = true;
             locations."/" = {
               proxyPass = "http://0.0.0.0:8686";
+              proxyWebsockets = true;
+            };
+          };
+
+          "print.toph.ethe.us" = {
+            useACMEHost = "toph.ethe.us";
+            forceSSL = true;
+            locations."/" = {
+              proxyPass = "http://0.0.0.0:631";
               proxyWebsockets = true;
             };
           };

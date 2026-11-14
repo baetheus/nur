@@ -193,6 +193,11 @@
               type = "A";
               value = "100.64.0.7";
             }
+            {
+              name = "print.toph.ethe.us";
+              type = "A";
+              value = "100.64.0.7";
+            }
           ];
 
         };
