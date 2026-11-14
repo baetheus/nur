@@ -212,6 +212,7 @@
           domain = "toph.ethe.us";
           extraDomainNames = [ "*.toph.ethe.us" ];
           dnsProvider = "porkbun";
+          dnsResolver = "1.1.1.1:53";
           environmentFile = config.age.secrets.porkbun-api.path;
         };
       };
