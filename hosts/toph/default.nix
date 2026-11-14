@@ -279,8 +279,19 @@
             useACMEHost = "toph.ethe.us";
             forceSSL = true;
             locations."/" = {
-              proxyPass = "http://0.0.0.0:631";
-              proxyWebsockets = true;
+              proxyPass = "https://127.0.0.1:631";
+              extraConfig = ''
+                # Send SNI to the upstream
+                proxy_ssl_server_name on;
+                proxy_ssl_name localhost;
+
+                # CUPS checks the Host header and rejects unknown ones
+                proxy_set_header Host localhost:631;
+
+                # Up the body limit
+                client_max_body_size 0;
+                proxy_read_timeout 300s;
+              '';
             };
           };
         };
