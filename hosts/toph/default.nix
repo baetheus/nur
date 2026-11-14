@@ -33,6 +33,7 @@
         53 # CUP
         443 # HTTPS
         22000 # Syncthing
+        32400 # Plex for local access
       ];
 
       # Immutability
