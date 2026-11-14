@@ -283,10 +283,10 @@
               extraConfig = ''
                 # Send SNI to the upstream
                 proxy_ssl_server_name on;
-                proxy_ssl_name localhost;
+                proxy_ssl_name toph;
 
                 # CUPS checks the Host header and rejects unknown ones
-                proxy_set_header Host localhost:631;
+                proxy_set_header Host toph:631;
 
                 # Up the body limit
                 client_max_body_size 0;
