@@ -32,6 +32,7 @@
         22 # SSH
         53 # CUP
         443 # HTTPS
+        631 # CUPS
         22000 # Syncthing
         32400 # Plex for local access
       ];
